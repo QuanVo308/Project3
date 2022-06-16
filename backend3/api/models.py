@@ -19,7 +19,7 @@ class Province(models.Model):
     areaID = models.ForeignKey(Area, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.code
+        return self.acronym
 
 
 class Branch(models.Model):

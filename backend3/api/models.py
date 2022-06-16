@@ -23,15 +23,15 @@ class Province(models.Model):
 
 
 class Branch(models.Model):
-    province = models.ForeignKey(Province, on_delete=models.CASCADE)
-    name = models.CharField(max_length=10)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
 
 class PopPlus(models.Model):
     name = models.CharField(max_length=20)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    branchID = models.ForeignKey(Branch, on_delete=models.PROTECT)
     area_OSPF = models.IntegerField()
     octet2_ip_OSPF_MGMT = models.IntegerField()
     octet2_ip_MGMT = models.IntegerField()
@@ -48,8 +48,8 @@ class Pop(models.Model):
     range_ip = models.GenericIPAddressField()
     vlan_PPPoE = models.CharField(max_length=20)
     metro = models.CharField(max_length=20)
-    popPlus = models.ForeignKey(PopPlus, on_delete=models.CASCADE)
-    province = models.ForeignKey(Province, on_delete=models.CASCADE)
+    popPlusID = models.ForeignKey(PopPlus, on_delete=models.PROTECT)
+    provinceID = models.ForeignKey(Province, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name

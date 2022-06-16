@@ -14,9 +14,9 @@ class Area(models.Model):
 
 
 class Province(models.Model):
-    name = models.CharField(max_length=20)
-    code = models.CharField(max_length=10, default="")
-    area = models.ForeignKey(Area, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    acronym = models.CharField(max_length=3, default="")
+    areaID = models.ForeignKey(Area, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.code
@@ -52,12 +52,19 @@ class Pop(models.Model):
     def __str__(self):
         return self.name
 
+class Brand(models.Model):
+    name = models.CharField(max_length=30)
+    company = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
 
 class Device(models.Model):
+    popID= models.ForeignKey(Pop, on_delete=models.PROTECT)
     name = models.CharField(max_length=50)
-    ip = models.GenericIPAddressField()
     role = models.CharField(max_length=20)
-    pop = models.ForeignKey(Pop, on_delete=models.CASCADE)
+    ip = models.GenericIPAddressField()
+    brandID = models.ForeignKey(Brand, on_delete=models.PROTECT )
 
     def __str__(self):
         return self.name

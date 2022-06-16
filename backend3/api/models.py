@@ -33,9 +33,9 @@ class PopPlus(models.Model):
     name = models.CharField(max_length=20)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
     area_OSPF = models.IntegerField()
-    octet2_Ip_OSPF_MGMT = models.IntegerField()
-    octet2_Ip_MGMT = models.IntegerField()
-    octet3_Ip_MGMT = models.IntegerField()
+    octet2_ip_OSPF_MGMT = models.IntegerField()
+    octet2_ip_MGMT = models.IntegerField()
+    octet3_ip_MGMT = models.IntegerField()
     vlan_PPPoE = models.IntegerField()
 
     def __str__(self):
@@ -45,9 +45,11 @@ class PopPlus(models.Model):
 class Pop(models.Model):
     name = models.CharField(max_length=20)
     ring = models.CharField(max_length=20)
-    range_Ip = models.GenericIPAddressField()
+    range_ip = models.GenericIPAddressField()
     vlan_PPPoE = models.CharField(max_length=20)
+    metro = models.CharField(max_length=20)
     popPlus = models.ForeignKey(PopPlus, on_delete=models.CASCADE)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

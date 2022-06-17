@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from rest_framework import viewsets
-from rest_framework import Response
+# from rest_framework import Response
 from .models import *
 from .ultility import *
 from .serializers import *
@@ -11,13 +11,8 @@ def index(request):
     return HttpResponse("Hello, world!!!!")
 
 def test(request):
-    octet = 45
-    print(validate_ip_octet(octet))
-    print(validate_ip_octet(456))
-    print(validate_ip_octet(255))
-    print(validate_ip_octet(0))
-    print(validate_ip_octet('3'))
-    print(validate_ip_octet(3.3))
+    pop = Pop.objects.filter()[0]
+    print(validate_pop(pop))
     return HttpResponse("Test")
 
 

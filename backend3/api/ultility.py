@@ -2,8 +2,8 @@ from .models import *
 
 def validate_popplus_name(popplus):
     # print("branchID: ", popplus.branchID.id)
-    branch = popplus.branchID
-    province = branch.provinceID
+    branch = popplus.branch
+    province = branch.province
     character = ['P', 'M']
     if province.acronym != popplus.name[0:3]:
         print("acronym wrong", province.acronym, popplus.name[0:3])
@@ -30,6 +30,7 @@ def validate_popplus_vlan(popplus):
 
 def validate_popplus(popplus):
     # print(popplus.id)
+    # popplus.name = 'HNIL331'
     if (validate_popplus_name(popplus) 
     and validate_popplus_vlan(popplus)):
         return True

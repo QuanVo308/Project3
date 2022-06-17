@@ -16,14 +16,14 @@ class Area(models.Model):
 class Province(models.Model):
     name = models.CharField(max_length=30)
     acronym = models.CharField(max_length=3, default="")
-    areaID = models.ForeignKey(Area, on_delete=models.PROTECT)
+    area = models.ForeignKey(Area, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.acronym
 
 
 class Branch(models.Model):
-    provinceID = models.ForeignKey(Province, on_delete=models.PROTECT)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT)
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -31,7 +31,7 @@ class Branch(models.Model):
 
 class PopPlus(models.Model):
     name = models.CharField(max_length=20)
-    branchID = models.ForeignKey(Branch, on_delete=models.PROTECT)
+    branch = models.ForeignKey(Branch, on_delete=models.PROTECT)
     area_OSPF = models.IntegerField()
     octet2_ip_OSPF_MGMT = models.IntegerField()
     octet2_ip_MGMT = models.IntegerField()
@@ -48,8 +48,8 @@ class Pop(models.Model):
     range_ip = models.GenericIPAddressField()
     vlan_PPPoE = models.CharField(max_length=20)
     metro = models.CharField(max_length=20)
-    popPlusID = models.ForeignKey(PopPlus, on_delete=models.PROTECT)
-    provinceID = models.ForeignKey(Province, on_delete=models.PROTECT)
+    popPlus = models.ForeignKey(PopPlus, on_delete=models.PROTECT)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -66,7 +66,7 @@ class Device(models.Model):
     name = models.CharField(max_length=50)
     role = models.CharField(max_length=20)
     ip = models.GenericIPAddressField()
-    brandID = models.ForeignKey(Brand, on_delete=models.PROTECT )
+    brand = models.ForeignKey(Brand, on_delete=models.PROTECT )
 
     def __str__(self):
         return self.name

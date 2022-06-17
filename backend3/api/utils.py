@@ -3,9 +3,10 @@ from django.core.validators import validate_ipv4_address
 import ipaddress
 
 def validate_ip_octet(octet):
-    if type(octet) == int:
-        if octet <= 255 and octet >=0:
-            return True
+    # if type(octet) == int:
+    octet = int(octet)
+    if octet <= 255 and octet >=0:
+        return True
     return False
 
 
@@ -30,17 +31,19 @@ def validate_popplus_name(popplus):
     return True
 
 def validate_popplus_vlan(popplus):
-    if type(popplus.vlan_PPPoE) == int:
-        if popplus.vlan_PPPoE <= 39 and popplus.vlan_PPPoE >= 30:
-            return True
+    # if type(popplus.vlan_PPPoE) == int:
+    popplus.vlan_PPPoE = int(popplus.vlan_PPPoE)
+    if popplus.vlan_PPPoE <= 39 and popplus.vlan_PPPoE >= 30:
+        return True
     
     print("popplus pppoe wrong")
     return False
 
 def validate_popplus_area(popplus):
-    if type(popplus.area_OSPF) == int:
-        if popplus.area_OSPF <= 9 and popplus.area_OSPF >= 1:
-            return True
+    # if type(popplus.area_OSPF) == int:
+    popplus.area_OSPF = int(popplus.area_OSPF)
+    if popplus.area_OSPF <= 9 and popplus.area_OSPF >= 1:
+        return True
     
     print("popplus area ospf wrong")
     return False
@@ -119,6 +122,7 @@ def validate_pop_rangeIP(pop):
     #     return False
 
     try:
+        print(pop.range_ip)
         ipaddress.ip_address(pop.range_ip)
     except:
         print('wrong ip address')
@@ -142,21 +146,19 @@ def validate_pop_rangeIP(pop):
 
 def get_pop_rangeIP(pop):
     ip = '10.'
-    # print(pop.popPlus.octet2_ip_MGMT)
     ip += str(pop.popPlus.octet2_ip_MGMT) + '.'
-    # print(pop.popPlus.octet3_ip_MGMT + 17*64//255)
-    ip += str(pop.popPlus.octet3_ip_MGMT + pop.sequence_ring*64//255) + '.'
-    # print(17*64%255)
-    ip += str(17*64%255)
+    # print(int(pop.sequence_ring)*64//255)
+    ip += str(int(pop.popPlus.octet3_ip_MGMT) + int(pop.sequence_ring)*64//255) + '.'
+    print('check',int(pop.sequence_ring)*64%256)
+    ip += str(int(pop.sequence_ring)*64%256)
     return ip
 
 def validate_pop(pop):
     # print(type(pop.range_ip))
-    pop.range_ip = '10.113.36.64'
 
     # t = Pop()
     # t.popPlus = PopPlus.objects.filter()[0]
-    print(get_pop_rangeIP(pop))
+    # print(get_pop_rangeIP(pop))
 
     if(validate_pop_name(pop)
     and validate_pop_ring(pop)
@@ -164,3 +166,14 @@ def validate_pop(pop):
         return True
     return False
 
+def validate_device_name(device):
+    if device.role == 'AGG':
+        return True
+    else:
+        return True
+
+    return False
+def validate_device(device):
+
+
+    return False

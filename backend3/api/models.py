@@ -23,7 +23,7 @@ class Province(models.Model):
 
 
 class Branch(models.Model):
-    province = models.ForeignKey(Province, on_delete=models.PROTECT)
+    provinceID = models.ForeignKey(Province, on_delete=models.PROTECT)
     name = models.CharField(max_length=30)
 
     def __str__(self):

@@ -20,6 +20,9 @@ class AreaViewSet(viewsets.ModelViewSet):
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
 
+    def get_Area(self):
+        return self.list()
+
 
 class ProvinceViewSet(viewsets.ModelViewSet):
     queryset = Province.objects.all()

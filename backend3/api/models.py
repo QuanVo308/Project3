@@ -50,6 +50,7 @@ class Pop(models.Model):
     metro = models.CharField(max_length=20)
     popPlus = models.ForeignKey(PopPlus, on_delete=models.PROTECT)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
+    sequence_ring = models.IntegerField()
 
     def __str__(self):
         return self.name

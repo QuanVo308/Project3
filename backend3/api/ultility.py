@@ -140,10 +140,24 @@ def validate_pop_rangeIP(pop):
     #     return False
     return True 
 
+def get_pop_rangeIP(pop):
+    ip = '10.'
+    # print(pop.popPlus.octet2_ip_MGMT)
+    ip += str(pop.popPlus.octet2_ip_MGMT) + '.'
+    # print(pop.popPlus.octet3_ip_MGMT + 17*64//255)
+    ip += str(pop.popPlus.octet3_ip_MGMT + pop.sequence_ring*64//255) + '.'
+    # print(17*64%255)
+    ip += str(17*64%255)
+    return ip
+
 def validate_pop(pop):
     # print(type(pop.range_ip))
-    pop.range_ip = '10.183.36.64'
-    # print(type(pop.range_ip))
+    pop.range_ip = '10.113.36.64'
+
+    # t = Pop()
+    # t.popPlus = PopPlus.objects.filter()[0]
+    print(get_pop_rangeIP(pop))
+
     if(validate_pop_name(pop)
     and validate_pop_ring(pop)
     and validate_pop_rangeIP(pop)):

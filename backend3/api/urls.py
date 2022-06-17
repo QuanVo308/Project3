@@ -7,6 +7,10 @@ router = DefaultRouter()
 router.register(r'popplus', views.PopPlusViewSet,basename="popplus")
 router.register(r'pop', views.PopViewSet,basename="pop")
 router.register(r'device', views.DeviceViewSet,basename="device")
+router.register(r'area', views.AreaViewSet,basename="area")
+router.register(r'province', views.ProvinceViewSet,basename="province")
+router.register(r'branch', views.BranchViewSet,basename="branch")
+router.register(r'brand', views.BrandViewSet,basename="brand")
 
 
 urlpatterns = [

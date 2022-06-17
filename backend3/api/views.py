@@ -4,6 +4,7 @@ from rest_framework import Response
 from .models import *
 from .ultility import *
 from .serializers import *
+from .models import *
 
 
 def index(request):
@@ -33,3 +34,4 @@ class PopViewSet(viewsets.ModelViewSet):
 class DeviceViewSet(viewsets.ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
+    

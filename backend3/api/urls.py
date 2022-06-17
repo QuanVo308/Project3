@@ -11,7 +11,6 @@ router.register(r'device', views.DeviceViewSet,basename="device")
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('', views.index, name='index'),
-    # path('/test', views.test, name='test'),
+    path('', views.index, name='index'),
+    path('test', views.test, name='test'),
 ]
-

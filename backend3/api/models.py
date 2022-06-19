@@ -55,7 +55,7 @@ class Brand(models.Model):
 
 
 class Device(models.Model):
-    popID= models.ForeignKey(Pop, on_delete=models.PROTECT)
+    pop= models.ForeignKey(Pop, on_delete=models.PROTECT)
     name = models.CharField(max_length=50)
     role = models.CharField(max_length=20)
     ip = models.GenericIPAddressField()

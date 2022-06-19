@@ -15,10 +15,9 @@ def index(request):
     return HttpResponse("Hello, world!!!!")
 
 def test(request):
-    pop = Pop.objects.filter()[0]
-    popp = PopPlus.objects.filter()[0]
-    print(validate_pop(pop))
-    print(validate_popplus(popp))
+    device = Device.objects.filter()[0]
+    # print(vars(device))
+    print(validate_device(device))
     return HttpResponse("Test")
 
 

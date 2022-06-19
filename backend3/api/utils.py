@@ -1,3 +1,4 @@
+from this import d
 from .models import *
 from django.core.validators import validate_ipv4_address
 import ipaddress
@@ -115,12 +116,6 @@ def validate_pop_ring(pop):
     return True
 
 def validate_pop_rangeIP(pop):
-    # if not validate_ipv4_address(pop.range_ip):
-    #     return False
-
-    # if ipaddress.ip_address(pop.range_ip):
-    #     return False
-
     try:
         print(pop.range_ip)
         ipaddress.ip_address(pop.range_ip)
@@ -128,20 +123,6 @@ def validate_pop_rangeIP(pop):
         print('wrong ip address')
         return False
 
-    # dot = pop.range_ip.find('.')
-    # if dot == -1:
-    #     return False
-    
-    # octet = pop.range_ip[:dot]
-    # print(octet)
-
-    # dot = pop.range_ip.find('.', dot + 1)
-    # if dot == -1:
-    #     return False
-
-    # dot = pop.range_ip.find('.', dot + 1)
-    # if dot == -1:
-    #     return False
     return True 
 
 def get_pop_rangeIP(pop):
@@ -166,14 +147,83 @@ def validate_pop(pop):
         return True
     return False
 
+def popp_format(name):
+    shortened = False
+
+    for index, i in enumerate(name):
+        # print(i, index)
+        if i=='0' and not shortened:
+           name = name[:index] + name[index+1:]
+           shortened = True
+
+    # print(name)
+
+    return name
+
+
+def get_device_sequence(dtype, pop):
+
+    # dtype = name[2:]
+    devices = Device.objects.filter(pop=pop, name__icontains=dtype)
+    sequences=[]
+    print(dtype)
+    
+    for i in devices:
+        # print(i.name[len(i.name)-7:len(i.name)-5])
+        sequences.append(int(i.name[len(i.name)-2:]))
+    sequences.sort()
+    
+    s = 0
+    while(True):
+        if s not in sequences:
+            return f"{s:02}"
+        s+=1
+
+    return -1
+
 def validate_device_name(device):
+    # print(device.role)
     if device.role == 'AGG':
+
+        type = ['DI','DA','CE']
+        if not device.name[0:2] in type:
+            print("AGG role begin")
+            return False
+
+        if device.pop.province.area.name != device.name[2]:
+            print("AGG role area")
+            return False
+
+        if device.name[3:5] != device.pop.metro[2:]:
+            print("AGG role metro")
+            return False
+
+        popp = device.pop.popPlus.name[3:]
+        popp = popp_format(popp)
+        next = len(popp)+5
+        if(device.name[5:next] != popp):
+            print("AGG role popplus")
+            return False
+
+        if(device.name[next:next+3] != device.pop.province.acronym):
+            print("AGG role province")
+            return False
+        next+=3
+
+        # print(device.name[next:next+4], device.pop.name[3:])
+        if(device.name[next:next+4] != device.pop.name[3:]):
+            print("AGG role pop")
+            return False
+        next+=4
+
+        print(get_device_sequence(device.name[next+2:next+4], device.pop))
+
         return True
     else:
         return True
 
-    return False
 def validate_device(device):
-
-
+    
+    if( validate_device_name(device)):
+        return True
     return False

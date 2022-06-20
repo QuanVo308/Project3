@@ -9,7 +9,8 @@ from django.db import models
 class Area(models.Model):
     name = models.CharField(max_length=10, unique=True)
     
-  
+    def __str__(self) :
+        return self.name
 
 
 class Province(models.Model):
@@ -17,12 +18,16 @@ class Province(models.Model):
     acronym = models.CharField(max_length=3, default="", unique=True)
     area = models.ForeignKey(Area, on_delete=models.PROTECT)
 
-
+    def __str__(self) :
+        return self.name
 
 
 class Branch(models.Model):
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     name = models.CharField(max_length=30, unique=True)
+
+    def __str__(self) :
+        return self.name
 
 
 class PopPlus(models.Model):
@@ -34,7 +39,8 @@ class PopPlus(models.Model):
     octet3_ip_MGMT = models.IntegerField()
     vlan_PPPoE = models.IntegerField()
 
-
+    def __str__(self) :
+        return self.name
 
 
 class Pop(models.Model):
@@ -47,11 +53,16 @@ class Pop(models.Model):
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     sequence_ring = models.IntegerField()
 
+    def __str__(self) :
+        return self.name
 
 
 class Brand(models.Model):
     name = models.CharField(max_length=30, unique=True)
     company = models.CharField(max_length=30)
+
+    def __str__(self) :
+        return self.name
 
 
 class Device(models.Model):
@@ -60,4 +71,7 @@ class Device(models.Model):
     role = models.CharField(max_length=20)
     ip = models.GenericIPAddressField()
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT )
+
+    def __str__(self) :
+        return self.name
 

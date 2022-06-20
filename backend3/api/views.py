@@ -52,7 +52,7 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         for i in t:
             setattr(pp, i, t[i])
 
-        print(validate_popplus(pp))
+        # print(validate_popplus(pp))
 
         if validate_popplus(pp):
             s = self.serializer_class(data=request.data)
@@ -82,6 +82,7 @@ class PopViewSet(viewsets.ModelViewSet):
         request.data._mutable = True
         request.data['range_ip'] = get_pop_rangeIP(pp)
         # print(pp.ip)
+        
 
         if validate_pop(pp):
             s = self.serializer_class(data=request.data)

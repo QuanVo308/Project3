@@ -25,6 +25,8 @@ class PopPlusSerializer(serializers.ModelSerializer):
 
 
 class PopSerializer(serializers.ModelSerializer):
+    popPlus_name = serializers.ReadOnlyField(source='popPlus.name')
+    province_name = serializers.ReadOnlyField(source='province.name')
     class Meta:
         model = Pop
         fields = '__all__'
@@ -32,6 +34,8 @@ class PopSerializer(serializers.ModelSerializer):
 
 
 class DeviceSerializer(serializers.ModelSerializer):
+    pop_name = serializers.ReadOnlyField(source='pop.name')
+    brand_name = serializers.ReadOnlyField(source='brand.name')
     class Meta:
         model = Device
         fields = '__all__'

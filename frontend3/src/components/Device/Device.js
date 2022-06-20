@@ -28,6 +28,8 @@ export default function Device(){
                             <th>Ip</th>
                             <th>Pop</th>
                             <th>Brand</th> 
+                            <th>Subnet</th>
+                            <th>Gateway</th>
                         </tr>
                     </thead>
                     {deviceList.map(data => (
@@ -39,6 +41,8 @@ export default function Device(){
                             <td>{data.ip }</td>
                             <td>{data.pop_name }</td>
                             <td>{data.brand_name}</td>
+                            <td>{data.subnet}</td>
+                            <td>{data.gateway}</td>
                         </tr>
                     </tbody>
                     ))}

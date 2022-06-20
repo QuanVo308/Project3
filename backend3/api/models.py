@@ -14,7 +14,7 @@ class Area(models.Model):
 
 class Province(models.Model):
     name = models.CharField(max_length=30, unique=True)
-    acronym = models.CharField(max_length=3, default="")
+    acronym = models.CharField(max_length=3, default="", unique=True)
     area = models.ForeignKey(Area, on_delete=models.PROTECT)
 
 
@@ -50,7 +50,7 @@ class Pop(models.Model):
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     company = models.CharField(max_length=30)
 
 

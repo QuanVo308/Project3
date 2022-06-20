@@ -7,13 +7,13 @@ from django.db import models
 
 # Create your models here.
 class Area(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=10, unique=True)
     
   
 
 
 class Province(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     acronym = models.CharField(max_length=3, default="")
     area = models.ForeignKey(Area, on_delete=models.PROTECT)
 
@@ -22,7 +22,7 @@ class Province(models.Model):
 
 class Branch(models.Model):
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
 
 
 class PopPlus(models.Model):

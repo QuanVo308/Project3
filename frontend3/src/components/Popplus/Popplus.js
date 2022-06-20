@@ -10,16 +10,16 @@ export default function Popplus(){
     useEffect(() => { 
         const getPopplus = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
+            console.log(res)
             setPopplusList(res.data)
         }
         getPopplus()
     },[])
 
-    // useEffect(() => { 
-    //     let res = axios.get('http://127.0.0.1:8000/api/popplus/')
-    //     .then(function(record){
-    //         setPopplusList(record.data)})
-    // },[])
+    // useEffect(()=>{
+    //     let res = 
+    // })
+
 
     return(
         <div>
@@ -47,7 +47,7 @@ export default function Popplus(){
                             <td>{data.octet2_ip_MGMT}</td>
                             <td>{data.octet3_ip_MGMT}</td>
                             <td>{data.vlan_PPPoE}</td>
-                            <td>{data.branch}</td>
+                            <td>{data.branch_name}</td>
                         </tr>
                     </tbody>
                     ))}

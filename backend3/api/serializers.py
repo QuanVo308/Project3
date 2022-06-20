@@ -18,10 +18,10 @@ class BranchSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PopPlusSerializer(serializers.ModelSerializer):
+    branch_name = serializers.ReadOnlyField(source='branch.name')
     class Meta:
         model = PopPlus
         fields = '__all__'
-
 
 class PopSerializer(serializers.ModelSerializer):
     class Meta:

@@ -132,7 +132,7 @@ def get_pop_rangeIP(pop):
     ip += str(pop.popPlus.octet2_ip_MGMT) + '.'
     # print(int(pop.sequence_ring)*64//255)
     ip += str(int(pop.popPlus.octet3_ip_MGMT) + int(pop.sequence_ring)*64//255) + '.'
-    print('check',int(pop.sequence_ring)*64%256)
+    # print('check',int(pop.sequence_ring)*64%256)
     ip += str(int(pop.sequence_ring)*64%256)
     return ip
 

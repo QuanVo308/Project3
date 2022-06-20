@@ -166,7 +166,7 @@ def get_device_sequence(dtype, pop):
     # dtype = name[2:]
     devices = Device.objects.filter(pop=pop, name__icontains=dtype)
     sequences=[]
-    print(dtype)
+    # print(dtype)
     
     for i in devices:
         # print(i.name[len(i.name)-7:len(i.name)-5])

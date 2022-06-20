@@ -5,12 +5,21 @@ import styles from './Popplus.module.scss'
 
 export default function Popplus(){
 
-    const [popplusList, setPopplusList] = useState()
+    const [popplusList, setPopplusList] = useState([])
 
-    useEffect(async () => { 
-        await axios.get('http://127.0.0.1:8000/api/popplus/')
+    useEffect(() => { 
+        const getPopplus = async()=>{
+            let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
+            setPopplusList(res.data)
+        }
+        getPopplus()
+    },[])
 
-    })
+    // useEffect(() => { 
+    //     let res = axios.get('http://127.0.0.1:8000/api/popplus/')
+    //     .then(function(record){
+    //         setPopplusList(record.data)})
+    // },[])
 
     return(
         <div>
@@ -28,25 +37,20 @@ export default function Popplus(){
                             <th>branch </th>
                         </tr>
                     </thead>
-                    {/* <tbody>
+                    {popplusList.map(data => (
+                        <tbody key={data.id}>
                         <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                            <td>{data.id}</td>
+                            <td>{data.name}</td>
+                            <td>{data.area_OSPF}</td>
+                            <td>{data.octet2_ip_OSPF_MGMT}</td>
+                            <td>{data.octet2_ip_MGMT}</td>
+                            <td>{data.octet3_ip_MGMT}</td>
+                            <td>{data.vlan_PPPoE}</td>
+                            <td>{data.branch}</td>
                         </tr>
-                        <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        </tr>
-                        <tr>
-                        <td>3</td>
-                        <td colSpan={2}>Larry the Bird</td>
-                        <td>@twitter</td>
-                        </tr>
-                    </tbody> */}
+                    </tbody>
+                    ))}
                 </Table>
             </div>
         </div>

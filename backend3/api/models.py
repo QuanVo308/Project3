@@ -71,8 +71,6 @@ class Device(models.Model):
     role = models.CharField(max_length=20)
     ip = models.GenericIPAddressField()
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT )
-    subnet = models.GenericIPAddressField(default=None, null=True)
-    gateway = models.GenericIPAddressField(default=None, null=True)
 
     def __str__(self) :
         return self.name

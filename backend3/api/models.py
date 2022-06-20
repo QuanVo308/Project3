@@ -26,7 +26,7 @@ class Branch(models.Model):
 
 
 class PopPlus(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     branch = models.ForeignKey(Branch, on_delete=models.PROTECT)
     area_OSPF = models.IntegerField()
     octet2_ip_OSPF_MGMT = models.IntegerField()
@@ -38,9 +38,9 @@ class PopPlus(models.Model):
 
 
 class Pop(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     ring = models.CharField(max_length=20)
-    range_ip = models.GenericIPAddressField()
+    range_ip = models.GenericIPAddressField(unique=True)
     vlan_PPPoE = models.CharField(max_length=20)
     metro = models.CharField(max_length=20)
     popPlus = models.ForeignKey(PopPlus, on_delete=models.PROTECT)
@@ -56,8 +56,8 @@ class Brand(models.Model):
 
 class Device(models.Model):
     pop= models.ForeignKey(Pop, on_delete=models.PROTECT)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     role = models.CharField(max_length=20)
-    ip = models.GenericIPAddressField()
+    ip = models.GenericIPAddressField(unique=True)
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT )
 

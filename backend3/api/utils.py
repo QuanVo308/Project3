@@ -212,14 +212,27 @@ def validate_device_name(device):
             return False
         next+=3
 
-        # print(get_device_sequence(device.name[len(device.name)-4: len(device.name)-2], device.pop))
         if(device.name[next:next+4] != device.pop.name[3:]):
             print("AGG role pop")
             return False
-        next+=4
+        next+=6
+
+        if not Brand.objects.filter(name = device.name[next:]):
+            print("AGG role brand")
+            return False 
 
         return True
     else:
+        if(device.name[0:3] != device.pop.province.acronym):
+            print("Device role province")
+            return False
+        if(device.name[3:7] != device.pop.name[3:]):
+            print("Device role pop")
+            return False
+
+        if not Brand.objects.filter(name = device.name[9:]):
+            print("Device role brand")
+            return False 
         return True
 
 def get_device_ips(device, tnew=True):
@@ -227,7 +240,7 @@ def get_device_ips(device, tnew=True):
   
     # print(device.pop.range_ip)
     if device.role == 'AGG':
-        print(device.role)
+        # print(device.role)
         i = 1
         while(i <= 9):
             # print(i)
@@ -241,7 +254,7 @@ def get_device_ips(device, tnew=True):
             ip=''
             i+=1
     elif device.role == "OLT":
-        print(device.role)
+        # print(device.role)
         i = 11
         while(i <= 19):
             # print(i)
@@ -255,7 +268,7 @@ def get_device_ips(device, tnew=True):
             ip=''
             i+=1
     elif device.role == "SW-BB":
-        print(device.role)
+        # print(device.role)
         i = 21
         while(i <= 29):
             # print(i)
@@ -269,7 +282,7 @@ def get_device_ips(device, tnew=True):
             ip=''
             i+=1
     elif device.role == "POWER":
-        print(device.role)
+        # print(device.role)
         if tnew:
             i = 34
             while(i <= 38):

@@ -14,12 +14,17 @@ def index(request):
 def test(request):
     pop = Pop.objects.filter()[0]
     # print(get_pop_rangeIP(pop))
-    devices = Device.objects.filter(pop = pop)
+    devices = Device.objects.filter()
     # print(Device.objects.filter(pop = device.pop))
     for device in devices:
         print(device.id)
         print(validate_device(device))
         print(get_device_ips(device))
+        print("gateway", get_device_gateway(device))
+        print('subnet', get_device_subnet(device))
+        # device.gateway = get_device_gateway(device)
+        # device.subnet = get_device_subnet(device)
+        # device.save()
         print('\n\n')
     return HttpResponse("Test")
 

@@ -117,7 +117,7 @@ class PopViewSet(viewsets.ModelViewSet):
         for i in t:
             setattr(pp, i, t[i])
         # setattr(pp, 'ip', get_pop_rangeIP(pp))
-        # pp.range_ip = get_pop_rangeIP(pp)
+        pp.range_ip = get_pop_rangeIP(pp)
         request.data._mutable = True
         request.data['range_ip'] = get_pop_rangeIP(pp)
         # print(pp.ip)
@@ -154,6 +154,54 @@ class DeviceViewSet(viewsets.ModelViewSet):
             se['brand_name'] = Brand.objects.filter(id = se['brand'])[0].name
             se['pop_name'] = Pop.objects.filter(id = se['pop'])[0].name
         return Response(serializer.data)
+    
+    def create(self, request):
+        request.data._mutable = True
+        print(get_device_name(request.data))
+        request.data['name'] = get_device_name(request.data)
+
+        t = request.data.copy()
+        t._mutable = True
+
+        if not Brand.objects.filter(name = request.data['brand']) or not Pop.objects.filter(name = request.data['pop'])[0]:
+            return HttpResponse('fail')
+
+        t['brand'] = Brand.objects.filter(name = request.data['brand'])[0]
+        t['pop'] = Pop.objects.filter(name = request.data['pop'])[0]
+
+
+        request.data['pop'] = Pop.objects.filter(name = request.data['pop'])[0].id
+        request.data['brand'] = Brand.objects.filter(name = request.data['brand'])[0].id
+
+        pp = Device()
+        for i in t:
+            setattr(pp, i, t[i])
+        
+        if len(get_device_ips(pp)) != 0:
+            pp.ip = get_device_ips(pp)[0]
+            request.data['ip'] = pp.ip
+            # print(pp.ip)
+        else:
+            return HttpResponse('fail')
+
+        request.data['subnet'] = get_device_subnet(pp)
+        request.data['gateway'] = get_device_gateway(pp)
+        pp.subnet = request.data['subnet']
+        pp.gateway = request.data['gateway']
+
+        # print(request.data)
+        # print(vars(pp))
+
+        if validate_device(pp):
+            s = self.serializer_class(data=request.data)
+            # print('zxczxczxc')
+            s.is_valid(raise_exception=True)
+            # self.perform_create(s)
+            return HttpResponse('success')
+        
+        else:
+            return HttpResponse('fail')
+
 
 
 class BrandViewSet(viewsets.ModelViewSet):

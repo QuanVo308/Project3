@@ -1,6 +1,6 @@
 from urllib import request
 from django.http import HttpResponse
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import *
 from .utils import *
@@ -51,16 +51,20 @@ class PopPlusViewSet(viewsets.ModelViewSet):
     def create(self, request):
         t = request.data.copy()
         t._mutable = True
-        t['branch'] = Branch.objects.filter(id = request.data['branch'])[0]
+        t['branch'] = Branch.objects.filter(name = request.data['branch'])[0]
 
         pp = PopPlus()
         for i in t:
             setattr(pp, i, t[i])
 
+        request.data._mutable = True
+        request.data['branch'] = pp.branch.id
+
         # print(validate_popplus(pp))
 
         if validate_popplus(pp):
             s = self.serializer_class(data=request.data)
+            # print('zxczxczxc')
             s.is_valid(raise_exception=True)
             self.perform_create(s)
             return HttpResponse('success')
@@ -72,6 +76,20 @@ class PopPlusViewSet(viewsets.ModelViewSet):
 class PopViewSet(viewsets.ModelViewSet):
     queryset = Pop.objects.all()
     serializer_class = PopSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        
+        serializer = self.get_serializer(queryset, many=True)
+        for se in serializer.data:
+            se['province_name'] = Province.objects.filter(id = se['province'])[0].name
+        return Response(serializer.data)
     
     def create(self, request):
         t = request.data.copy()
@@ -83,7 +101,7 @@ class PopViewSet(viewsets.ModelViewSet):
         for i in t:
             setattr(pp, i, t[i])
         # setattr(pp, 'ip', get_pop_rangeIP(pp))
-        pp.range_ip = get_pop_rangeIP(pp)
+        # pp.range_ip = get_pop_rangeIP(pp)
         request.data._mutable = True
         request.data['range_ip'] = get_pop_rangeIP(pp)
         # print(pp.ip)
@@ -92,11 +110,11 @@ class PopViewSet(viewsets.ModelViewSet):
         if validate_pop(pp):
             s = self.serializer_class(data=request.data)
             s.is_valid(raise_exception=True)
-            # self.perform_create(s)
+            self.perform_create(s)
             headers = self.get_success_headers(s.data)
 
             # return HttpResponse('success')
-            return Response(s.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(s.data, status= status.HTTP_201_CREATED, headers=headers)
         
         else:
             return HttpResponse('fail')

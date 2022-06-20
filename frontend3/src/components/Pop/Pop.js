@@ -44,7 +44,7 @@ export default function Pop(){
                             <td>{data.sequence_ring}</td>
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.popPlus}</td>
-                            <td>{data.province}</td>
+                            <td>{data.province_name}</td>
                         </tr>
                     </tbody>
                     ))}

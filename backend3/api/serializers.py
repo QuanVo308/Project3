@@ -21,12 +21,14 @@ class PopPlusSerializer(serializers.ModelSerializer):
     class Meta:
         model = PopPlus
         fields = '__all__'
+        extra_fields = ['pname']
 
 
 class PopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pop
         fields = '__all__'
+        
 
 
 class DeviceSerializer(serializers.ModelSerializer):

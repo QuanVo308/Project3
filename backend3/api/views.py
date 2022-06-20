@@ -22,9 +22,9 @@ def test(request):
         print(get_device_ips(device))
         print("gateway", get_device_gateway(device))
         print('subnet', get_device_subnet(device))
-        # device.gateway = get_device_gateway(device)
-        # device.subnet = get_device_subnet(device)
-        # device.save()
+        device.gateway = get_device_gateway(device)
+        device.subnet = get_device_subnet(device)
+        device.save()
         print('\n\n')
     return HttpResponse("Test")
 

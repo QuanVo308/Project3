@@ -12,13 +12,15 @@ def index(request):
     return HttpResponse("Hello, world!!!!")
 
 def test(request):
-    # pop = Pop.objects.filter()[0]
+    pop = Pop.objects.filter()[0]
     # print(get_pop_rangeIP(pop))
-    device = Device.objects.filter()[0]
+    devices = Device.objects.filter(pop = pop)
     # print(Device.objects.filter(pop = device.pop))
-    print(validate_device(device))
-
-    print(get_device_ips(device))
+    for device in devices:
+        print(device.id)
+        print(validate_device(device))
+        print(get_device_ips(device))
+        print('\n\n')
     return HttpResponse("Test")
 
 

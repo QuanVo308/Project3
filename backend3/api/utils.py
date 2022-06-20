@@ -220,11 +220,12 @@ def validate_device_name(device):
     else:
         return True
 
-def get_device_ips(device, tnew=True):
+def get_device_ips(device, tnew=False):
     ips=[]
   
     # print(device.pop.range_ip)
     if device.role == 'AGG':
+        print(device.role)
         i = 1
         while(i <= 9):
             # print(i)
@@ -237,7 +238,57 @@ def get_device_ips(device, tnew=True):
                 ips.append(ip)
             ip=''
             i+=1
-        return ips
+    elif device.role == "OLT":
+        print(device.role)
+        i = 11
+        while(i <= 19):
+            # print(i)
+            octet1 = '10.'
+            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+i)//255) + '.'
+            octet4 = str(((int(device.pop.sequence_ring)*64)+i)%256)
+            ip = octet1 + octet2 + octet3 + octet4
+            if not Device.objects.filter(pop = device.pop, ip = ip):
+                ips.append(ip)
+            ip=''
+            i+=1
+    elif device.role == "SW-BB":
+        print(device.role)
+        i = 21
+        while(i <= 29):
+            # print(i)
+            octet1 = '10.'
+            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+i)//255) + '.'
+            octet4 = str(((int(device.pop.sequence_ring)*64)+i)%256)
+            ip = octet1 + octet2 + octet3 + octet4
+            if not Device.objects.filter(pop = device.pop, ip = ip):
+                ips.append(ip)
+            ip=''
+            i+=1
+    elif device.role == "POWER":
+        print(device.role)
+        if tnew:
+            i = 34
+            while(i <= 38):
+                # print(i)
+                octet1 = '10.'
+                octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+                octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+i)//255) + '.'
+                octet4 = str(((int(device.pop.sequence_ring)*64)+i)%256)
+                ip = octet1 + octet2 + octet3 + octet4
+                if not Device.objects.filter(pop = device.pop, ip = ip):
+                    ips.append(ip)
+                ip=''
+                i+=1
+        else:
+            octet1 = '25.'
+            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet3 = str(int(device.pop.sequence_ring)) + '.'
+            octet4 = '2'
+            ip = octet1 + octet2 + octet3 + octet4
+            ips.append(ip)
+
     return ips
 
 

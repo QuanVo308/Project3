@@ -1,32 +1,30 @@
-from re import T
+from urllib import request
 from django.http import HttpResponse
 from rest_framework import viewsets
-# from rest_framework import Response
+from rest_framework.response import Response
 from .models import *
 from .utils import *
 from .serializers import *
 from .models import *
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
 
 
 def index(request):
     return HttpResponse("Hello, world!!!!")
 
 def test(request):
-    device = Device.objects.filter()[0]
-    # print(vars(device))
-    print(validate_device(device))
+    octet = 45
+    print(validate_ip_octet(octet))
+    print(validate_ip_octet(456))
+    print(validate_ip_octet(255))
+    print(validate_ip_octet(0))
+    print(validate_ip_octet('3'))
+    print(validate_ip_octet(3.3))
     return HttpResponse("Test")
 
 
 class AreaViewSet(viewsets.ModelViewSet):
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
-
-    def get_Area(self):
-        return self.list()
 
 
 class ProvinceViewSet(viewsets.ModelViewSet):

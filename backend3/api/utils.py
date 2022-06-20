@@ -1,6 +1,7 @@
 # from this import d
 
 # from pydantic import NoneBytes
+from re import I
 from .models import *
 from django.core.validators import validate_ipv4_address
 import ipaddress
@@ -169,10 +170,17 @@ def get_device_sequence(dtype, pop):
     devices = Device.objects.filter(pop=pop, name__icontains=dtype)
     sequences=[]
     # print(dtype)
+
     
     for i in devices:
+        iter = 0
+        if i.name[8].isnumeric():
+            iter = 16
+        else:
+            iter = 15
         # print(i.name[len(i.name)-7:len(i.name)-5])
-        sequences.append(int(i.name[len(i.name)-2:]))
+        sequences.append(int(i.name[iter:iter+2]))
+    # print(sequences)
     sequences.sort()
     
     s = 0
@@ -335,13 +343,27 @@ def get_device_subnet(device, tnew = True):
     elif device.role == 'POWER':
         return '255.255.255.248' if tnew else '255.255.255.0'
 
+def get_device_name(dinfo):
+    name = ''
+    if dinfo['role'] == 'AGG':
+        name += dinfo['type']
+        name += str(dinfo['area'])
+        name += str(dinfo['metro'][2:])
+        name += str(popp_format(dinfo['popp'][3:]))
+        name += str(Province.objects.filter(name = dinfo['province'])[0].acronym )
+        name += str(dinfo['pop'][3:])
+        # print(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0])
+        name += str(get_device_sequence(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0]))
+        name += str(dinfo['brand'])
+    return name
+
 
 def validate_device(device):
     # iter = 0
     # if device.name[8].isnumeric():
-    #     iter = 18
+    #     iter = 16
     # else:
-    #     iter = 17
+    #     iter = 15
 
     if( validate_device_name(device)):
         return True

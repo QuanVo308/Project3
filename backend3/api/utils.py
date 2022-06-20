@@ -1,4 +1,6 @@
 from this import d
+
+from pydantic import NoneBytes
 from .models import *
 from django.core.validators import validate_ipv4_address
 import ipaddress
@@ -220,7 +222,7 @@ def validate_device_name(device):
     else:
         return True
 
-def get_device_ips(device, tnew=False):
+def get_device_ips(device, tnew=True):
     ips=[]
   
     # print(device.pop.range_ip)
@@ -290,6 +292,35 @@ def get_device_ips(device, tnew=False):
             ips.append(ip)
 
     return ips
+
+def get_device_gateway(device, tnew = True):
+    if device.role == 'AGG' :
+        return None
+    elif device.role == 'OLT' or device.role == 'SW-BB':
+        agg = Device.objects.filter(pop = device.pop, role='AGG')[0]
+        return agg.ip
+    elif device.role == 'POWER':
+        if tnew:
+            octet1 = '10.'
+            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+33)//255) + '.'
+            octet4 = str(((int(device.pop.sequence_ring)*64)+33)%256)
+            ip = octet1 + octet2 + octet3 + octet4
+            return ip
+        else:
+            octet1 = '25.'
+            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet3 = str(int(device.pop.sequence_ring)) + '.'
+            octet4 = '1'
+            ip = octet1 + octet2 + octet3 + octet4
+            return ip
+            
+    
+def get_device_subnet(device, tnew = True):
+    if device.role == 'AGG' or device.role == 'SW-BB' or device.role == 'OLT':
+        return '255.255.255.224'
+    elif device.role == 'POWER':
+        return '255.255.255.248' if tnew else '255.255.255.0'
 
 
 def validate_device(device):

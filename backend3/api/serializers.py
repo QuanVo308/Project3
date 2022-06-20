@@ -22,11 +22,7 @@ class PopPlusSerializer(serializers.ModelSerializer):
     class Meta:
         model = PopPlus
         fields = '__all__'
-        extra_fields = ['pname']
-<<<<<<< HEAD
-=======
 
->>>>>>> 35c1738d7ded657d583ebd353bb16848739195ee
 
 class PopSerializer(serializers.ModelSerializer):
     class Meta:

@@ -58,6 +58,6 @@ class Device(models.Model):
     pop= models.ForeignKey(Pop, on_delete=models.PROTECT)
     name = models.CharField(max_length=50, unique=True)
     role = models.CharField(max_length=20)
-    ip = models.GenericIPAddressField(unique=True)
+    ip = models.GenericIPAddressField()
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT )
 

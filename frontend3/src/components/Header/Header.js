@@ -1,19 +1,20 @@
 
 import {Nav} from 'react-bootstrap'
+import styles from './Header.module.scss'
 
 export default function Header(){
     return(
-        <div>
-            <div>QUẢN LÝ TÀI NGUYÊN LOGIC INFMB FTEL</div>
+        <div className={styles.header}>
+            <div className={styles.title}>QUẢN LÝ TÀI NGUYÊN LOGIC INFMB FTEL</div>
             <Nav variant="tabs" defaultActiveKey="/home">
                 <Nav.Item>
-                    <Nav.Link href="">Pop+</Nav.Link>
+                    <Nav.Link href="/popplus">Pop+</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="">Pop</Nav.Link>
+                    <Nav.Link href="/pop">Pop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="">Device</Nav.Link>
+                    <Nav.Link href="/device">Device</Nav.Link>
                 </Nav.Item>
             </Nav>
         </div>

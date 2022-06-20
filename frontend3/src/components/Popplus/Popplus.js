@@ -47,7 +47,7 @@ export default function Popplus(){
                             <td>{data.octet2_ip_MGMT}</td>
                             <td>{data.octet3_ip_MGMT}</td>
                             <td>{data.vlan_PPPoE}</td>
-                            <td>{data.branch}</td>
+                            <td>{data.branch_name}</td>
                         </tr>
                     </tbody>
                     ))}

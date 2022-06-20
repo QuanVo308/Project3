@@ -37,8 +37,8 @@ export default function Device(){
                             <td>{data.name}</td>
                             <td>{data.role}</td>
                             <td>{data.ip }</td>
-                            <td>{data.pop }</td>
-                            <td>{data.brand}</td>
+                            <td>{data.pop_name }</td>
+                            <td>{data.brand_name}</td>
                         </tr>
                     </tbody>
                     ))}

@@ -43,7 +43,7 @@ export default function Pop(){
                             <td>{data.metro }</td>
                             <td>{data.sequence_ring}</td>
                             <td>{data.vlan_PPPoE}</td>
-                            <td>{data.popPlus}</td>
+                            <td>{data.popplus_name}</td>
                             <td>{data.province_name}</td>
                         </tr>
                     </tbody>

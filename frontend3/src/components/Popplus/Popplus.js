@@ -56,7 +56,6 @@ export default function Popplus(){
 
     const handleAdd = () => {
         const formData = new FormData()
-        console.log("input test", input)
         Object.entries(input).map( ([key, value]) => {
             formData.append(key, value)
         })
@@ -67,18 +66,13 @@ export default function Popplus(){
             headers: { "Content-Type": "multipart/form-data" },
           })
           .then(function (response) {
-            //handle success
-            console.log(response);
+            // console.log(response);
           })
-          .catch(function (response) {
-            //handle error
-            console.log(response);
-          });
     }
 
     return(
         <div>
-            <div>
+            <div className={styles.Addpopplus}>
                 <Button variant="primary" onClick={()=>{handleShow()}}> Add Popplus</Button>
                 {/* {showAddPopplus?<AddPopplus data={showAddPopplus}/>:null} */}
                 <Modal show={show} onHide={handleClose}>

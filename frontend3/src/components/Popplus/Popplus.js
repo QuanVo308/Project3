@@ -31,25 +31,63 @@ export default function Popplus(){
 
     const [provinceList, setProvinceList] = useState([])
     const getProvice = (data) => {
-        axios.get('http://127.0.0.1:8000/api/provincearea', {params:{area: data}})
+        axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
-            console.log(res)
-            setProvinceList(res.data)
+            setProvinceList(res.data.data)
+            
         })
     }
     
     const [branchList, setBranchList] = useState([])
     const getBranch = (data) => {
-        axios.get('http://127.0.0.1:8000/api/branchprovince/', {params:{province: data}})
+        axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
-            console.log(res)
-            setBranchList(res.data)
+            // console.log(res)
+            setBranchList(res.data.data)
+            // const pname = 'name'
+            // const pvalue = res.data.data[0].name
+            // console.log("check2", pname, pvalue)
+
+            // setInput(values => ({...values, [pname]: pvalue}))
+
         })
     }
 
+<<<<<<< HEAD
     const handleAdd = (e) => {
         e.preventDefault()
         console.log('Hello')
+=======
+    const [input, setInput] = useState({})
+    const handleChange = (event) => {
+        const name = event.target.name
+        const value = event.target.value
+        setInput(values => ({...values, [name]: value}))
+    }
+
+    function buildFormData(formData, data, parentKey) {
+        if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+          Object.keys(data).forEach(key => {
+            buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+          });
+        } else {
+          const value = data == null ? '' : data;
+      
+          formData.append(parentKey, value);
+        }
+      }
+
+
+    const handleAdd = () => {
+        const formData = FormData()
+        buildFormData(formData, input);
+        console.log(input)
+        console.log(formData)
+        axios.post('http://127.0.0.1:8000/api/popplus/', {'data': formData})
+            .then(function(res){
+                console.log(res)
+            })
+>>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
     }
 
     return(
@@ -65,7 +103,8 @@ export default function Popplus(){
                         <form>
                             <div>
                                 <label>Vùng: 
-                                    <select onChange={(e)=>{getProvice(e.target.value)}}>
+                                    <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                        <option>-</option>
                                         {areaList.map(data => (
                                             <option value={data.name}>{data.name}</option>
                                         ))}
@@ -74,7 +113,8 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Tỉnh:
-                                    <select onChange={(e)=>{getBranch(e.target.value)}}>
+                                    <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                        <option>-</option>
                                         {provinceList.map(data => (
                                             <option value={data.name}>{data.name}</option>
                                         ))}
@@ -83,7 +123,8 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Chi nhánh:
-                                    <select>
+                                    <select name='branch' onChange={handleChange}>
+                                        <option>-</option>
                                         {branchList.map(data => (
                                             <option value={data.name}>{data.name}</option>
                                         ))}
@@ -92,16 +133,18 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Phần đuôi: 
-                                    <select>
+                                    <select name='tail1' onChange={handleChange}>
+                                        <option>-</option>
                                         <option value='P'>P</option>
                                         <option value='M'>M</option>
                                     </select>
-                                    <input type="number" placeholder='001 -> 999' min="1" max="999"/>
+                                    <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
                                 </label>
                             </div>
                             <div>
                                 <label>Area OSPF:
-                                    <select>
+                                    <select name='area_OSPF' onChange={handleChange}>
+                                        <option>-</option>
                                         {[1,2,3,4,5,6,7,8,9].map(data => (
                                             <option value={data}>{data}</option>
                                         ))}
@@ -109,17 +152,18 @@ export default function Popplus(){
                                 </label>
                             </div>
                             <div>
-                                <label>Octet2 IP OSPF MGMT:<input type="number" /></label>
+                                <label>Octet2 IP OSPF MGMT:<input type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} /></label>
                             </div>
                             <div>
-                                <label>Octet2 IP MGMT:<input type="number" /></label>
+                                <label>Octet2 IP MGMT:<input type="number" name='octet2_ip_MGMT' onChange={handleChange} /></label>
                             </div>
                             <div>
-                            <label>Octet3 IP MGMT:<input type="number" /></label>
+                            <label>Octet3 IP MGMT:<input type="number" name='octet3_ip_MGMT' onChange={handleChange} /></label>
                             </div>
                             <div>
                             <label>vlan PPPoE:
-                                <select>
+                                <select name='vlan_PPPoE' onChange={handleChange}>
+                                    <option>-</option>
                                     {[30,31,32,33,34,35,36,37,38,39].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}
@@ -132,7 +176,7 @@ export default function Popplus(){
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={{handleAdd}}>
+                    <Button variant="primary" onClick={handleAdd}>
                         Add
                     </Button>
                     </Modal.Footer>

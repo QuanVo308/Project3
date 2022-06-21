@@ -2,3 +2,9 @@
 ./__pycache__
 .__pycache__
 __pycache__
+
+backend3/api/__pycache__/__init__.cpython-310.pyc
+backend3/api/__pycache__
+backend3/api/__pycache__/ls.cpython-310.pyc
+backend3/testapp/migrations/__pycache__/__init__.cpython-310.pyc
+*.pyc

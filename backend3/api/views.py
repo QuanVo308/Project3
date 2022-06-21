@@ -60,21 +60,22 @@ class PopPlusViewSet(viewsets.ModelViewSet):
     serializer_class = PopPlusSerializer
 
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
 
         
-        serializer = self.get_serializer(queryset, many=True)
-        for se in serializer.data:
-            se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
-        return Response(serializer.data)
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     for se in serializer.data:
+    #         se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
+    #     return Response(serializer.data)
 
     def create(self, request):
+        print(request.data)
         request.data._mutable = True
 
 
@@ -110,20 +111,20 @@ class PopViewSet(viewsets.ModelViewSet):
     queryset = Pop.objects.all()
     serializer_class = PopSerializer
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
 
         
-        serializer = self.get_serializer(queryset, many=True)
-        for se in serializer.data:
-            se['province_name'] = Province.objects.filter(id = se['province'])[0].name
-            se['popplus_name'] = PopPlus.objects.filter(id = se['popPlus'])[0].name
-        return Response(serializer.data)
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     for se in serializer.data:
+    #         se['province_name'] = Province.objects.filter(id = se['province'])[0].name
+    #         se['popplus_name'] = PopPlus.objects.filter(id = se['popPlus'])[0].name
+    #     return Response(serializer.data)
     
     def create(self, request):
         request.data._mutable = True
@@ -173,20 +174,20 @@ class DeviceViewSet(viewsets.ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
 
         
-        serializer = self.get_serializer(queryset, many=True)
-        for se in serializer.data:
-            se['brand_name'] = Brand.objects.filter(id = se['brand'])[0].name
-            se['pop_name'] = Pop.objects.filter(id = se['pop'])[0].name
-        return Response(serializer.data)
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     for se in serializer.data:
+    #         se['brand_name'] = Brand.objects.filter(id = se['brand'])[0].name
+    #         se['pop_name'] = Pop.objects.filter(id = se['pop'])[0].name
+    #     return Response(serializer.data)
     
     def create(self, request):
         request.data._mutable = True

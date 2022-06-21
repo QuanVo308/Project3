@@ -17,4 +17,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', views.index, name='index'),
     path('test', views.test, name='test'),
+    path('provincearea', views.get_province_in_area, name='province_area'),
+    path('branchprovince', views.get_branch_in_province, name='branch_province'),
+    path('popplusbrnach', views.get_popplus_in_branch, name='popplus_branch'),
+    path('poppopplus', views.get_pop_in_popplus, name='pop_popplus'),
 ]

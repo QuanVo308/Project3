@@ -1,5 +1,5 @@
 from urllib import request
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import *
@@ -15,21 +15,29 @@ def index(request):
     return HttpResponse("Hello, world!!!!")
 
 def test(request):
-    pop = Pop.objects.filter()[0]
-    # print(get_pop_rangeIP(pop))
-    devices = Device.objects.filter()
-    # print(Device.objects.filter(pop = device.pop))
-    for device in devices:
-        print(device.id)
-        print(validate_device(device))
-        print(get_device_ips(device))
-        print("gateway", get_device_gateway(device))
-        print('subnet', get_device_subnet(device))
-        device.gateway = get_device_gateway(device)
-        device.subnet = get_device_subnet(device)
-        device.save()
-        print('\n\n')
-    return HttpResponse("Test")
+    # print(Province.objects.filter(name = request.GET['area']))
+    province = Province.objects.filter(area = request.GET['area']).values()
+    return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
+
+def get_province_in_area(request):
+    id = Area.objects.get(name = request.GET['name'])
+    province = Province.objects.filter(area = id).values()
+    return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
+
+def get_branch_in_province(request):
+    id = Province.objects.get(name = request.GET['name'])
+    branch = Branch.objects.filter(province = id).values()
+    return JsonResponse({'data': list(branch), 'status': status.HTTP_201_CREATED})
+
+def get_popplus_in_branch(request):
+    id = Branch.objects.get(name = request.GET['name'])
+    popplus = PopPlus.objects.filter(branch = id).values()
+    return JsonResponse({'data': list(popplus), 'status': status.HTTP_201_CREATED})
+
+def get_pop_in_popplus(request):
+    id = PopPlus.objects.get(name = request.GET['name'])
+    pop = Pop.objects.filter(popPlus = id).values()
+    return JsonResponse({'data': list(pop), 'status': status.HTTP_201_CREATED})
 
 
 class AreaViewSet(viewsets.ModelViewSet):

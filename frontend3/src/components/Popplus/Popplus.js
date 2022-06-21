@@ -47,8 +47,9 @@ export default function Popplus(){
         })
     }
 
-    const handleAdd = () ={
-        
+    const handleAdd = (e) => {
+        e.preventDefault()
+        console.log('Hello')
     }
 
     return(

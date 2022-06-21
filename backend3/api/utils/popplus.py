@@ -51,3 +51,9 @@ def validate_popplus(popplus):
     and validate_popplus_area(popplus)):
         return True
     return False
+
+def get_popplus_name(popp, tail1, tail2):
+    name = ''
+    name += str(Province.objects.filter(name = popp.branch.province)[0].acronym)
+    name += tail1 + f"{int(tail2):03}"
+    return name

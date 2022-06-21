@@ -94,9 +94,15 @@ def get_pop_ring(pop):
     ring += str(Province.objects.filter(name = pop.province)[0].acronym)
     ring += str(pop.metro)
     ring += str(pop.popPlus.name[3:])
-    ring += 'R' + str(f"{pop.sequence_ring:02}")
+    ring += 'R' + str(f"{int(pop.sequence_ring):02}")
 
     return ring
+
+def get_pop_vlan(pop):
+    vlan = ''
+    # print(pop.popPlus)
+    vlan += str(PopPlus.objects.filter(name = pop.popPlus)[0].vlan_PPPoE) + str(f"{int(pop.sequence_ring):02}")
+    return vlan
 
 
 def validate_pop(pop):

@@ -152,13 +152,16 @@ class PopViewSet(viewsets.ModelViewSet):
         request.data['ring'] = get_pop_ring(pp)
         pp.ring = request.data['ring']
 
-        print(request.data['ring'])
+        request.data['vlan_PPPoE'] = get_pop_vlan(pp)
+        pp.vlan_PPPoE = request.data['vlan_PPPoE']
+        print("PPP", vars(pp))
+
         # print(pp.ip)
         
 
         if validate_pop(pp):
             s = self.serializer_class(data=request.data)
-            # print('check')
+            print('check')
             s.is_valid(raise_exception=True)
             # self.perform_create(s)
             headers = self.get_success_headers(s.data)

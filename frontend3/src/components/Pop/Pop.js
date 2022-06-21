@@ -10,7 +10,7 @@ export default function Pop(){
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
             setPopList(res.data)
-            console.log(res)
+            // console.log(res)
         }
         getPop()
     },[])
@@ -64,7 +64,9 @@ export default function Pop(){
         const formData = new FormData()
         Object.entries(input).map( ([key, value]) => {
             formData.append(key, value)
+            
         })
+        console.log(input)
         axios({
             method: "post",
             url: "http://127.0.0.1:8000/api/pop/",
@@ -72,7 +74,7 @@ export default function Pop(){
             headers: { "Content-Type": "multipart/form-data" },
           })
           .then(function (response) {
-            // console.log(response);
+            console.log(response);
           })
     }
 
@@ -118,7 +120,7 @@ export default function Pop(){
                             </div>
                             <div>
                                 <label>Popplus:
-                                    <select name='popplus' onChange={handleChange}>
+                                    <select name='popPlus' onChange={handleChange}>
                                         <option>-</option>
                                         {popplusList.map(data => (
                                             <option value={data.name}>{data.name}</option>
@@ -139,7 +141,7 @@ export default function Pop(){
                             </div>
                             <div>
                                 <label>Metro:
-                                    <select name='area_OSPF' onChange={handleChange}>
+                                    <select name='metro' onChange={handleChange}>
                                         <option>-</option>
                                         {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
                                             <option value={data}>{data}</option>

@@ -3,7 +3,10 @@ from django.http import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import *
-from .utils import *
+# from .utils import *
+from .utils.device import *
+from .utils.pop import *
+from .utils.popplus import *
 from .serializers import *
 from .models import *
 
@@ -81,7 +84,7 @@ class PopPlusViewSet(viewsets.ModelViewSet):
             s = self.serializer_class(data=request.data)
             # print('zxczxczxc')
             s.is_valid(raise_exception=True)
-            self.perform_create(s)
+            # self.perform_create(s)
             return HttpResponse('success')
         
         else:
@@ -126,7 +129,7 @@ class PopViewSet(viewsets.ModelViewSet):
         if validate_pop(pp):
             s = self.serializer_class(data=request.data)
             s.is_valid(raise_exception=True)
-            self.perform_create(s)
+            # self.perform_create(s)
             headers = self.get_success_headers(s.data)
 
             # return HttpResponse('success')
@@ -164,6 +167,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
         t._mutable = True
 
         if not Brand.objects.filter(name = request.data['brand']) or not Pop.objects.filter(name = request.data['pop'])[0]:
+            # print('check')
             return HttpResponse('fail')
 
         t['brand'] = Brand.objects.filter(name = request.data['brand'])[0]
@@ -182,6 +186,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
             request.data['ip'] = pp.ip
             # print(pp.ip)
         else:
+            print('out of ip')
             return HttpResponse('fail')
 
         request.data['subnet'] = get_device_subnet(pp)
@@ -196,10 +201,11 @@ class DeviceViewSet(viewsets.ModelViewSet):
             s = self.serializer_class(data=request.data)
             # print('zxczxczxc')
             s.is_valid(raise_exception=True)
-            # self.perform_create(s)
+            self.perform_create(s)
             return HttpResponse('success')
         
         else:
+            # print('zxczxczxc')
             return HttpResponse('fail')
 
 

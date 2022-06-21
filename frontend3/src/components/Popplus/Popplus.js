@@ -44,20 +44,8 @@ export default function Popplus(){
         .then(function(res){
             // console.log(res)
             setBranchList(res.data.data)
-            // const pname = 'name'
-            // const pvalue = res.data.data[0].name
-            // console.log("check2", pname, pvalue)
-
-            // setInput(values => ({...values, [pname]: pvalue}))
-
         })
     }
-
-
-    // const handleAdd = (e) => {
-    //     e.preventDefault()
-    //     console.log('Hello')
-    // }
 
     const [input, setInput] = useState({})
     const handleChange = (event) => {
@@ -66,16 +54,10 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
-
-
     const handleAdd = () => {
         const formData = new FormData()
-        // formData.append('branch', 'Fred');
-        // formData.append('test1', 'Fred');
-        // formData.append('test2', 'Fred');
         console.log("input test", input)
         Object.entries(input).map( ([key, value]) => {
-            // console.log("test", key, value)
             formData.append(key, value)
         })
         axios({

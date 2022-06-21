@@ -67,6 +67,9 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+        request.data._mutable = True
+
+
         t = request.data.copy()
         t._mutable = True
         t['branch'] = Branch.objects.filter(name = request.data['branch'])[0]
@@ -75,7 +78,6 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         for i in t:
             setattr(pp, i, t[i])
 
-        request.data._mutable = True
         request.data['branch'] = pp.branch.id
 
         # print(validate_popplus(pp))
@@ -85,7 +87,8 @@ class PopPlusViewSet(viewsets.ModelViewSet):
             # print('zxczxczxc')
             s.is_valid(raise_exception=True)
             # self.perform_create(s)
-            return HttpResponse('success')
+            headers = self.get_success_headers(s.data)
+            return Response(s.data, status= status.HTTP_201_CREATED, headers=headers)
         
         else:
             return HttpResponse('fail')
@@ -189,8 +192,13 @@ class DeviceViewSet(viewsets.ModelViewSet):
             print('out of ip')
             return HttpResponse('fail')
 
-        request.data['subnet'] = get_device_subnet(pp)
-        request.data['gateway'] = get_device_gateway(pp)
+        try:
+            print(request.data['tnew'])
+            request.data['subnet'] = get_device_subnet(pp, int(request.data['tnew']))
+            request.data['gateway'] = get_device_gateway(pp, int(request.data['tnew']))
+        except:
+            request.data['subnet'] = get_device_subnet(pp)
+            request.data['gateway'] = get_device_gateway(pp)
         pp.subnet = request.data['subnet']
         pp.gateway = request.data['gateway']
 
@@ -202,7 +210,8 @@ class DeviceViewSet(viewsets.ModelViewSet):
             # print('zxczxczxc')
             s.is_valid(raise_exception=True)
             self.perform_create(s)
-            return HttpResponse('success')
+            headers = self.get_success_headers(s.data)
+            return Response(s.data, status= status.HTTP_201_CREATED, headers=headers)
         
         else:
             # print('zxczxczxc')

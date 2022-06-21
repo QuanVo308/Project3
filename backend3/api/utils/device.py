@@ -11,9 +11,9 @@ def get_device_sequence(dtype, pop):
     for i in devices:
         iter = 0
         if i.name[8].isnumeric():
-            iter = 16
+            iter = 16 if i.role == 'AGG' else 7
         else:
-            iter = 15
+            iter = 15 if i.role == 'AGG' else 6
         # print(i.name[len(i.name)-7:len(i.name)-5])
         sequences.append(int(i.name[iter:iter+2]))
     # print(sequences)
@@ -189,6 +189,11 @@ def get_device_name(dinfo):
         name += str(Province.objects.filter(name = dinfo['province'])[0].acronym )
         name += str(dinfo['pop'][3:])
         # print(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0])
+        name += str(get_device_sequence(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0]))
+        name += str(dinfo['brand'])
+    else:
+        name += str(Province.objects.filter(name = dinfo['province'])[0].acronym )
+        name += str(dinfo['pop'][3:])
         name += str(get_device_sequence(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0]))
         name += str(dinfo['brand'])
     return name

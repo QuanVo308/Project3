@@ -46,10 +46,10 @@ def validate_pop_ring(pop):
         print('R')
         return False
     if len(pop.ring[12:]) != 2:
-        print('sequence')
+        print('sequence1')
         return False
     if int(pop.ring[12:]) < 0 or int(pop.ring[12:]) > 63:
-        print("sequence")
+        print("sequence2")
         return False
     return True
 
@@ -73,6 +73,7 @@ def validate_ip_address(ip):
         return False
 
     return True 
+
 def get_pop_rangeIP(pop):
     ip = '10.'
     ip += str(pop.popPlus.octet2_ip_MGMT) + '.'
@@ -81,6 +82,22 @@ def get_pop_rangeIP(pop):
     # print('check',int(pop.sequence_ring)*64%256)
     ip += str(int(pop.sequence_ring)*64%256)
     return ip
+
+def get_pop_name(pop, tail1, tail2):
+    name = ''
+    name += str(Province.objects.filter(name = pop.popPlus.branch.province)[0].acronym)
+    name += tail1 + f"{int(tail2):03}"
+    return name
+
+def get_pop_ring(pop):
+    ring=''
+    ring += str(Province.objects.filter(name = pop.province)[0].acronym)
+    ring += str(pop.metro)
+    ring += str(pop.popPlus.name[3:])
+    ring += 'R' + str(f"{pop.sequence_ring:02}")
+
+    return ring
+
 
 def validate_pop(pop):
     # print(type(pop.range_ip))

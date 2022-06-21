@@ -6,8 +6,9 @@ from .models import *
 from django.core.validators import validate_ipv4_address
 import ipaddress
 
-def validate_ip_octet(octet):
+def validate_ip_octet(octet): 
     # if type(octet) == int:
+    
     octet = int(octet)
     if octet <= 255 and octet >=0:
         return True

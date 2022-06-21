@@ -54,9 +54,10 @@ export default function Popplus(){
     }
 
 
-    const handleAdd = (e) => {
-        e.preventDefault()
-        console.log('Hello')
+    // const handleAdd = (e) => {
+    //     e.preventDefault()
+    //     console.log('Hello')
+    // }
 
     const [input, setInput] = useState({})
     const handleChange = (event) => {
@@ -65,35 +66,32 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
-    function buildFormData(formData, data, parentKey) {
-        if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
-          Object.keys(data).forEach(key => {
-            buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
-          });
-        } else {
-          const value = data == null ? '' : data;
-      
-          formData.append(parentKey, value);
-        }
-      }
 
 
     const handleAdd = () => {
-        const formData = FormData()
-        buildFormData(formData, input);
-        console.log(input)
-        console.log(formData)
-        axios.post('http://127.0.0.1:8000/api/popplus/', {'data': formData})
-            .then(function(res){
-                console.log(res)
-            })
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
-=======
->>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
-=======
->>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
+        const formData = new FormData()
+        // formData.append('branch', 'Fred');
+        // formData.append('test1', 'Fred');
+        // formData.append('test2', 'Fred');
+        console.log("input test", input)
+        Object.entries(input).map( ([key, value]) => {
+            // console.log("test", key, value)
+            formData.append(key, value)
+        })
+        axios({
+            method: "post",
+            url: "http://127.0.0.1:8000/api/popplus/",
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then(function (response) {
+            //handle success
+            console.log(response);
+          })
+          .catch(function (response) {
+            //handle error
+            console.log(response);
+          });
     }
 
     return(

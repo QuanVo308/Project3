@@ -54,10 +54,13 @@ export default function Popplus(){
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const handleAdd = (e) => {
         e.preventDefault()
         console.log('Hello')
 =======
+=======
+>>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
     const [input, setInput] = useState({})
     const handleChange = (event) => {
         const name = event.target.name
@@ -87,6 +90,9 @@ export default function Popplus(){
             .then(function(res){
                 console.log(res)
             })
+<<<<<<< HEAD
+>>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
+=======
 >>>>>>> fa39d8087420ebac3cd123283660ce3fa3e4a30a
     }
 

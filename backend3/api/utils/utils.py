@@ -2,6 +2,7 @@ from re import I
 from ..models import *
 from django.core.validators import validate_ipv4_address
 import ipaddress
+from django.db.models import Q
 
 def validate_ip_octet(octet): 
     # if type(octet) == int:

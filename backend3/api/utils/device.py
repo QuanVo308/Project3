@@ -154,8 +154,10 @@ def get_device_gateway(device, tnew = True):
     if device.role == 'AGG' :
         return None
     elif device.role == 'OLT' or device.role == 'SW-BB':
-        agg = Device.objects.filter(pop = device.pop, role='AGG')[0]
-        return agg.ip
+        if Device.objects.filter(pop = device.pop, role='AGG'):
+            agg = Device.objects.filter(pop = device.pop, role='AGG')[0]
+            return agg.ip
+        return None
     elif device.role == 'POWER':
         if tnew:
             octet1 = '10.'

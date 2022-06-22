@@ -19,6 +19,11 @@ def test(request):
     province = Province.objects.filter(area = request.GET['area']).values()
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
+def update_device_all(request):
+    update_devices()
+    return HttpResponse(status.HTTP_200_OK)
+
+
 def get_province_in_area(request):
     id = Area.objects.get(name = request.GET['name'])
     province = Province.objects.filter(area = id).values()

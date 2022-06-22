@@ -23,4 +23,5 @@ urlpatterns = [
     path('poppopplus', views.get_pop_in_popplus, name='pop_popplus'),
     path('updategateway/', views.update_device_gateway, name='update_gateway'),
     path('branddevice/', views.get_brand_of_device, name='brand_of_device'),
+    path('updatedevice/', views.update_device_all, name='update_device'),
 ]

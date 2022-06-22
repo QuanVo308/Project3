@@ -230,7 +230,7 @@ export default function Popplus(){
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
                                     {provinceList.map(data => (
                                         data.name == updateData.province_name ?
-                                        <option value={data.name} selected={true}>{data.name}</option> :
+                                        <option value={data.name} selected ={true}>{data.name}</option> :
                                         <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>

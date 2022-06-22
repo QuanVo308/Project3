@@ -15,15 +15,6 @@ export default function Device(){
             // console.log(res)
         }
         getDevice()
-    },[])
-
-    useEffect(() => { 
-        const getDevice = async()=>{
-            let res = await axios.get('http://127.0.0.1:8000/api/device/')
-            setDeviceList(res.data)
-            // console.log(res)
-        }
-        getDevice()
     },[update])
 
     const [showAdd, setShowAdd] = useState(false);
@@ -110,7 +101,7 @@ export default function Device(){
             headers: { "Content-Type": "multipart/form-data" },
           })
           .then(function (response) {
-            console.log(response);
+            // console.log(response);
             setUpdate(prev => !prev)
           })
 

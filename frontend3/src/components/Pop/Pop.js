@@ -6,6 +6,7 @@ import styles from './Pop.module.scss'
 export default function Pop(){
 
     const [popList, setPopList] = useState([])
+    const [update, setUpdate] = useState(false)
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
@@ -13,7 +14,7 @@ export default function Pop(){
             // console.log(res)
         }
         getPop()
-    },[])
+    },[update])
 
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
@@ -81,7 +82,8 @@ export default function Pop(){
             headers: { "Content-Type": "multipart/form-data" },
           })
           .then(function (response) {
-            console.log(response);
+            // console.log(response);
+            setUpdate(prev => !prev)
           })
 
         setShowAdd(false)
@@ -91,7 +93,8 @@ export default function Pop(){
         // console.log(deleteData)
         axios.delete(`http://127.0.0.1:8000/api/pop/${deleteData}/`)
         .then(function (res) {
-            console.log(res);
+            // console.log(res);
+            setUpdate(prev => !prev)
           })
 
         setShowDelete(false)

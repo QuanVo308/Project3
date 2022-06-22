@@ -7,15 +7,16 @@ import styles from './Popplus.module.scss'
 export default function Popplus(){
 
     const [popplusList, setPopplusList] = useState([])
+    const [update, setUpdate] = useState(false)
 
     useEffect(() => { 
         const getPopplus = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
-            // console.log(res)
+            console.log(res)
             setPopplusList(res.data)
         }
         getPopplus()
-    },[])
+    },[update])
 
 
     const [showAdd, setShowAdd] = useState(false);
@@ -63,6 +64,16 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
+    const [inputUpdate, setInputUpdate] = useState({})
+    useEffect(()=>{
+        setInputUpdate(updateData)
+    },[updateData])
+    const handleChangeUpdate = (event) => {
+        const name = event.target.name
+        const value = event.target.value
+        setInputUpdate(values => ({...values, [name]: value}))
+    }
+
     const handleAdd = () => {
         console.log(input)
         const formData = new FormData()
@@ -77,6 +88,7 @@ export default function Popplus(){
           })
           .then(function (response) {
             // console.log(response);
+            setUpdate(prev => !prev)
           })
 
           setShowAdd(false)
@@ -86,14 +98,15 @@ export default function Popplus(){
         // console.log(deleteData)
         axios.delete(`http://127.0.0.1:8000/api/popplus/${deleteData}/`)
         .then(function (res) {
-            console.log(res);
+            // console.log(res);
+            setUpdate(prev => !prev)
           })
 
           setShowDelete(false)
     }
 
     const handleUpdate = () => {
-        console.log(input)
+        console.log(inputUpdate)
     }
 
     return(
@@ -195,16 +208,39 @@ export default function Popplus(){
                     <Modal.Body>
                         <form className={styles.formModal}>
                             <div>
+                                <label>Vùng:</label>
+                                {/* <input type='text' defaultValue={updateData.area_name} disabled/> */}
+                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                    <option>-</option>
+                                    {areaList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Tỉnh:</label>
+                                {/* <input type='text' defaultValue={updateData.province_name} onClick={()=>{getBranch(updateData.province_name)}}/> */}
+                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                    {provinceList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Chi nhánh:</label>
+                                <select defaultValue={updateData.branch_name} name='branch' onChange={handleChange}>
+                                    {branchList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
                                 <label>Name:</label>
                                 <input type='text' defaultValue={updateData.name} disabled/>
-                            </div>
-                            <div>
-                                <label>Branch:</label>
-                                <input type='text' defaultValue={updateData.branch_name} disabled />
-                            </div>
+                            </div> 
                             <div>
                                 <label>Area OSPF:</label>
-                                <select defaultValue={updateData.area_OSPF} name='area_OSPF' onChange={handleChange}>
+                                <select defaultValue={updateData.area_OSPF} name='area_OSPF' onChange={handleChangeUpdate}>
                                     {[1,2,3,4,5,6,7,8,9].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}
@@ -212,19 +248,19 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Octet2 IP OSPF MGMT:</label>
-                                <input defaultValue={updateData.octet2_ip_OSPF_MGMT} type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} />
+                                <input defaultValue={updateData.octet2_ip_OSPF_MGMT} type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChangeUpdate} />
                             </div>
                             <div>
                                 <label>Octet2 IP MGMT:</label>
-                                <input defaultValue={updateData.octet2_ip_MGMT} type="number" name='octet2_ip_MGMT' onChange={handleChange} />
+                                <input defaultValue={updateData.octet2_ip_MGMT} type="number" name='octet2_ip_MGMT' onChange={handleChangeUpdate} />
                             </div>
                             <div>
                                 <label>Octet3 IP MGMT:</label>
-                                <input defaultValue={updateData.octet3_ip_MGMT} type="number" name='octet3_ip_MGMT' onChange={handleChange} />
+                                <input defaultValue={updateData.octet3_ip_MGMT} type="number" name='octet3_ip_MGMT' onChange={handleChangeUpdate} />
                             </div>
                             <div>
                                 <label>vlan PPPoE:</label>
-                                <select defaultValue={updateData.vlan_PPPoE} name='vlan_PPPoE' onChange={handleChange}>
+                                <select defaultValue={updateData.vlan_PPPoE} name='vlan_PPPoE' onChange={handleChangeUpdate}>
                                     <option>-</option>
                                     {[30,31,32,33,34,35,36,37,38,39].map(data => (
                                         <option value={data}>{data}</option>

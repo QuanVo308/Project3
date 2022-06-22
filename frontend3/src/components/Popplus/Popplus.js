@@ -36,6 +36,7 @@ export default function Popplus(){
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
+            console.log(res)
         })
         },[])
 
@@ -107,6 +108,13 @@ export default function Popplus(){
 
     const handleUpdate = () => {
         console.log(inputUpdate)
+        // axios.put(`http://127.0.0.1:8000/api/popplus/${inputUpdate.id}/`)
+        // .then(function (res) {
+        //     // console.log(res);
+        //     setUpdate(prev => !prev)
+        //   })
+
+        //   setShowUpdate(false)
     }
 
     return(
@@ -115,7 +123,7 @@ export default function Popplus(){
                 <div>
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Popplus</Button>
                 </div>
-                {/* {showAddPopplus?<AddPopplus data={showAddPopplus}/>:null} */}
+
                 <Modal show={showAdd} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Popplus</Modal.Title>
@@ -210,7 +218,7 @@ export default function Popplus(){
                             <div>
                                 <label>Vùng:</label>
                                 {/* <input type='text' defaultValue={updateData.area_name} disabled/> */}
-                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                <select defaultValue={updateData.area_name} name='area' onBeforeInput={()=>{getBranch(updateData.area_name)}} onChange={(e)=>{getProvice(e.target.value)}}>
                                     <option>-</option>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
@@ -220,7 +228,7 @@ export default function Popplus(){
                             <div>
                                 <label>Tỉnh:</label>
                                 {/* <input type='text' defaultValue={updateData.province_name} onClick={()=>{getBranch(updateData.province_name)}}/> */}
-                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                <select defaultValue={updateData.province_name} name='province'onBeforeInput={()=>{getBranch(updateData.province_name)}} onChange={(e)=>{getBranch(e.target.value)}}>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -322,7 +330,7 @@ export default function Popplus(){
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.branch_name}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data)}}> Update</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data); console.log(data)}}> Update</Button>
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
                             </td>
                         </tr>

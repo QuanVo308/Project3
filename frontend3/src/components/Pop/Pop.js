@@ -7,6 +7,16 @@ export default function Pop(){
 
     const [popList, setPopList] = useState([])
     const [update, setUpdate] = useState(false)
+    const [showAdd, setShowAdd] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [deleteData, setDeleteData] = useState(false);
+    const [areaList, setAreaList] = useState([])
+    const [provinceList, setProvinceList] = useState([])
+    const [branchList, setBranchList] = useState([])
+    const [popplusList, setPopplusList] = useState([])
+    const [input, setInput] = useState({})
+
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
@@ -25,18 +35,6 @@ export default function Pop(){
         getPop()
     },[update])
 
-
-    const [showAdd, setShowAdd] = useState(false);
-    const [showUpdate, setShowUpdate] = useState(false);
-    const [showDelete, setShowDelete] = useState(false);
-    const [deleteData, setDeleteData] = useState(false);
-
-    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false); setInput(0)}
-    const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>setShowUpdate(true)
-    const handleShowDelete = () =>setShowDelete(true)
-
-    const [areaList, setAreaList] = useState([])
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
@@ -44,6 +42,15 @@ export default function Pop(){
         })
         },[])
 
+    const handleClose = () => {
+        setShowAdd(false)
+        setShowUpdate(false)
+        setShowDelete(false)
+        setInput(0)
+    }
+    const handleShowAdd = () => setShowAdd(true);
+    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowDelete = () =>setShowDelete(true)
 
     function checkSequenceRing(se) {
         if(se > 63){
@@ -65,7 +72,6 @@ export default function Pop(){
         return tail
     }
 
-    const [provinceList, setProvinceList] = useState([])
     const getProvice = (data) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
@@ -74,7 +80,6 @@ export default function Pop(){
         })
     }
     
-    const [branchList, setBranchList] = useState([])
     const getBranch = (data) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
@@ -83,7 +88,6 @@ export default function Pop(){
         })
     }
 
-    const [popplusList, setPopplusList] = useState([])
     const getPopplus = (data) => {
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
@@ -91,7 +95,6 @@ export default function Pop(){
         })
     }
 
-    const [input, setInput] = useState({})
     const handleChange = (event) => {
         const name = event.target.name
         var value

@@ -7,6 +7,18 @@ export default function Device(){
 
     const [deviceList, setDeviceList] = useState([])
     const [update, setUpdate] = useState(false)
+    const [showAdd, setShowAdd] = useState(false)
+    const [showUpdate, setShowUpdate] = useState(false)
+    const [showDelete, setShowDelete] = useState(false)
+    const [deleteData, setDeleteData] = useState()
+    const [updateData, setUpdateData] = useState()
+    const [areaList, setAreaList] = useState([])
+    const [provinceList, setProvinceList] = useState([])
+    const [branchList, setBranchList] = useState([])
+    const [popplusList, setPopplusList] = useState([])
+    const [popList, setPopList] = useState([])
+    const [brandList, setBrandList] = useState([])
+    const [input, setInput] = useState({})
 
     useEffect(() => { 
         const getDevice = async()=>{
@@ -17,18 +29,6 @@ export default function Device(){
         getDevice()
     },[update])
 
-    const [showAdd, setShowAdd] = useState(false);
-    const [showUpdate, setShowUpdate] = useState(false);
-    const [showDelete, setShowDelete] = useState(false);
-    const [deleteData, setDeleteData] = useState();
-    const [updateData, setUpdateData] = useState();
-
-    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
-    const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>setShowUpdate(true)
-    const handleShowDelete = () =>setShowDelete(true)
-
-    const [areaList, setAreaList] = useState([])
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
@@ -36,7 +36,15 @@ export default function Device(){
         })
         },[])
 
-    const [provinceList, setProvinceList] = useState([])
+    const handleClose = () => {
+        setShowAdd(false)
+        setShowUpdate(false)
+        setShowDelete(false)
+    }
+    const handleShowAdd = () => setShowAdd(true);
+    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowDelete = () =>setShowDelete(true)
+
     const getProvice = (data) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
@@ -45,7 +53,6 @@ export default function Device(){
         })
     }
     
-    const [branchList, setBranchList] = useState([])
     const getBranch = (data) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
@@ -54,7 +61,6 @@ export default function Device(){
         })
     }
 
-    const [popplusList, setPopplusList] = useState([])
     const getPopplus = (data) => {
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
@@ -62,7 +68,6 @@ export default function Device(){
         })
     }
 
-    const [popList, setPopList] = useState([])
     const getPop = (data) => {
         // const data = e.target.value
         axios.get('http://127.0.0.1:8000/api/poppopplus', {params:{'name': data}})
@@ -71,8 +76,6 @@ export default function Device(){
         })
     }
 
-    const [brandList, setBrandList] = useState([])
-
     const getBrand = (data) => {
         axios.get('http://127.0.0.1:8000/api/branddevice/', {params:{'role': data}})
         .then(function(res){
@@ -80,7 +83,6 @@ export default function Device(){
         })
     }
 
-    const [input, setInput] = useState({})
     const handleChange = (event) => {
         const name = event.target.name
         const value = event.target.value

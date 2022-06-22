@@ -13,7 +13,10 @@ export default function Popplus(){
     const [deleteData, setDeleteData] = useState();
     const [updateData, setUpdateData] = useState();
     const [areaList, setAreaList] = useState([])
-
+    const [provinceList, setProvinceList] = useState([])
+    const [branchList, setBranchList] = useState([])
+    const [input, setInput] = useState({})
+    const [inputUpdate, setInputUpdate] = useState({})
 
     useEffect(() => { 
         const getPopplus = async()=>{
@@ -26,23 +29,18 @@ export default function Popplus(){
         console.log(areaList, updateData)
     },[update, updateData])
 
-
-   
-
-    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
-    const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>setShowUpdate(true)
-    const handleShowDelete = () =>setShowDelete(true)
-
-    
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
         })
         },[])
+   
+    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
+    const handleShowAdd = () => setShowAdd(true);
+    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowDelete = () =>setShowDelete(true)
 
-    const [provinceList, setProvinceList] = useState([])
     const getProvice = (data) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
@@ -51,7 +49,6 @@ export default function Popplus(){
         })
     }
     
-    const [branchList, setBranchList] = useState([])
     const getBranch = (data) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
@@ -60,17 +57,16 @@ export default function Popplus(){
         })
     }
 
-    const [input, setInput] = useState({})
     const handleChange = (event) => {
         const name = event.target.name
         const value = event.target.value
         setInput(values => ({...values, [name]: value}))
     }
 
-    const [inputUpdate, setInputUpdate] = useState({})
     useEffect(()=>{
         setInputUpdate(updateData)
     },[updateData])
+
     const handleChangeUpdate = (event) => {
         const name = event.target.name
         const value = event.target.value
@@ -98,10 +94,8 @@ export default function Popplus(){
     }
 
     const handleDelete = () => {
-        // console.log(deleteData)
         axios.delete(`http://127.0.0.1:8000/api/popplus/${deleteData}/`)
         .then(function (res) {
-            // console.log(res);
             setUpdate(prev => !prev)
           })
 

@@ -24,9 +24,5 @@ urlpatterns = [
     path('updategateway/', views.update_device_gateway, name='update_gateway'),
     path('branddevice/', views.get_brand_of_device, name='brand_of_device'),
     path('updatedevice/', views.update_device_all, name='update_device'), 
-<<<<<<< HEAD
-=======
     path('updatepop/', views.update_pop_all, name='update_pop'), 
->>>>>>> 7aa85752c22d608a806d275fd91765a7e9525c6a
 ]
-

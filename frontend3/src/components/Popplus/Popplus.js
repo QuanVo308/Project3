@@ -3,35 +3,38 @@ import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
 import styles from './Popplus.module.scss'
 
-
 export default function Popplus(){
 
     const [popplusList, setPopplusList] = useState([])
     const [update, setUpdate] = useState(false)
-
-    useEffect(() => { 
-        const getPopplus = async()=>{
-            let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
-            console.log(res)
-            setPopplusList(res.data)
-        }
-        getPopplus()
-    },[update])
-
-
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [deleteData, setDeleteData] = useState();
     const [updateData, setUpdateData] = useState();
+    const [areaList, setAreaList] = useState([])
 
+
+    useEffect(() => { 
+        const getPopplus = async()=>{
+            let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
+            // console.log(res)
+            setPopplusList(res.data)
+        }
+        getPopplus()
+        // console.log("update", updateData)
+        console.log(areaList, updateData)
+    },[update, updateData])
+
+
+   
 
     const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
     const handleShowAdd = () => setShowAdd(true);
     const handleShowUpdate = () =>setShowUpdate(true)
     const handleShowDelete = () =>setShowDelete(true)
 
-    const [areaList, setAreaList] = useState([])
+    
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
@@ -210,18 +213,24 @@ export default function Popplus(){
                             <div>
                                 <label>Vùng:</label>
                                 {/* <input type='text' defaultValue={updateData.area_name} disabled/> */}
-                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                    <option>-</option>
+                                <select  name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                    <option>0</option>
+                                    {/* <option selected={true}>123</option> */}
                                     {areaList.map(data => (
+                                        data.name == updateData.area_name ? 
+                                        <option value={data.name} selected={true}>{data.name}</option> :
                                         <option value={data.name}>{data.name}</option>
+
                                     ))}
                                 </select>
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
                                 {/* <input type='text' defaultValue={updateData.province_name} onClick={()=>{getBranch(updateData.province_name)}}/> */}
-                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
                                     {provinceList.map(data => (
+                                        data.name == updateData.province_name ?
+                                        <option value={data.name} selected={true}>{data.name}</option> :
                                         <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>
@@ -322,8 +331,8 @@ export default function Popplus(){
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.branch_name}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data)}}> Update</Button>
-                                <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data);}}> Update</Button>
+                                <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id);}}> Delete</Button>
                             </td>
                         </tr>
                     </tbody>

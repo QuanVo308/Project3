@@ -17,9 +17,15 @@ export default function Popplus(){
     },[])
 
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [showAdd, setShowAdd] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [deleteData, setDeleteData] = useState(false);
+
+    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
+    const handleShowAdd = () => setShowAdd(true);
+    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowDelete = () =>setShowDelete(true)
 
     const [areaList, setAreaList] = useState([])
     useEffect(() => { 
@@ -68,16 +74,28 @@ export default function Popplus(){
           .then(function (response) {
             // console.log(response);
           })
+
+          setShowAdd(false)
+    }
+
+    const handleDelete = () => {
+        // console.log(deleteData)
+        axios.delete(`http://127.0.0.1:8000/api/popplus/${deleteData}/`)
+        .then(function (res) {
+            console.log(res);
+          })
+
+          setShowDelete(false)
     }
 
     return(
         <div>
             <div>
                 <div>
-                    <Button variant="primary" onClick={()=>{handleShow()}}> Add Popplus</Button>
+                    <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Popplus</Button>
                 </div>
                 {/* {showAddPopplus?<AddPopplus data={showAddPopplus}/>:null} */}
-                <Modal show={show} onHide={handleClose}>
+                <Modal show={showAdd} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Popplus</Modal.Title>
                     </Modal.Header>
@@ -160,6 +178,36 @@ export default function Popplus(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
+                
+                <Modal show={showUpdate} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Update Data</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body></Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Update
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showDelete} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Confirm!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có muốn xóa dữ liệu này?</Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleDelete}>
+                        Delete
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
             <div className={styles.table}>
                 <Table striped bordered hover>
@@ -172,7 +220,8 @@ export default function Popplus(){
                             <th>octet2_ip_MGMT </th>
                             <th>octet3_ip_MGMT </th>
                             <th>vlan_PPPoE </th>
-                            <th>branch </th>
+                            <th>branch</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     {popplusList.map(data => (
@@ -186,6 +235,10 @@ export default function Popplus(){
                             <td>{data.octet3_ip_MGMT}</td>
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.branch_name}</td>
+                            <td>
+                                <Button variant="success" onClick={()=>{handleShowUpdate()}}> Update</Button>
+                                <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
+                            </td>
                         </tr>
                     </tbody>
                     ))}

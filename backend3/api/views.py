@@ -153,6 +153,9 @@ class DeviceViewSet(viewsets.ModelViewSet):
         request.data._mutable = True
         # print(get_device_name(request.data))
         request.data['metro'] = Pop.objects.filter(name = request.data['pop'])[0].metro
+        request.data['popp'] = Pop.objects.filter(name = request.data['pop'])[0].popPlus.name
+        request.data['province'] = Pop.objects.filter(name = request.data['pop'])[0].province.name
+        request.data['area'] = Pop.objects.filter(name = request.data['pop'])[0].province.area.name
         request.data['name'] = get_device_name(request.data)
 
         t = request.data.copy()

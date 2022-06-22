@@ -6,6 +6,8 @@ import styles from './Device.module.scss'
 export default function Device(){
 
     const [deviceList, setDeviceList] = useState([])
+    const [update, setUpdate] = useState(false)
+
     useEffect(() => { 
         const getDevice = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/device/')
@@ -14,6 +16,15 @@ export default function Device(){
         }
         getDevice()
     },[])
+
+    useEffect(() => { 
+        const getDevice = async()=>{
+            let res = await axios.get('http://127.0.0.1:8000/api/device/')
+            setDeviceList(res.data)
+            // console.log(res)
+        }
+        getDevice()
+    },[update])
 
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
@@ -99,6 +110,7 @@ export default function Device(){
           })
           .then(function (response) {
             console.log(response);
+            setUpdate(prev => !prev)
           })
 
         setShowAdd(false)
@@ -109,6 +121,7 @@ export default function Device(){
         axios.delete(`http://127.0.0.1:8000/api/device/${deleteData}/`)
         .then(function (res) {
             console.log(res);
+            setUpdate(prev => !prev)
           })
 
         setShowDelete(false)

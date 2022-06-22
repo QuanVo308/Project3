@@ -23,8 +23,6 @@ urlpatterns = [
     path('poppopplus', views.get_pop_in_popplus, name='pop_popplus'),
     path('updategateway/', views.update_device_gateway, name='update_gateway'),
     path('branddevice/', views.get_brand_of_device, name='brand_of_device'),
-<<<<<<< HEAD
     path('updatedevice/', views.update_device_all, name='update_device'), 
-=======
->>>>>>> 19de8fb1fc7cc5866daf9b291b6ca91e6cde5cf9
 ]
+

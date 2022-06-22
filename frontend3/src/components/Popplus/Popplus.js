@@ -11,6 +11,7 @@ export default function Popplus(){
     useEffect(() => { 
         const getPopplus = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
+            // console.log(res)
             setPopplusList(res.data)
         }
         getPopplus()
@@ -20,7 +21,9 @@ export default function Popplus(){
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
-    const [deleteData, setDeleteData] = useState(false);
+    const [deleteData, setDeleteData] = useState();
+    const [updateData, setUpdateData] = useState();
+
 
     const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
     const handleShowAdd = () => setShowAdd(true);
@@ -61,6 +64,7 @@ export default function Popplus(){
     }
 
     const handleAdd = () => {
+        console.log(input)
         const formData = new FormData()
         Object.entries(input).map( ([key, value]) => {
             formData.append(key, value)
@@ -86,6 +90,10 @@ export default function Popplus(){
           })
 
           setShowDelete(false)
+    }
+
+    const handleUpdate = () => {
+        console.log(input)
     }
 
     return(
@@ -179,20 +187,62 @@ export default function Popplus(){
                     </Modal.Footer>
                 </Modal>
                 
+                {updateData?
                 <Modal show={showUpdate} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body></Modal.Body>
+                    <Modal.Body>
+                        <form className={styles.formModal}>
+                            <div>
+                                <label>Name:</label>
+                                <input type='text' defaultValue={updateData.name} disabled/>
+                            </div>
+                            <div>
+                                <label>Branch:</label>
+                                <input type='text' defaultValue={updateData.branch_name} disabled />
+                            </div>
+                            <div>
+                                <label>Area OSPF:</label>
+                                <select defaultValue={updateData.area_OSPF} name='area_OSPF' onChange={handleChange}>
+                                    {[1,2,3,4,5,6,7,8,9].map(data => (
+                                        <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Octet2 IP OSPF MGMT:</label>
+                                <input defaultValue={updateData.octet2_ip_OSPF_MGMT} type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} />
+                            </div>
+                            <div>
+                                <label>Octet2 IP MGMT:</label>
+                                <input defaultValue={updateData.octet2_ip_MGMT} type="number" name='octet2_ip_MGMT' onChange={handleChange} />
+                            </div>
+                            <div>
+                                <label>Octet3 IP MGMT:</label>
+                                <input defaultValue={updateData.octet3_ip_MGMT} type="number" name='octet3_ip_MGMT' onChange={handleChange} />
+                            </div>
+                            <div>
+                                <label>vlan PPPoE:</label>
+                                <select defaultValue={updateData.vlan_PPPoE} name='vlan_PPPoE' onChange={handleChange}>
+                                    <option>-</option>
+                                    {[30,31,32,33,34,35,36,37,38,39].map(data => (
+                                        <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </form>
+                    </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleUpdate}>
                         Update
                     </Button>
                     </Modal.Footer>
                 </Modal>
+                :null}
 
                 <Modal show={showDelete} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -236,7 +286,7 @@ export default function Popplus(){
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.branch_name}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate()}}> Update</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data)}}> Update</Button>
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
                             </td>
                         </tr>

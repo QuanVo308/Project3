@@ -18,7 +18,8 @@ export default function Device(){
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
-    const [deleteData, setDeleteData] = useState(false);
+    const [deleteData, setDeleteData] = useState();
+    const [updateData, setUpdateData] = useState();
 
     const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
     const handleShowAdd = () => setShowAdd(true);
@@ -269,7 +270,7 @@ export default function Device(){
                             <td>{data.subnet}</td>
                             <td>{data.gateway}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate()}}> Update</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data)}}> Update</Button>
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
                             </td>
                         </tr>

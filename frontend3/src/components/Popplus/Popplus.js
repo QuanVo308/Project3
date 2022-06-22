@@ -72,83 +72,82 @@ export default function Popplus(){
 
     return(
         <div>
-            <div className={styles.AddPopplus}>
-                <Button variant="primary" onClick={()=>{handleShow()}}> Add Popplus</Button>
+            <div>
+                <div>
+                    <Button variant="primary" onClick={()=>{handleShow()}}> Add Popplus</Button>
+                </div>
                 {/* {showAddPopplus?<AddPopplus data={showAddPopplus}/>:null} */}
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Popplus</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <form>
+                        <form className={styles.formModal}>
                             <div>
-                                <label>Vùng: 
-                                    <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                        <option>-</option>
-                                        {areaList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Vùng:</label>
+                                <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                    <option>-</option>
+                                    {areaList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>    
                             </div>
                             <div>
-                                <label>Tỉnh:
-                                    <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                        <option>-</option>
-                                        {provinceList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Tỉnh:</label>
+                                <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                    <option>-</option>
+                                    {provinceList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Chi nhánh:
-                                    <select name='branch' onChange={handleChange}>
-                                        <option>-</option>
-                                        {branchList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Chi nhánh:</label>
+                                <select name='branch' onChange={handleChange}>
+                                    <option>-</option>
+                                    {branchList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Phần đuôi: 
-                                    <select name='tail1' onChange={handleChange}>
-                                        <option>-</option>
-                                        <option value='P'>P</option>
-                                        <option value='M'>M</option>
-                                    </select>
-                                    <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
-                                </label>
+                                <label>Phần đuôi: </label>
+                                <select name='tail1' onChange={handleChange}>
+                                    <option>-</option>
+                                    <option value='P'>P</option>
+                                    <option value='M'>M</option>
+                                </select>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
                             </div>
                             <div>
-                                <label>Area OSPF:
-                                    <select name='area_OSPF' onChange={handleChange}>
-                                        <option>-</option>
-                                        {[1,2,3,4,5,6,7,8,9].map(data => (
-                                            <option value={data}>{data}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Area OSPF:</label>
+                                <select name='area_OSPF' onChange={handleChange}>
+                                    <option>-</option>
+                                    {[1,2,3,4,5,6,7,8,9].map(data => (
+                                        <option value={data}>{data}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Octet2 IP OSPF MGMT:<input type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} /></label>
+                                <label>Octet2 IP OSPF MGMT:</label>
+                                <input type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} />
                             </div>
                             <div>
-                                <label>Octet2 IP MGMT:<input type="number" name='octet2_ip_MGMT' onChange={handleChange} /></label>
+                                <label>Octet2 IP MGMT:</label>
+                                <input type="number" name='octet2_ip_MGMT' onChange={handleChange} />
                             </div>
                             <div>
-                            <label>Octet3 IP MGMT:<input type="number" name='octet3_ip_MGMT' onChange={handleChange} /></label>
+                                <label>Octet3 IP MGMT:</label>
+                                <input type="number" name='octet3_ip_MGMT' onChange={handleChange} />
                             </div>
                             <div>
-                            <label>vlan PPPoE:
+                                <label>vlan PPPoE:</label>
                                 <select name='vlan_PPPoE' onChange={handleChange}>
                                     <option>-</option>
                                     {[30,31,32,33,34,35,36,37,38,39].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}
                                 </select>
-                            </label>
                             </div>
                         </form>
                     </Modal.Body>

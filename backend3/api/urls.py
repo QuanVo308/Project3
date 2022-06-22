@@ -21,4 +21,6 @@ urlpatterns = [
     path('branchprovince', views.get_branch_in_province, name='branch_province'),
     path('popplusbrnach', views.get_popplus_in_branch, name='popplus_branch'),
     path('poppopplus', views.get_pop_in_popplus, name='pop_popplus'),
+    path('updategateway/', views.update_device_gateway, name='update_gateway'),
+    path('branddevice/', views.get_brand_of_device, name='brand_of_device'),
 ]

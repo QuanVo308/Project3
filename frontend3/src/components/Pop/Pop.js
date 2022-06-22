@@ -10,7 +10,7 @@ export default function Pop(){
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
             setPopList(res.data)
-            console.log(res)
+            // console.log(res)
         }
         getPop()
     },[])
@@ -87,70 +87,65 @@ export default function Pop(){
                     <Modal.Title>Add Pop</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <form>
+                        <form className={styles.formModal}>
                             <div>
-                                <label>Vùng: 
-                                    <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                        <option>-</option>
-                                        {areaList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Vùng: </label>
+                                <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                    <option>-</option>
+                                    {areaList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Tỉnh:
-                                    <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                        <option>-</option>
-                                        {provinceList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Tỉnh:</label>
+                                <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                    <option>-</option>
+                                    {provinceList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Chi nhánh:
-                                    <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
-                                        <option>-</option>
-                                        {branchList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Chi nhánh:</label>
+                                <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
+                                    <option>-</option>
+                                    {branchList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Popplus:
-                                    <select name='popPlus' onChange={handleChange}>
-                                        <option>-</option>
-                                        {popplusList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Popplus:</label>
+                                <select name='popPlus' onChange={handleChange}>
+                                    <option>-</option>
+                                    {popplusList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Phần đuôi: 
-                                    <select name='tail1' onChange={handleChange}>
-                                        <option>-</option>
-                                        {['P','M','K','V','B'].map(data => (
+                                <label>Phần đuôi: </label>
+                                <select name='tail1' onChange={handleChange}>
+                                    <option>-</option>
+                                    {['P','M','K','V','B'].map(data => (
+                                    <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
+                            </div>
+                            <div>
+                                <label>Metro:</label>
+                                <select name='metro' onChange={handleChange}>
+                                    <option>-</option>
+                                    {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}
-                                    </select>
-                                    <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
-                                </label>
+                                </select>
                             </div>
                             <div>
-                                <label>Metro:
-                                    <select name='metro' onChange={handleChange}>
-                                        <option>-</option>
-                                        {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
-                                            <option value={data}>{data}</option>
-                                        ))}
-                                    </select>
-                                </label>
-                            </div>
-                            <div>
-                                <label>Sequence Ring:<input type="number" name='sequence_ring' placeholder='01->63' min="1" max="63" onChange={handleChange} /></label>
+                                <label>Sequence Ring:</label>
+                                <input type="number" name='sequence_ring' placeholder='01->63' min="1" max="63" onChange={handleChange} />
                             </div>
                         </form>
                     </Modal.Body>

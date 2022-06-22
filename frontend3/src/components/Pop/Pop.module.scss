@@ -1,3 +1,22 @@
 .table {
     margin: 20px;
 }
+
+.formModal {
+    margin: 10px;
+    :focus{
+        background-color: rgb(231, 240, 240);
+    }
+    div {
+        margin-bottom: 10px;
+        label{
+            width: 40%;
+        }
+        select{
+            width: 30%;
+        }
+        input{
+            width: 30%;
+        }
+    }
+}

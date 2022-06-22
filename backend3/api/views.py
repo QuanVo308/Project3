@@ -39,6 +39,29 @@ def get_pop_in_popplus(request):
     pop = Pop.objects.filter(popPlus = id).values()
     return JsonResponse({'data': list(pop), 'status': status.HTTP_201_CREATED})
 
+def get_brand_of_device(request):
+    # device = Device.objects.filter(name = request.GET['name'])[0]
+    if request.GET['role'] == 'AGG':
+        return JsonResponse({'data': list(Brand.objects.filter(name__icontains='HW').values()), 'status': status.HTTP_201_CREATED})
+    elif request.GET['role'] == 'OLT':
+        return JsonResponse({'data': list(Brand.objects.filter(name__icontains='GC').values()), 'status': status.HTTP_201_CREATED})
+    elif request.GET['role'] == "POWER":
+        return JsonResponse({'data': list(Brand.objects.filter(name__icontains='PWE').values()), 'status': status.HTTP_201_CREATED})
+    elif request.GET['role'] == "SW-BB":
+        return JsonResponse({'data': list(Brand.objects.filter(Q(name__icontains='HW') | Q(name__icontains='DF') | Q(name__icontains='DS')).values()), 'status': status.HTTP_201_CREATED})
+    else :
+        return HttpResponse(status.HTTP_404_NOT_FOUND)
+
+def update_device_gateway(request):
+    device = Device.objects.filter(name = request.GET['name'])[0]
+    # print(device.role)
+    if device.role == 'POWER':
+        device.gateway = get_device_gateway(device, request.GET['tnew'])
+    else:
+        device.gateway = get_device_gateway(device)
+    device.save()
+    return HttpResponse(device.gateway)
+
 
 class AreaViewSet(viewsets.ModelViewSet):
     queryset = Area.objects.all()

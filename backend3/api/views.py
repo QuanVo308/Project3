@@ -92,6 +92,22 @@ class PopPlusViewSet(viewsets.ModelViewSet):
     serializer_class = PopPlusSerializer
 
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        
+        serializer = self.get_serializer(queryset, many=True)
+        for se in serializer.data:
+            se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
+            se['province_name'] = Province.objects.filter(id = se['branch'])[0].name
+            se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
+        return Response(serializer.data)
+
     def create(self, request):
         print(request.data)
         request.data._mutable = True
@@ -130,6 +146,21 @@ class PopViewSet(viewsets.ModelViewSet):
     serializer_class = PopSerializer
 
     
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        
+        serializer = self.get_serializer(queryset, many=True)
+        for se in serializer.data:
+            se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
+            se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
+        return Response(serializer.data)
+
     def create(self, request):
         request.data._mutable = True
         request.data['province'] = PopPlus.objects.filter(name = request.data['popPlus'])[0].branch.province.id
@@ -180,6 +211,23 @@ class PopViewSet(viewsets.ModelViewSet):
 class DeviceViewSet(viewsets.ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        
+        serializer = self.get_serializer(queryset, many=True)
+        for se in serializer.data:
+            se['popPlus_name'] = PopPlus.objects.filter(id = Pop.objects.filter(name = se['pop_name'])[0].popPlus.id)[0].name
+            se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
+            se['province_name'] = Province.objects.filter(id = Branch.objects.filter(name = se['branch_name'])[0].province.id)[0].name
+            se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
+        return Response(serializer.data)
 
     def create(self, request):
         pp = Device()

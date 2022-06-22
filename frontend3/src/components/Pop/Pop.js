@@ -10,7 +10,7 @@ export default function Pop(){
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
             setPopList(res.data)
-            // console.log(res)
+            console.log(res)
         }
         getPop()
     },[])
@@ -80,7 +80,7 @@ export default function Pop(){
 
     return(
         <div>
-            <div className={styles.Addpop}>
+            <div className={styles.AddPop}>
                 <Button variant="primary" onClick={()=>{handleShow()}}> Add Pop</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -189,7 +189,7 @@ export default function Pop(){
                             <td>{data.metro }</td>
                             <td>{data.sequence_ring}</td>
                             <td>{data.vlan_PPPoE}</td>
-                            <td>{data.popplus_name}</td>
+                            <td>{data.popPlus_name}</td>
                             <td>{data.province_name}</td>
                         </tr>
                     </tbody>

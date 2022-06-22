@@ -72,7 +72,7 @@ export default function Popplus(){
 
     return(
         <div>
-            <div className={styles.Addpopplus}>
+            <div className={styles.AddPopplus}>
                 <Button variant="primary" onClick={()=>{handleShow()}}> Add Popplus</Button>
                 {/* {showAddPopplus?<AddPopplus data={showAddPopplus}/>:null} */}
                 <Modal show={show} onHide={handleClose}>

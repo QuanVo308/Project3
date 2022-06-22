@@ -21,7 +21,7 @@ export default function Popplus(){
     useEffect(() => { 
         const getPopplus = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
-            // console.log(res)
+            console.log(res)
             setPopplusList(res.data)
         }
         getPopplus()
@@ -36,7 +36,11 @@ export default function Popplus(){
         })
         },[])
    
-    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
+    const handleClose = () => {
+        setShowAdd(false)
+        setShowUpdate(false)
+        setShowDelete(false)
+    }
     const handleShowAdd = () => setShowAdd(true);
     const handleShowUpdate = () =>setShowUpdate(true)
     const handleShowDelete = () =>setShowDelete(true)

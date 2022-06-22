@@ -6,6 +6,7 @@ import styles from './Pop.module.scss'
 export default function Pop(){
 
     const [popList, setPopList] = useState([])
+    const [update, setUpdate] = useState(false)
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
@@ -15,12 +16,22 @@ export default function Pop(){
         getPop()
     },[])
 
+    useEffect(() => { 
+        const getPop = async()=>{
+            let res = await axios.get('http://127.0.0.1:8000/api/pop/')
+            setPopList(res.data)
+            // console.log(res)
+        }
+        getPop()
+    },[update])
+
+
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [deleteData, setDeleteData] = useState(false);
 
-    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
+    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false); setInput(0)}
     const handleShowAdd = () => setShowAdd(true);
     const handleShowUpdate = () =>setShowUpdate(true)
     const handleShowDelete = () =>setShowDelete(true)
@@ -32,6 +43,27 @@ export default function Pop(){
             setAreaList(res.data)
         })
         },[])
+
+
+    function checkSequenceRing(se) {
+        if(se > 63){
+            return 63
+        }
+        if(se < 1){
+            return 1
+        }
+        return se
+    }
+
+    function checkTail2(tail) {
+        if(tail < 1){
+            return 1
+        }
+        if(tail > 999){
+            return 999
+        }
+        return tail
+    }
 
     const [provinceList, setProvinceList] = useState([])
     const getProvice = (data) => {
@@ -62,7 +94,14 @@ export default function Pop(){
     const [input, setInput] = useState({})
     const handleChange = (event) => {
         const name = event.target.name
-        const value = event.target.value
+        var value
+        if (name == 'sequence_ring'){
+            value = checkSequenceRing(event.target.value)
+        } else if (name =='tail2') {
+            value = checkTail2(event.target.value)
+        } else {
+            value = event.target.value
+        }
         setInput(values => ({...values, [name]: value}))
     }
 
@@ -81,6 +120,7 @@ export default function Pop(){
           })
           .then(function (response) {
             console.log(response);
+            setUpdate(prev => !prev)
           })
 
         setShowAdd(false)
@@ -91,6 +131,7 @@ export default function Pop(){
         axios.delete(`http://127.0.0.1:8000/api/pop/${deleteData}/`)
         .then(function (res) {
             console.log(res);
+            setUpdate(prev => !prev)
           })
 
         setShowDelete(false)
@@ -152,7 +193,7 @@ export default function Pop(){
                                     <option value={data}>{data}</option>
                                     ))}
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" value={input['tail2']} onChange={handleChange}/>
                             </div>
                             <div>
                                 <label>Metro:</label>
@@ -165,7 +206,7 @@ export default function Pop(){
                             </div>
                             <div>
                                 <label>Sequence Ring:</label>
-                                <input type="number" name='sequence_ring' placeholder='01->63' min="1" max="63" onChange={handleChange} />
+                                <input type="number" name='sequence_ring' placeholder='01->63' value={input['sequence_ring']} min="1" max="63" onChange={handleChange} />
                             </div>
                         </form>
                     </Modal.Body>

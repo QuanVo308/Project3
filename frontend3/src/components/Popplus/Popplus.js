@@ -7,6 +7,8 @@ import styles from './Popplus.module.scss'
 export default function Popplus(){
 
     const [popplusList, setPopplusList] = useState([])
+    const [update, setUpdate] = useState(false)
+
 
     useEffect(() => { 
         const getPopplus = async()=>{
@@ -16,13 +18,21 @@ export default function Popplus(){
         getPopplus()
     },[])
 
+    useEffect(() => { 
+        const getPopplus = async()=>{
+            let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
+            setPopplusList(res.data)
+        }
+        getPopplus()
+    },[update])
+
 
     const [showAdd, setShowAdd] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [deleteData, setDeleteData] = useState(false);
 
-    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
+    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false); setInput(0)}
     const handleShowAdd = () => setShowAdd(true);
     const handleShowUpdate = () =>setShowUpdate(true)
     const handleShowDelete = () =>setShowDelete(true)
@@ -45,6 +55,25 @@ export default function Popplus(){
     }
     
     const [branchList, setBranchList] = useState([])
+    function checkIPOctet(ip) {
+        if(ip < 0){
+            return 0
+        }
+        if(ip > 255){
+            return 255
+        }
+        return ip
+    }
+
+    function checkTail2(tail) {
+        if(tail < 1){
+            return 1
+        }
+        if(tail > 999){
+            return 999
+        }
+        return tail
+    }
     const getBranch = (data) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
@@ -56,7 +85,17 @@ export default function Popplus(){
     const [input, setInput] = useState({})
     const handleChange = (event) => {
         const name = event.target.name
-        const value = event.target.value
+        console.log(name)
+        var value
+        if( name == "octet2_ip_OSPF_MGMT" || name == "octet2_ip_MGMT" || name == "octet3_ip_MGMT" ){
+            console.log('check1')
+            value = checkIPOctet(event.target.value)
+        } else if (name == 'tail2') {
+            value = checkTail2(event.target.value)
+        } else {
+            value = event.target.value
+        }
+        console.log(value)
         setInput(values => ({...values, [name]: value}))
     }
 
@@ -73,6 +112,7 @@ export default function Popplus(){
           })
           .then(function (response) {
             // console.log(response);
+            setUpdate(prev => !prev)
           })
 
           setShowAdd(false)
@@ -83,6 +123,7 @@ export default function Popplus(){
         axios.delete(`http://127.0.0.1:8000/api/popplus/${deleteData}/`)
         .then(function (res) {
             console.log(res);
+            setUpdate(prev => !prev)
           })
 
           setShowDelete(false)
@@ -135,7 +176,7 @@ export default function Popplus(){
                                     <option value='P'>P</option>
                                     <option value='M'>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="0" max="999" value={input['tail2']} onChange={handleChange}/>
                             </div>
                             <div>
                                 <label>Area OSPF:</label>
@@ -148,15 +189,15 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Octet2 IP OSPF MGMT:</label>
-                                <input type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} />
+                                <input type="number" name='octet2_ip_OSPF_MGMT' value={input['octet2_ip_OSPF_MGMT']} onChange={handleChange} />
                             </div>
                             <div>
                                 <label>Octet2 IP MGMT:</label>
-                                <input type="number" name='octet2_ip_MGMT' onChange={handleChange} />
+                                <input type="number" name='octet2_ip_MGMT' value={input['octet2_ip_MGMT']} onChange={handleChange} />
                             </div>
                             <div>
                                 <label>Octet3 IP MGMT:</label>
-                                <input type="number" name='octet3_ip_MGMT' onChange={handleChange} />
+                                <input type="number" name='octet3_ip_MGMT' value={input['octet3_ip_MGMT']} onChange={handleChange} />
                             </div>
                             <div>
                                 <label>vlan PPPoE:</label>

@@ -10,14 +10,20 @@ export default function Pop(){
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
             setPopList(res.data)
-            console.log(res)
+            // console.log(res)
         }
         getPop()
     },[])
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [showAdd, setShowAdd] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [deleteData, setDeleteData] = useState(false);
+
+    const handleClose = () => {setShowAdd(false);setShowUpdate(false);setShowDelete(false)}
+    const handleShowAdd = () => setShowAdd(true);
+    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowDelete = () =>setShowDelete(true)
 
     const [areaList, setAreaList] = useState([])
     useEffect(() => { 
@@ -76,81 +82,90 @@ export default function Pop(){
           .then(function (response) {
             console.log(response);
           })
+
+        setShowAdd(false)
+    }
+
+    const handleDelete = () => {
+        // console.log(deleteData)
+        axios.delete(`http://127.0.0.1:8000/api/pop/${deleteData}/`)
+        .then(function (res) {
+            console.log(res);
+          })
+
+        setShowDelete(false)
     }
 
     return(
         <div>
-            <div className={styles.AddPop}>
-                <Button variant="primary" onClick={()=>{handleShow()}}> Add Pop</Button>
-                <Modal show={show} onHide={handleClose}>
+            <div>
+                <div>
+                    <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Pop</Button>
+                </div>
+                <Modal show={showAdd} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Pop</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <form>
+                        <form className={styles.formModal}>
                             <div>
-                                <label>Vùng: 
-                                    <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                        <option>-</option>
-                                        {areaList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Vùng: </label>
+                                <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                    <option>-</option>
+                                    {areaList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Tỉnh:
-                                    <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                        <option>-</option>
-                                        {provinceList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Tỉnh:</label>
+                                <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                    <option>-</option>
+                                    {provinceList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Chi nhánh:
-                                    <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
-                                        <option>-</option>
-                                        {branchList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Chi nhánh:</label>
+                                <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
+                                    <option>-</option>
+                                    {branchList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Popplus:
-                                    <select name='popPlus' onChange={handleChange}>
-                                        <option>-</option>
-                                        {popplusList.map(data => (
-                                            <option value={data.name}>{data.name}</option>
-                                        ))}
-                                    </select>
-                                </label>
+                                <label>Popplus:</label>
+                                <select name='popPlus' onChange={handleChange}>
+                                    <option>-</option>
+                                    {popplusList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label>Phần đuôi: 
-                                    <select name='tail1' onChange={handleChange}>
-                                        <option>-</option>
-                                        {['P','M','K','V','B'].map(data => (
+                                <label>Phần đuôi: </label>
+                                <select name='tail1' onChange={handleChange}>
+                                    <option>-</option>
+                                    {['P','M','K','V','B'].map(data => (
+                                    <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
+                            </div>
+                            <div>
+                                <label>Metro:</label>
+                                <select name='metro' onChange={handleChange}>
+                                    <option>-</option>
+                                    {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}
-                                    </select>
-                                    <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
-                                </label>
+                                </select>
                             </div>
                             <div>
-                                <label>Metro:
-                                    <select name='metro' onChange={handleChange}>
-                                        <option>-</option>
-                                        {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
-                                            <option value={data}>{data}</option>
-                                        ))}
-                                    </select>
-                                </label>
-                            </div>
-                            <div>
-                                <label>Sequence Ring:<input type="number" name='sequence_ring' placeholder='01->63' min="1" max="63" onChange={handleChange} /></label>
+                                <label>Sequence Ring:</label>
+                                <input type="number" name='sequence_ring' placeholder='01->63' min="1" max="63" onChange={handleChange} />
                             </div>
                         </form>
                     </Modal.Body>
@@ -160,6 +175,36 @@ export default function Pop(){
                     </Button>
                     <Button variant="primary" onClick={handleAdd}>
                         Add
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showUpdate} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Update Data</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body></Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Update
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showDelete} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Confirm!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có muốn xóa dữ liệu này?</Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleDelete}>
+                        Delete
                     </Button>
                     </Modal.Footer>
                 </Modal>
@@ -177,6 +222,7 @@ export default function Pop(){
                             <th>vlan_PPPoE </th>
                             <th>PopPlus</th>
                             <th>Province</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     {popList.map(data => (
@@ -191,6 +237,10 @@ export default function Pop(){
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.popPlus_name}</td>
                             <td>{data.province_name}</td>
+                            <td>
+                                <Button variant="success" onClick={()=>{handleShowUpdate()}}> Update</Button>
+                                <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
+                            </td>
                         </tr>
                     </tbody>
                     ))}

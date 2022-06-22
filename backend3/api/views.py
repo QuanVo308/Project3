@@ -173,31 +173,35 @@ class DeviceViewSet(viewsets.ModelViewSet):
     serializer_class = DeviceSerializer
 
     def create(self, request):
+        pp = Device()
         request.data._mutable = True
         # print(get_device_name(request.data))
         request.data['metro'] = Pop.objects.filter(name = request.data['pop'])[0].metro
         request.data['popp'] = Pop.objects.filter(name = request.data['pop'])[0].popPlus.name
         request.data['province'] = Pop.objects.filter(name = request.data['pop'])[0].province.name
         request.data['area'] = Pop.objects.filter(name = request.data['pop'])[0].province.area.name
-        request.data['name'] = get_device_name(request.data)
 
         t = request.data.copy()
+        t['brand'] = Brand.objects.filter(name = request.data['brand'])[0]
+        t['pop'] = Pop.objects.filter(name = request.data['pop'])[0]
+        for i in t:
+            setattr(pp, i, t[i])
+
+        request.data['name'] = get_device_name(pp)
+        pp.name = request.data['name']
+        t['name'] =request.data['name']
+
+        
         t._mutable = True
 
         if not Brand.objects.filter(name = request.data['brand']) or not Pop.objects.filter(name = request.data['pop'])[0]:
             # print('check')
             return HttpResponse('fail')
 
-        t['brand'] = Brand.objects.filter(name = request.data['brand'])[0]
-        t['pop'] = Pop.objects.filter(name = request.data['pop'])[0]
-
 
         request.data['pop'] = Pop.objects.filter(name = request.data['pop'])[0].id
         request.data['brand'] = Brand.objects.filter(name = request.data['brand'])[0].id
 
-        pp = Device()
-        for i in t:
-            setattr(pp, i, t[i])
         
         if len(get_device_ips(pp)) != 0:
             pp.ip = get_device_ips(pp)[0]

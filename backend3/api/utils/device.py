@@ -183,21 +183,21 @@ def get_device_subnet(device, tnew = True):
 
 def get_device_name(dinfo):
     name = ''
-    if dinfo['role'] == 'AGG':
-        name += dinfo['type']
-        name += str(dinfo['area'])
-        name += str(dinfo['metro'][2:])
-        name += str(popp_format(dinfo['popp'][3:]))
-        name += str(Province.objects.filter(name = dinfo['province'])[0].acronym )
-        name += str(dinfo['pop'][3:])
+    if dinfo.role == 'AGG':
+        name += dinfo.type
+        name += str(dinfo.area)
+        name += str(dinfo.metro[2:])
+        name += str(popp_format(dinfo.popp[3:]))
+        name += str(Province.objects.filter(name = dinfo.province)[0].acronym )
+        name += str(dinfo.pop.name[3:])
         # print(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0])
-        name += str(get_device_sequence(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0]))
-        name += str(dinfo['brand'])
+        name += str(get_device_sequence(dinfo.brand.name[:2], Pop.objects.filter(name = dinfo.pop.name)[0]))
+        name += str(dinfo.brand)
     else:
-        name += str(Province.objects.filter(name = dinfo['province'])[0].acronym )
-        name += str(dinfo['pop'][3:])
-        name += str(get_device_sequence(dinfo['brand'][:2], Pop.objects.filter(name = dinfo['pop'])[0]))
-        name += str(dinfo['brand'])
+        name += str(Province.objects.filter(name = dinfo.province)[0].acronym )
+        name += str(dinfo.pop.name[3:])
+        name += str(get_device_sequence(dinfo.brand.name[:2], Pop.objects.filter(name = dinfo.pop)[0]))
+        name += str(dinfo.brand)
     return name
 
 

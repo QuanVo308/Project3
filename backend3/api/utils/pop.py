@@ -117,3 +117,24 @@ def validate_pop(pop):
     and validate_pop_rangeIP(pop)):
         return True
     return False
+
+def update_pops():
+    pops = Pop.objects.filter()
+    for i in pops:
+        print(i.id)
+        print(validate_pop(i))
+        # print(i.name)
+        # print(get_pop_name(i, i.name[3], i.name[4:]))
+        i.name = get_pop_name(i, i.name[3], i.name[4:])
+        # print(i.ring)
+        # print(get_pop_ring(i))
+        i.ring = get_pop_ring(i)
+        # print(i.vlan_PPPoE)
+        # print(get_pop_vlan(i))
+        i.vlan_PPPoE = get_pop_vlan(i)
+        # print(i.range_ip)
+        # print(get_pop_rangeIP(i))
+        i.range_ip = get_pop_rangeIP(i)
+        print(validate_pop(i), '\n')
+        i.save()
+    print('ok')

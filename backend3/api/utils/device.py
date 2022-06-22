@@ -239,6 +239,7 @@ def update_devices():
         i.province = i.pop.province.name
         i.metro = i.pop.metro
         print(i.id)
+        print(validate_device(i))
         i.name = get_device_name(i)
         i.subnet = get_device_subnet(i)
         i.gateway = get_device_gateway(i)

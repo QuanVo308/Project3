@@ -23,6 +23,10 @@ def update_device_all(request):
     update_devices()
     return HttpResponse(status.HTTP_200_OK)
 
+def update_pop_all(request):
+    update_pops()
+    return HttpResponse(status.HTTP_200_OK)
+
 
 def get_province_in_area(request):
     id = Area.objects.get(name = request.GET['name'])

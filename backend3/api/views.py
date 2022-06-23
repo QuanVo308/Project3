@@ -54,6 +54,10 @@ def search_device(request):
     province = Device.objects.filter(qs).values()
 
     # print(province)
+    p = list(province)
+    for i in p:
+        i['pop_name'] = Pop.objects.filter(id = i['pop_id'])[0].name
+        i['brand_name'] = Brand.objects.filter(id = i['brand_id'])[0].name
     
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
@@ -75,8 +79,13 @@ def search_pop(request):
     
     for query in queries:
         qs = qs | query
-    print( qs)
+    # print( qs)
     province = Pop.objects.filter(qs).values()
+    p = list(province)
+    for i in p:
+        i['popPlus_name'] = PopPlus.objects.filter(id = i['popPlus_id'])[0].name
+        i['province_name'] = Province.objects.filter(id = i['province_id'])[0].name
+
 
     # print(province)
     

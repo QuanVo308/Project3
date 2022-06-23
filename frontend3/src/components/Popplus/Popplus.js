@@ -225,7 +225,7 @@ export default function Popplus(){
                         <form className={styles.formModal} >
                             <div>
                                 <label>Vùng:</label>
-                                <select defaultValue={updateData.area_name}  name='area' onChange={(e)=>{getProvice(e.target.value)}} >
+                                <select defaultValue={updateData.area_name}  name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}} >
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -233,7 +233,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value)}} >
+                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}} >
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -246,6 +246,15 @@ export default function Popplus(){
                                         <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>
+                            </div>
+                            <div>
+                                <label>Phần đuôi: </label>
+                                <select name='tail1' onChange={handleChange}>
+                                    <option>-</option>
+                                    <option value='P'>P</option>
+                                    <option value='M'>M</option>
+                                </select>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChangeUpdate}/>
                             </div>
                             <div>
                                 <label>Name:</label>

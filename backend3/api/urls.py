@@ -26,4 +26,7 @@ urlpatterns = [
     path('updatedevice/', views.update_device_all, name='update_device'), 
     path('updatepop/', views.update_pop_all, name='update_pop'),
     path('branchname/', views.get_branch_by_name, name='branch_by_name'), 
+    path('poppname/', views.get_popplus_name_api, name='get_popp_name'), 
+    path('popname/', views.get_pop_name_api, name='get_pop_name'),
+    path('devicename/', views.get_device_name_api, name='get_device_name'),
 ]

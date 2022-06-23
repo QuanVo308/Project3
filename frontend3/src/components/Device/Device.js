@@ -31,13 +31,20 @@ export default function Device({tab}){
             // resetName()
         }
         getDevice()
-    },[update, tab])
+    },[update])
+    useEffect( () => {
+        axios.get('http://127.0.0.1:8000/api/area/')
+        .then(function(res){
+            setAreaList(res.data)
+            getProvince(res.data[0].name, false)
+        })
+    }, [tab])
 
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
-            getProvice(res.data[0].name)
+            getProvince(res.data[0].name)
         })
         },[update])
 
@@ -58,7 +65,7 @@ export default function Device({tab}){
     }
     const handleShowAdd = () => {
         setShowAdd(true);
-        getProvice(1, false)
+        getProvince(1, false)
     }
     const handleShowUpdate = (data) =>{
         setShowUpdate(true)
@@ -68,7 +75,7 @@ export default function Device({tab}){
     }
     const handleShowDelete = () =>setShowDelete(true)
 
-    const getProvice = (data, br) => {
+    const getProvince = (data, br) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
@@ -143,6 +150,14 @@ export default function Device({tab}){
         const name = event.target.name
         const value = event.target.value
         setInputUpdate(values => ({...values, [name]: value}))
+        console.log("name", name, value)
+        if( name == 'brand'){
+            axios.get(`http://127.0.0.1:8000/api/brand/${value}/`)
+            .then( (res) => {
+                // console.log("brandname", res.data.name)
+                setInputUpdate(values => ({...values, 'brand_name': res.data.name}))
+            })
+        }
         // axios.get('http://127.0.0.1:8000/api/popname/', {params:{
         //     'popPlus': b,
         //     'tail1': t1,
@@ -155,6 +170,7 @@ export default function Device({tab}){
 
         
         // setInputUpdate(values => ({...values, [name]: value}))
+        setUpdate(prev => !prev)
     }
 
     const handleAdd = () => {
@@ -209,13 +225,18 @@ export default function Device({tab}){
     }
 
     const resetName = () => {
-        // axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'popPlus': inputUpdate['popPlus_name'],
-        //     'tail1': inputUpdate['tail1'],
-        //     'tail2': inputUpdate['tail2']}})
-        // .then(function(res){
-        //     // console.log(res.data)
-        //     setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        // })
+        axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
+            'role': inputUpdate['role'],
+            'name': inputUpdate['name'],
+            'brand': inputUpdate['brand_name'],
+            'type': inputUpdate['type'],
+        }})
+        .then(function(res){
+            console.log("res", res.data)
+            console.log("input", inputUpdate)
+            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+            setUpdate(prev => !prev)
+        })
     }
 
     return(
@@ -238,7 +259,7 @@ export default function Device({tab}){
                         <form className={styles.formModal}>
                             <div>
                                 <label>Vùng: </label>
-                                <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
+                                <select name='area' onChange={(e)=>{getProvince(e.target.value)}}>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -320,7 +341,7 @@ export default function Device({tab}){
                 </Modal>
                 
                 {updateData?
-                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvice(updateData.area_name, false);  getBrand(updateData.role)}}>
+                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvince(updateData.area_name, false);  getBrand(updateData.role)}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
@@ -328,7 +349,7 @@ export default function Device({tab}){
                         <form className={styles.formModal}>
                             <div>
                                 <label>Vùng: </label>
-                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvince(e.target.value); handleChangeUpdate(e)}}>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -372,7 +393,7 @@ export default function Device({tab}){
                             
                             <div>
                                 <label>Role:</label>
-                                <select defaultValue={updateData.role} name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={updateData.role} name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}} disabled>
                                     {['AGG','OLT','SW-BB','POWER'].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}

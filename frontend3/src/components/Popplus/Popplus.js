@@ -76,7 +76,7 @@ export default function Popplus(){
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
         // console.log("check1", data.province_name)
         setInputUpdate(data)
-        getProvince(data.area_name, false)
+        getProvince(data.area_name, true)
         getBranch(data.province_name)
         // console.log(tail1, tail2)
         // console.log(data)
@@ -86,15 +86,17 @@ export default function Popplus(){
     }
     const handleShowDelete = () =>setShowDelete(true)
 
-    const getProvince = (data, br ) => {
+    const getProvince = (data, br) => {
+        console.log("1", br)
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
-            if (br){
+            console.log("2", br)
+            if (!br){
                 getBranch(res.data.data[0].name)
                 console.log("check", data)
             }
-            br = true
+            br = false
             // setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name}))
         })
     }
@@ -262,7 +264,7 @@ export default function Popplus(){
                         <form className={styles.formModal}>
                             <div>
                                 <label>Vùng:</label>
-                                <select name='area' onChange={(e)=>{getProvince(e.target.value)}}>
+                                <select name='area' onChange={(e)=>{getProvince(e.target.value, false)}}>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -336,7 +338,7 @@ export default function Popplus(){
                 </Modal>
                 
                 {updateData?
-                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvince(updateData.area_name); getBranch(updateData.province_name)}}>
+                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
@@ -363,7 +365,7 @@ export default function Popplus(){
                                 <select name='branch_name' onChange={(e)=>{handleChangeUpdate(e); updateBranch(e)}}>
                                 {/* <option>{inputUpdate.branch_name}</option> */}
                                     {branchList.map(data => (
-                                        <option value={data.id} selected={inputUpdate.branch_name==data.name}>{data.name}</option>
+                                        <option value={data.mame} selected={inputUpdate.branch_name==data.name}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

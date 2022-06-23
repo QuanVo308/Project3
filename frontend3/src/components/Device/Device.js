@@ -31,7 +31,7 @@ export default function Device({tab}){
             // resetName()
         }
         getDevice()
-    },[update])
+    },[update, tab])
     useEffect( () => {
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){

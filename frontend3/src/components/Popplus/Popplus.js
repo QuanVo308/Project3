@@ -69,18 +69,9 @@ export default function Popplus(){
         setInputUpdate(updateData)
     },[updateData])
 
-    const handleChangeUpdate = (event, branch_id) => {
+    const handleChangeUpdate = (event) => {
         const name = event.target.name
         const value = event.target.value
-        
-        function myFunction(data) {
-            if (data.id==updateData.branch_id){ return data}
-            return 0
-          }
-        let update_branch = branchList.find(myFunction)
-
-        console.log(update_branch)
-        
         setInputUpdate(values => ({...values, [name]: value}))
     }
 
@@ -233,9 +224,9 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Chi nhánh:</label>
-                                <select defaultValue={updateData.branch_name} name='branch_name' onChange={(e)=>handleChangeUpdate(e,e.target.values)}>
+                                <select defaultValue={updateData.branch_name} name='branch_name' onChange={handleChangeUpdate}>
                                     {branchList.map(data => (
-                                        <option value={data.name} values={data.id}>{data.name}</option>
+                                        <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

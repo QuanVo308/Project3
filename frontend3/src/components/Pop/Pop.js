@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
+import {Search} from 'react-bootstrap-icons'
 import styles from './Pop.module.scss'
 
 export default function Pop({tab}){
@@ -281,10 +282,16 @@ export default function Pop({tab}){
 
     return(
         <div>
-            <div>
-                <div>
+            <div className={styles.AddSearch}>
+                <div className={styles.btnAdd}>
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Pop</Button>
                 </div>
+                <div className={styles.btnSearch}>
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' />
+                    <Search />
+                </div>
+            </div>
+            <div>
                 <Modal show={showAdd} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Pop</Modal.Title>

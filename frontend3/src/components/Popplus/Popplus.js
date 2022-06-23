@@ -18,6 +18,7 @@ export default function Popplus(tab){
     const [branchList, setBranchList] = useState([])
     const [input, setInput] = useState({})
     const [inputUpdate, setInputUpdate] = useState({})
+    const [searchData, setSearchData] = useState()
 
     useEffect( () => {
         axios.get('http://127.0.0.1:8000/api/area/')
@@ -45,6 +46,7 @@ export default function Popplus(tab){
             getProvince(res.data[0].name)
         })
         },[])
+
     useEffect(()=>{
         // resetName()
     },[inputUpdate])
@@ -59,6 +61,13 @@ export default function Popplus(tab){
         }
         return tail
     }
+
+    useEffect(()=>{
+        axios.get('http://127.0.0.1:8000/api/searchpopp/', {'search': searchData})
+        .then(function(res){
+            setPopplusList(res.data)
+        });
+    },[searchData])
 
     function checkIPOctet(se) {
         if(se > 255){
@@ -275,7 +284,7 @@ export default function Popplus(tab){
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Popplus</Button>
                 </div>
                 <div className={styles.btnSearch}>
-                    <input className={styles.SearchInput} type='text' placeholder='Search...' />
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value)}}/>
                     <Search />
                 </div>
             </div>

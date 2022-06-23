@@ -49,7 +49,7 @@ export default function Popplus(){
     },[updateData])
 
     function checkTail2(tail) {
-        console.log(tail)
+        // console.log(tail)
         if(tail < 1){
             return 1
         }
@@ -113,9 +113,7 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
-    useEffect(()=>{
-        setInputUpdate(updateData)
-    },[updateData])
+
 
     const handleChangeUpdate = (event) => {
         const name = event.target.name
@@ -123,9 +121,9 @@ export default function Popplus(){
         if (name == 'octet2_ip_MGMT' || name == 'octet2_ip_OSPF_MGMT' || name == 'octet3_ip_MGMT'){
             value = checkIPOctet(event.target.value)
         } else if (name == 'tail2') {
-            console.log('check', name)
+            // console.log('check', name)
             value = checkTail2(event.target.value)
-            console.log('check', value)
+            // console.log('check', value)
         } else {
             value = event.target.value
         }
@@ -302,8 +300,8 @@ export default function Popplus(){
                                 <label>Phần đuôi: </label>
                                 <select name='tail1' onChange={handleChangeUpdate}>
                                     <option>-</option>
-                                    <option value='P'>P</option>
-                                    <option value='M'>M</option>
+                                    <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
+                                    <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
                                 </select>
                                 <input type="number" name='tail2' placeholder='001 -> 999' min="1" value={inputUpdate['tail2']} max="999" onChange={handleChangeUpdate}
                                 defaultValue={inputUpdate['tail2']}/>

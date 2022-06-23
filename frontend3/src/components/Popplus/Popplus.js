@@ -52,6 +52,8 @@ export default function Popplus(){
     const handleShowAdd = () => setShowAdd(true);
     const handleShowUpdate = () =>{
         setShowUpdate(true)
+        setInputUpdate(0)
+        setUpdate(prev => !prev)
 
     }
     const handleShowDelete = () =>setShowDelete(true)

@@ -52,7 +52,7 @@ export default function Device({tab}){
         axios.get('http://127.0.0.1:8000/api/searchdevice/',{params:{'search': searchData}})
         .then(function(res){
             // console.log(res)
-            setPopplusList(res.data.data)
+            setDeviceList(res.data.data)
         });
     },[searchData])
 

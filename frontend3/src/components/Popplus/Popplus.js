@@ -35,7 +35,7 @@ export default function Popplus(){
             setAreaList(res.data)
             getProvice(res.data[0].name)
         })
-        },[])
+        },[update])
     useEffect(()=>{
         // resetName()
     },[inputUpdate])
@@ -66,7 +66,11 @@ export default function Popplus(){
         setShowUpdate(false)
         setShowDelete(false)
     }
-    const handleShowAdd = () => setShowAdd(true);
+    const handleShowAdd = () => {
+        setShowAdd(true);
+        setInput(0)
+        setUpdate(prev => !prev)
+    }
     const handleShowUpdate = (data) =>{
         setShowUpdate(true)
         setInputUpdate(0)
@@ -273,7 +277,7 @@ export default function Popplus(){
                                 <label>Chi nhánh:</label>
                                 <select name='branch' onChange={handleChange}>
                                     {branchList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

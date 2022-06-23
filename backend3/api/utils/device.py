@@ -240,9 +240,15 @@ def update_devices():
         i.metro = i.pop.metro
         print(i.id)
         print(validate_device(i))
-        i.name = get_device_name(i)
-        i.subnet = get_device_subnet(i)
-        i.gateway = get_device_gateway(i)
-        print(validate_device(i), '\n')
-        i.save()
+        if (not validate_device(i)
+        or i.name != get_device_name(i)
+        or i.subnet != get_device_subnet(i)
+        or i.gateway != get_device_gateway(i)):
+            i.name = get_device_name(i)
+            i.subnet = get_device_subnet(i)
+            i.gateway = get_device_gateway(i)
+            print("update", validate_device(i))
+            print(vars(i))
+            i.save()
+        print()
 

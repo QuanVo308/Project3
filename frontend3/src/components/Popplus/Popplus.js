@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
+import {ArrowClockwise} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 
 export default function Popplus(){
@@ -31,6 +32,7 @@ export default function Popplus(){
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
+            getProvice(res.data[0].name)
         })
         },[])
     useEffect(()=>{
@@ -71,7 +73,6 @@ export default function Popplus(){
         setShowAdd(false)
         setShowUpdate(false)
         setShowDelete(false)
-        setInputUpdate(0)
     }
     const handleShowAdd = () => setShowAdd(true);
     const handleShowUpdate = (data) =>{
@@ -112,7 +113,9 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
-    
+    useEffect(()=>{
+        setInputUpdate(updateData)
+    },[updateData])
 
     const handleChangeUpdate = (event) => {
         const name = event.target.name
@@ -168,10 +171,7 @@ export default function Popplus(){
           })
         .catch( (res) => {
             console.log(res)
-        }
-
-        )
-
+        })
         setShowDelete(false)
     }
 
@@ -195,7 +195,6 @@ export default function Popplus(){
                             <div>
                                 <label>Vùng:</label>
                                 <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                    <option>-</option>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -204,7 +203,6 @@ export default function Popplus(){
                             <div>
                                 <label>Tỉnh:</label>
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                    <option>-</option>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -213,7 +211,6 @@ export default function Popplus(){
                             <div>
                                 <label>Chi nhánh:</label>
                                 <select name='branch' onChange={handleChange}>
-                                    <option>-</option>
                                     {branchList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -305,15 +302,15 @@ export default function Popplus(){
                                 <label>Phần đuôi: </label>
                                 <select name='tail1' onChange={handleChangeUpdate}>
                                     <option>-</option>
-                                    <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
-                                    <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
+                                    <option value='P'>P</option>
+                                    <option value='M'>M</option>
                                 </select>
                                 <input type="number" name='tail2' placeholder='001 -> 999' min="1" value={inputUpdate['tail2']} max="999" onChange={handleChangeUpdate}
                                 defaultValue={inputUpdate['tail2']}/>
                             </div>
                             <div>
                                 <label>Name:</label>
-                                <input type='text' defaultValue={updateData.name} disabled/>
+                                <input type='text' defaultValue={updateData.name} disabled/><ArrowClockwise />
                             </div> 
                             <div>
                                 <label>Area OSPF:</label>

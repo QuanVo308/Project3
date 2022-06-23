@@ -33,6 +33,7 @@ export default function Device(){
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
+            getProvice(res.data[0].name)
         })
         },[])
 
@@ -49,15 +50,15 @@ export default function Device(){
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
-            
+            getBranch(res.data.data[0].name)
         })
     }
     
     const getBranch = (data) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
-            // console.log(res)
             setBranchList(res.data.data)
+            getPopplus(res.data.data[0].name)
         })
     }
 
@@ -65,11 +66,11 @@ export default function Device(){
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
             setPopplusList(res.data.data)
+            getPop(res.data.data[0].name)
         })
     }
 
     const getPop = (data) => {
-        // const data = e.target.value
         axios.get('http://127.0.0.1:8000/api/poppopplus', {params:{'name': data}})
         .then(function(res){
             setPopList(res.data.data)
@@ -139,7 +140,6 @@ export default function Device(){
                             <div>
                                 <label>Vùng: </label>
                                 <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                    <option>-</option>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -148,7 +148,6 @@ export default function Device(){
                             <div>
                                 <label>Tỉnh:</label>
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                    <option>-</option>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -158,7 +157,6 @@ export default function Device(){
                             <div>
                                 <label>Chi nhánh:</label>
                                 <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
-                                    <option>-</option>
                                     {branchList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -167,7 +165,6 @@ export default function Device(){
                             <div>
                                 <label>Popplus:</label>
                                 <select name='popp' onChange={(e)=>{getPop(e.target.value)}}>
-                                    <option>-</option>
                                     {popplusList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -176,7 +173,6 @@ export default function Device(){
                             <div>
                                 <label>Pop:</label>
                                 <select name='pop' onChange={handleChange}>
-                                    <option>-</option>
                                     {popList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}

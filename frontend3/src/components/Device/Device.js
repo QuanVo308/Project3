@@ -11,7 +11,6 @@ export default function Device(){
     const [showUpdate, setShowUpdate] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [deleteData, setDeleteData] = useState()
-    const [updateData, setUpdateData] = useState()
     const [areaList, setAreaList] = useState([])
     const [provinceList, setProvinceList] = useState([])
     const [branchList, setBranchList] = useState([])
@@ -19,12 +18,15 @@ export default function Device(){
     const [popList, setPopList] = useState([])
     const [brandList, setBrandList] = useState([])
     const [input, setInput] = useState({})
+    const [updateData, setUpdateData] = useState()
+    const [inputUpdate, setInputUpdate] = useState({})
 
     useEffect(() => { 
         const getDevice = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/device/')
             setDeviceList(res.data)
             // console.log(res)
+            resetName()
         }
         getDevice()
     },[update])
@@ -35,15 +37,20 @@ export default function Device(){
             setAreaList(res.data)
             getProvice(res.data[0].name)
         })
-        },[])
+        },[update])
 
     const handleClose = () => {
         setShowAdd(false)
         setShowUpdate(false)
         setShowDelete(false)
+        setInput(0)
     }
     const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowUpdate = data =>{
+        setShowUpdate(true)
+        setInputUpdate(0)
+        setUpdateData(data)
+    }
     const handleShowDelete = () =>setShowDelete(true)
 
     const getProvice = (data) => {
@@ -90,6 +97,23 @@ export default function Device(){
         setInput(values => ({...values, [name]: value}))
     }
 
+    const handleChangeUpdate = (event) => {
+        const name = event.target.name
+
+        // axios.get('http://127.0.0.1:8000/api/popname/', {params:{
+        //     'popPlus': b,
+        //     'tail1': t1,
+        //     'tail2': t2 
+        // }})
+        //     .then(function(res){
+        //         // console.log(res.data)
+        //         setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        // })
+
+        
+        // setInputUpdate(values => ({...values, [name]: value}))
+    }
+
     const handleAdd = () => {
         const formData = new FormData()
         Object.entries(input).map( ([key, value]) => {
@@ -123,6 +147,16 @@ export default function Device(){
         })
 
         setShowDelete(false)
+    }
+
+    const resetName = () => {
+        // axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'popPlus': inputUpdate['popPlus_name'],
+        //     'tail1': inputUpdate['tail1'],
+        //     'tail2': inputUpdate['tail2']}})
+        // .then(function(res){
+        //     // console.log(res.data)
+        //     setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        // })
     }
 
     return(
@@ -218,11 +252,83 @@ export default function Device(){
                     </Modal.Footer>
                 </Modal>
 
-                <Modal show={showUpdate} onHide={handleClose}>
+                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvice(updateData.area_name); getBranch(updateData.province_name); getPopplus(updateData.popPlus_name); getPop(updateData.pop_name); getBrand(updateData.role)}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body></Modal.Body>
+                    <Modal.Body>
+                        <form className={styles.formModal}>
+                            <div>
+                                <label>Vùng: </label>
+                                <select name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}}>
+                                    {areaList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Tỉnh:</label>
+                                <select  name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}}>
+                                    {provinceList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                                
+                            </div>
+                            <div>
+                                <label>Chi nhánh:</label>
+                                <select  name='branch' onChange={(e)=>{getPopplus(e.target.value); handleChangeUpdate(e)}}>
+                                    {branchList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Popplus:</label>
+                                <select  name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
+                                    {popplusList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Pop:</label>
+                                <select  name='pop' onChange={handleChangeUpdate}>
+                                    {popList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                                
+                            </div>
+                            <div>
+                                <label>Type:</label>
+                                <select  name='type' onChange={handleChangeUpdate}>
+                                    <option>-</option>
+                                    {['DI','DA','CE'].map(data => (
+                                    <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Role:</label>
+                                <select  name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}}>
+                                    <option>-</option>
+                                    {['AGG','OLT','SW-BB','POWER'].map(data => (
+                                        <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Brand:</label>
+                                <select  name='brand' onChange={handleChangeUpdate}>
+                                    <option>-</option>
+                                    {brandList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </form>
+                    </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
@@ -275,7 +381,7 @@ export default function Device(){
                             <td>{data.subnet}</td>
                             <td>{data.gateway}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data)}}> Update</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(data)}}> Update</Button>
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
                             </td>
                         </tr>

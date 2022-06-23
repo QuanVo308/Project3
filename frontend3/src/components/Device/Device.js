@@ -53,6 +53,7 @@ export default function Device({tab}){
     const handleShowUpdate = (data) =>{
         setShowUpdate(true)
         setInputUpdate(0)
+        setInputUpdate(data)
         setUpdateData(data)
     }
     const handleShowDelete = () =>setShowDelete(true)
@@ -93,10 +94,12 @@ export default function Device({tab}){
             setPopplusList(res.data.data)
             if(!br){
                 
-                getPop(res.data.data[0].name)
                 if(res.data.data.length != 0){
+                    getPop(res.data.data[0].name)
                     
                     setInput(prev => ({...prev, "popPlus": res.data.data[0].id}))
+                } else {
+                    setPopList([])
                 }
             }
         })
@@ -180,7 +183,7 @@ export default function Device({tab}){
     }
 
     const handleUpdate = () => {
-        console.log(inputUpdate)
+        console.log('inputUpdate', inputUpdate)
         // axios({
         //     method: "put",
         //     url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
@@ -192,7 +195,7 @@ export default function Device({tab}){
         //     setUpdate(prev => !prev)
         //   }
         //   )
-        // setShowUpdate(false)
+        setShowUpdate(false)
     }
 
     const resetName = () => {
@@ -254,19 +257,10 @@ export default function Device({tab}){
                                 <label>Pop:</label>
                                 <select name='pop' onChange={handleChange}>
                                     {popList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                                 
-                            </div>
-                            <div>
-                                <label>Type:</label>
-                                <select name='type' onChange={handleChange}>
-                                    <option>-</option>
-                                    {['DI','DA','CE'].map(data => (
-                                    <option value={data}>{data}</option>
-                                    ))}
-                                </select>
                             </div>
                             <div>
                                 <label>Role:</label>
@@ -277,6 +271,17 @@ export default function Device({tab}){
                                     ))}
                                 </select>
                             </div>
+                            {input.role == 'AGG' && <div>
+                                <label>Type:</label>
+                                <select name='type' onChange={handleChange}>
+                                    <option>-</option>
+                                    {['DI','DA','CE'].map(data => (
+                                    <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>}
+                            
+                            
                             <div>
                                 <label>Brand:</label>
                                 <select name='brand' onChange={handleChange}>
@@ -299,7 +304,7 @@ export default function Device({tab}){
                 </Modal>
                 
                 {updateData?
-                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvice(updateData.area_name); getBranch(updateData.province_name); getPopplus(updateData.popPlus_name); getPop(updateData.pop_name); getBrand(updateData.role)}}>
+                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvice(updateData.area_name, false);  getBrand(updateData.role)}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
@@ -347,14 +352,15 @@ export default function Device({tab}){
                                 </select>
                                 
                             </div>
-                            <div>
+                            {inputUpdate.role == 'AGG' && <div>
                                 <label>Type:</label>
                                 <select defaultValue={updateData.type} name='type' onChange={handleChangeUpdate}>
                                     {['DI','DA','CE'].map(data => (
                                     <option value={data}>{data}</option>
                                     ))}
                                 </select>
-                            </div>
+                            </div>}
+                            
                             <div>
                                 <label>Role:</label>
                                 <select defaultValue={updateData.role} name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}}>

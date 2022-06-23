@@ -104,8 +104,8 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         for se in serializer.data:
             se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
-            se['province_name'] = Province.objects.filter(id = Branch.objects.filter(id = se['branch'])[0].province.id)[0].name
-            se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
+            se['province_name'] = Branch.objects.filter(id = se['branch'])[0].province.name
+            se['area_name'] = Branch.objects.filter(id = se['branch'])[0].province.area.name
         return Response(serializer.data)
 
     def create(self, request):

@@ -27,6 +27,10 @@ def update_pop_all(request):
     update_pops()
     return HttpResponse(status.HTTP_200_OK)
 
+def get_branch_by_name(request):
+    branch = Branch.objects.filter(name = request.GET['name']).values()
+    return JsonResponse({'data': list(branch), 'status': status.HTTP_201_CREATED})
+
 
 def get_province_in_area(request):
     id = Area.objects.get(name = request.GET['name'])

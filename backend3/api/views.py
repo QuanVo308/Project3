@@ -39,7 +39,7 @@ def test(request):
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
 def search_device(request):
-    value = request.GET['search']
+    value = request.GET['search'].upper()
     fields = [f for f in Device._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
     # for f in fields:
     #     print(f.name)
@@ -58,8 +58,7 @@ def search_device(request):
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
 def search_pop(request):
-    print("input", request.GET)
-    value = request.GET['search']
+    value = request.GET['search'].upper()
     fields = [f for f in Pop._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
     # for f in fields:
     #     print(f.name)
@@ -84,7 +83,7 @@ def search_pop(request):
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
 def search_popp(request):
-    value = request.GET['search']
+    value = request.GET['search'].upper()
     fields = [f for f in PopPlus._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
     # for f in fields:
     #     print(f.name)
@@ -364,14 +363,14 @@ class DeviceViewSet(viewsets.ModelViewSet):
         pp = Device()
         request.data._mutable = True
         # print(get_device_name(request.data))
-        request.data['metro'] = Pop.objects.filter(id = request.data['pop'])[0].metro
-        request.data['popp'] = Pop.objects.filter(id = request.data['pop'])[0].popPlus.name
-        request.data['province'] = Pop.objects.filter(id = request.data['pop'])[0].province.name
-        request.data['area'] = Pop.objects.filter(id = request.data['pop'])[0].province.area.name
+        request.data['metro'] = Pop.objects.filter(name = request.data['pop'])[0].metro
+        request.data['popp'] = Pop.objects.filter(name = request.data['pop'])[0].popPlus.name
+        request.data['province'] = Pop.objects.filter(name = request.data['pop'])[0].province.name
+        request.data['area'] = Pop.objects.filter(name = request.data['pop'])[0].province.area.name
 
         t = request.data.copy()
         t['brand'] = Brand.objects.filter(name = request.data['brand'])[0]
-        t['pop'] = Pop.objects.filter(id = request.data['pop'])[0]
+        t['pop'] = Pop.objects.filter(name = request.data['pop'])[0]
         for i in t:
             setattr(pp, i, t[i])
 
@@ -382,12 +381,12 @@ class DeviceViewSet(viewsets.ModelViewSet):
         
         t._mutable = True
 
-        if not Brand.objects.filter(name = request.data['brand']) or not Pop.objects.filter(id = request.data['pop'])[0]:
+        if not Brand.objects.filter(name = request.data['brand']) or not Pop.objects.filter(name = request.data['pop'])[0]:
             # print('check')
             return HttpResponse('fail')
 
 
-        request.data['pop'] = Pop.objects.filter(id = request.data['pop'])[0].id
+        request.data['pop'] = Pop.objects.filter(name = request.data['pop'])[0].id
         request.data['brand'] = Brand.objects.filter(name = request.data['brand'])[0].id
 
         

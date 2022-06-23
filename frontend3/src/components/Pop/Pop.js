@@ -19,6 +19,7 @@ export default function Pop({tab}){
     const [input, setInput] = useState({})
     const [inputUpdate, setInputUpdate] = useState({})
     const [updateData, setUpdateData] = useState()
+    const [searchData, setSearchData] = useState()
 
     useEffect( () => {
         axios.get('http://127.0.0.1:8000/api/area/')
@@ -45,6 +46,14 @@ export default function Pop({tab}){
             // getProvince(res.data[0].name, true)
         })
         },[update])
+
+    useEffect(()=>{
+        axios.get('http://127.0.0.1:8000/api/searchpop/',{params:{'search': searchData}})
+        .then(function(res){
+            // console.log(res)
+            setPopList(res.data.data)
+        });
+    },[searchData])
 
     const handleClose = () => {
         setShowAdd(false)
@@ -281,7 +290,7 @@ export default function Pop({tab}){
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Pop</Button>
                 </div>
                 <div className={styles.btnSearch}>
-                    <input className={styles.SearchInput} type='text' placeholder='Search...' />
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value)}} />
                     <Search />
                 </div>
             </div>

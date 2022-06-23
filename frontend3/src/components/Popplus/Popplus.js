@@ -63,9 +63,10 @@ export default function Popplus(tab){
     }
 
     useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/searchpopp/', {'search': searchData})
+        axios.get('http://127.0.0.1:8000/api/searchpopp/',{params:{'search': searchData}})
         .then(function(res){
-            setPopplusList(res.data)
+            console.log(res)
+            setPopplusList(res.data.data)
         });
     },[searchData])
 

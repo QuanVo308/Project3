@@ -21,6 +21,7 @@ export default function Device({tab}){
     const [input, setInput] = useState({})
     const [updateData, setUpdateData] = useState()
     const [inputUpdate, setInputUpdate] = useState({})
+    const [searchData, setSearchData] = useState()
 
     useEffect(() => { 
         const getDevice = async()=>{
@@ -39,6 +40,14 @@ export default function Device({tab}){
             getProvice(res.data[0].name)
         })
         },[update])
+
+    useEffect(()=>{
+        axios.get('http://127.0.0.1:8000/api/searchdevice/',{params:{'search': searchData}})
+        .then(function(res){
+            // console.log(res)
+            setPopplusList(res.data.data)
+        });
+    },[searchData])
 
     const handleClose = () => {
         setShowAdd(false)
@@ -216,7 +225,7 @@ export default function Device({tab}){
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Device</Button>
                 </div>
                 <div className={styles.btnSearch}>
-                    <input className={styles.SearchInput} type='text' placeholder='Search...' />
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value)}}/>
                     <Search />
                 </div>
             </div>

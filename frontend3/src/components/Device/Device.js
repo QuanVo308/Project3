@@ -26,7 +26,7 @@ export default function Device({tab}){
         const getDevice = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/device/')
             setDeviceList(res.data)
-            console.log(res)
+            // console.log(res)
             // resetName()
         }
         getDevice()
@@ -38,8 +38,9 @@ export default function Device({tab}){
             setAreaList(res.data)
             getProvice(res.data[0].name)
         })
+       
         },[update])
-
+    
     const handleClose = () => {
         setShowAdd(false)
         setShowUpdate(false)
@@ -133,7 +134,17 @@ export default function Device({tab}){
     const handleChangeUpdate = (event) => {
         const name = event.target.name
         const value = event.target.value
+        console.log("name", name, value)
+        if( name == 'brand'){
+            axios.get(`http://127.0.0.1:8000/api/brand/${value}/`)
+            .then( (res) => {
+                // console.log("brandname", res.data.name)
+                setInputUpdate(values => ({...values, 'brand_name': res.data.name}))
+            })
+        }
         setInputUpdate(values => ({...values, [name]: value}))
+        setUpdate(prev => !prev)
+        resetName()
         // axios.get('http://127.0.0.1:8000/api/popname/', {params:{
         //     'popPlus': b,
         //     'tail1': t1,
@@ -200,13 +211,18 @@ export default function Device({tab}){
     }
 
     const resetName = () => {
-        // axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'popPlus': inputUpdate['popPlus_name'],
-        //     'tail1': inputUpdate['tail1'],
-        //     'tail2': inputUpdate['tail2']}})
-        // .then(function(res){
-        //     // console.log(res.data)
-        //     setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        // })
+        axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
+            'role': inputUpdate['role'],
+            'name': inputUpdate['name'],
+            'brand': inputUpdate['brand_name'],
+            'type': inputUpdate['type'],
+        }})
+        .then(function(res){
+            console.log("res", res.data)
+            console.log("input", inputUpdate)
+            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+            setUpdate(prev => !prev)
+        })
     }
 
     return(
@@ -381,13 +397,13 @@ export default function Device({tab}){
                                 <label>Brand:</label>
                                 <select defaultValue={updateData.brand_name} name='brand' onChange={handleChangeUpdate}>
                                     {brandList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>
                             <div>
                                 <label>Name:</label>
-                                <input defaultValue={updateData.name} type='text' value={inputUpdate.name} disabled/>
+                                <input defaultValue={inputUpdate.name} type='text' value={inputUpdate.name} disabled/>
                             </div>
                         </form>
                     </Modal.Body>

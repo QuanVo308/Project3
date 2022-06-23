@@ -106,15 +106,21 @@ export default function Pop({tab}){
     
     const getBranch = (data, br) => {
         // console.log(data)
-        axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
+
+        axios.get(`http://127.0.0.1:8000/api/province/${data}/`, {})
         .then(function(res){
-            setBranchList(res.data.data)
-            if(!br){
-                // console.log('check')
-                getPopplus(res.data.data[0].name, false)
-                setInputUpdate(prev => ({...prev, 'branch_name':res.data.data[0].name, 'branch':res.data.data[0].id}))
-            }
+            axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': res.data.name}})
+            .then(function(res){
+                setBranchList(res.data.data)
+                if(!br){
+                    // console.log('check')
+                    getPopplus(res.data.data[0].name, false)
+                    setInputUpdate(prev => ({...prev, 'branch_name':res.data.data[0].name, 'branch':res.data.data[0].id}))
+                }
         })
+        })
+        
+        
     }
 
     const getPopplus = (data) => {
@@ -371,7 +377,7 @@ export default function Pop({tab}){
                                 <label>Tỉnh:</label>
                                 <select defaultValue={inputUpdate.province_name} name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                     {provinceList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

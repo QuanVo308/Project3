@@ -249,7 +249,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Phần đuôi: </label>
-                                <select name='tail1' onChange={handleChange}>
+                                <select name='tail1' onChange={handleChangeUpdate}>
                                     <option>-</option>
                                     <option value='P'>P</option>
                                     <option value='M'>M</option>

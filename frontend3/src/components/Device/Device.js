@@ -128,7 +128,7 @@ export default function Device({tab}){
             setPopList(res.data.data)
             if(res.data.data.length != 0){
                     
-                setInput(prev => ({...prev, "pop": res.data.data[0].id}))
+                setInput(prev => ({...prev, "pop": res.data.data[0].name}))
             }
         })
     }
@@ -149,6 +149,11 @@ export default function Device({tab}){
     const handleChangeUpdate = (event) => {
         const name = event.target.name
         const value = event.target.value
+        var r= inputUpdate['role']
+        var n= inputUpdate['name']
+        var b= inputUpdate['brand_name']
+        var t= inputUpdate['type']
+
         setInputUpdate(values => ({...values, [name]: value}))
         console.log("name", name, value)
         if( name == 'brand'){
@@ -156,8 +161,29 @@ export default function Device({tab}){
             .then( (res) => {
                 // console.log("brandname", res.data.name)
                 setInputUpdate(values => ({...values, 'brand_name': res.data.name}))
+                b = res.data.name
             })
         }
+
+        if( name == 'type'){
+            t = value
+        }
+       
+
+
+
+        axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
+            'role': r,
+            'name': n,
+            'brand': b,
+            'type': t,
+        }})
+        .then(function(res){
+            console.log("res", res.data)
+            console.log("input", inputUpdate)
+            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+            setUpdate(prev => !prev)
+        })
         // axios.get('http://127.0.0.1:8000/api/popname/', {params:{
         //     'popPlus': b,
         //     'tail1': t1,
@@ -179,7 +205,7 @@ export default function Device({tab}){
             formData.append(key, value)
             
         })
-        console.log(input)
+        console.log('input', input)
         axios({
             method: "post",
             url: "http://127.0.0.1:8000/api/device/",
@@ -294,7 +320,7 @@ export default function Device({tab}){
                                 <label>Pop:</label>
                                 <select name='pop' onChange={handleChange}>
                                     {popList.map(data => (
-                                        <option value={data.id}>{data.name}</option>
+                                        <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>
                                 
@@ -409,7 +435,7 @@ export default function Device({tab}){
                             </div>}
                             <div>
                                 <label>Brand:</label>
-                                <select defaultValue={updateData.brand_name} name='brand' onChange={handleChangeUpdate}>
+                                <select defaultValue={inputUpdate.brand_name} name='brand' onChange={handleChangeUpdate}>
                                     {brandList.map(data => (
                                         <option value={data.id}>{data.name}</option>
                                     ))}

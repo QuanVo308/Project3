@@ -116,10 +116,7 @@ export default function Popplus(){
           })
         .catch( (res) => {
             console.log(res)
-        }
-
-        )
-
+        })
         setShowDelete(false)
     }
 

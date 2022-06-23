@@ -147,6 +147,7 @@ class PopPlusViewSet(viewsets.ModelViewSet):
 
 
         t = request.data.copy()
+        print(request.data['branch'])
         t._mutable = True
         t['branch'] = Branch.objects.filter(name = request.data['branch'])[0]
 

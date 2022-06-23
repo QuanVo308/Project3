@@ -94,6 +94,7 @@ export default function Popplus(){
         .then(function(res){
             setProvinceList(res.data.data)
             getBranch(res.data.data[0].name)
+            
 
         })
     }
@@ -103,6 +104,8 @@ export default function Popplus(){
         .then(function(res){
             setBranchList(res.data.data)
             setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
+
+            setInput(prev => ({...prev, ['branch_name']: res.data.data[0].name, ['branch']: res.data.data[0].id}))
             // console.log('branch list',branchList)
         })
     }
@@ -175,6 +178,16 @@ export default function Popplus(){
 
     const handleUpdate = () => {
         console.log(inputUpdate)
+    }
+
+    const resetName = () => {
+        axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': inputUpdate['branch'],
+        'tail1': inputUpdate['tail1'],
+        'tail2': inputUpdate['tail2']}})
+        .then(function(res){
+            // console.log(res.data)
+            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        })
     }
 
     return(
@@ -308,7 +321,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Name:</label>
-                                <input type='text' defaultValue={updateData.name} disabled/><ArrowClockwise />
+                                <input type='text' value={inputUpdate.name} disabled/><ArrowClockwise onClick={() => {resetName()}} />
                             </div> 
                             <div>
                                 <label>Area OSPF:</label>

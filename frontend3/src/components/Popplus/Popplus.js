@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
-import {ArrowClockwise} from 'react-bootstrap-icons'
+import {ArrowClockwise, Search} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 
 export default function Popplus(){
@@ -261,11 +261,17 @@ export default function Popplus(){
 
     return(
         <div>
-            <div>
-                <div>
+            
+            <div className={styles.AddSearch}>
+                <div className={styles.btnAdd}>
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Popplus</Button>
                 </div>
-
+                <div className={styles.btnSearch}>
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' />
+                    <Search />
+                </div>
+            </div>
+            <div>
                 <Modal show={showAdd} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Popplus</Modal.Title>
@@ -450,6 +456,7 @@ export default function Popplus(){
                     </Modal.Footer>
                 </Modal>
             </div>
+            
             <div className={styles.table}>
                 <Table striped bordered hover>
                     <thead>

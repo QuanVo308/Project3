@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Table, Button, Modal} from 'react-bootstrap'
+import {Search} from 'react-bootstrap-icons'
 import styles from './Device.module.scss'
 
 export default function Device({tab}){
@@ -207,10 +208,16 @@ export default function Device({tab}){
 
     return(
         <div>
-            <div>
-                <div>
+            <div className={styles.AddSearch}>
+                <div className={styles.btnAdd}>
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Device</Button>
                 </div>
+                <div className={styles.btnSearch}>
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' />
+                    <Search />
+                </div>
+            </div>
+            <div>
                 <Modal show={showAdd} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add Device</Modal.Title>
@@ -370,6 +377,10 @@ export default function Device({tab}){
                                         <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>
+                            </div>
+                            <div>
+                                <label>Name:</label>
+                                <input defaultValue={updateData.name} type='text' value={inputUpdate.name} disabled/>
                             </div>
                         </form>
                     </Modal.Body>

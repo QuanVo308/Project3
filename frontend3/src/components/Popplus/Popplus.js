@@ -34,14 +34,38 @@ export default function Popplus(){
         })
         },[])
     useEffect(()=>{
-        setInputUpdate(updateData)
+        // setInputUpdate(updateData)
 
-        const tail1 = updateData['name'][updateData['name'].length - 4]
-        const tail2 = updateData['name'].substring(updateData['name'].length - 3, updateData['name'].length)
-        // console.log(tail1, tail2)
-        setInputUpdate(values => ({...values, ['tail1']: tail1}))
-        setInputUpdate(values => ({...values, ['tail2']: tail2}))
+      
+        // const tail1 = updateData['name'][updateData['name'].length - 4]
+        // const tail2 = updateData['name'].substring(updateData['name'].length - 3, updateData['name'].length)
+        // // console.log(tail1, tail2)
+        // setInputUpdate(values => ({...values, ['tail1']: tail1}))
+        // setInputUpdate(values => ({...values, ['tail2']: tail2}))
+        
+        // console.log(updateData)
     },[updateData])
+
+    function checkTail2(tail) {
+        console.log(tail)
+        if(tail < 1){
+            return 1
+        }
+        if(tail > 999){
+            return 999
+        }
+        return tail
+    }
+
+    function checkIPOctet(se) {
+        if(se > 255){
+            return 255
+        }
+        if(se < 0){
+            return 0
+        }
+        return se
+    }
    
     const handleClose = () => {
         setShowAdd(false)
@@ -50,9 +74,15 @@ export default function Popplus(){
         setInputUpdate(0)
     }
     const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>{
+    const handleShowUpdate = (data) =>{
         setShowUpdate(true)
         setInputUpdate(0)
+        setUpdateData(data)
+        const tail1 = data['name'][data['name'].length - 4]
+        const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
+        // console.log(tail1, tail2)
+        setInputUpdate(data)
+        setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
         setUpdate(prev => !prev)
 
     }
@@ -63,6 +93,7 @@ export default function Popplus(){
         .then(function(res){
             setProvinceList(res.data.data)
             getBranch(res.data.data[0].name)
+
         })
     }
     
@@ -70,6 +101,7 @@ export default function Popplus(){
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
             setBranchList(res.data.data)
+            setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
             // console.log('branch list',branchList)
         })
     }
@@ -84,7 +116,16 @@ export default function Popplus(){
 
     const handleChangeUpdate = (event) => {
         const name = event.target.name
-        const value = event.target.value
+        var value
+        if (name == 'octet2_ip_MGMT' || name == 'octet2_ip_OSPF_MGMT' || name == 'octet3_ip_MGMT'){
+            value = checkIPOctet(event.target.value)
+        } else if (name == 'tail2') {
+            console.log('check', name)
+            value = checkTail2(event.target.value)
+            console.log('check', value)
+        } else {
+            value = event.target.value
+        }
         setInputUpdate(values => ({...values, [name]: value}))
     }
 
@@ -267,7 +308,7 @@ export default function Popplus(){
                                     <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
                                     <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChangeUpdate}
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" value={inputUpdate['tail2']} max="999" onChange={handleChangeUpdate}
                                 defaultValue={inputUpdate['tail2']}/>
                             </div>
                             <div>
@@ -284,15 +325,15 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Octet2 IP OSPF MGMT:</label>
-                                <input defaultValue={updateData.octet2_ip_OSPF_MGMT} type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChangeUpdate} />
+                                <input defaultValue={updateData.octet2_ip_OSPF_MGMT} value={inputUpdate['octet2_ip_OSPF_MGMT']} type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChangeUpdate} />
                             </div>
                             <div>
                                 <label>Octet2 IP MGMT:</label>
-                                <input defaultValue={updateData.octet2_ip_MGMT} type="number" name='octet2_ip_MGMT' onChange={handleChangeUpdate} />
+                                <input defaultValue={updateData.octet2_ip_MGMT} value={inputUpdate['octet2_ip_MGMT']} type="number" name='octet2_ip_MGMT' onChange={handleChangeUpdate} />
                             </div>
                             <div>
                                 <label>Octet3 IP MGMT:</label>
-                                <input defaultValue={updateData.octet3_ip_MGMT} type="number" name='octet3_ip_MGMT' onChange={handleChangeUpdate} />
+                                <input defaultValue={updateData.octet3_ip_MGMT} value={inputUpdate['octet3_ip_MGMT']} type="number" name='octet3_ip_MGMT' onChange={handleChangeUpdate} />
                             </div>
                             <div>
                                 <label>vlan PPPoE:</label>
@@ -358,7 +399,7 @@ export default function Popplus(){
                             <td>{data.vlan_PPPoE}</td>
                             <td>{data.branch_name}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate(); setUpdateData(data);}}> Update</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(data)}}> Update</Button>
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id);}}> Delete</Button>
                             </td>
                         </tr>

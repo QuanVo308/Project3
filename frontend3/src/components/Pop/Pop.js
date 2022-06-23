@@ -63,6 +63,7 @@ export default function Pop(){
     }
 
     function checkTail2(tail) {
+        // console.log(tail)
         if(tail < 1){
             return 1
         }

@@ -115,6 +115,9 @@ export default function Device(){
             console.log(res);
             setUpdate(prev => !prev)
           })
+        .catch( (res) => {
+            console.log(res)
+        })
 
         setShowDelete(false)
     }

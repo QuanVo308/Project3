@@ -104,8 +104,13 @@ export default function Popplus(){
             // console.log(res);
             setUpdate(prev => !prev)
           })
+        .catch( (res) => {
+            console.log(res)
+        }
 
-          setShowDelete(false)
+        )
+
+        setShowDelete(false)
     }
 
     const handleUpdate = () => {

@@ -33,21 +33,34 @@ export default function Popplus(){
             setAreaList(res.data)
         })
         },[])
+    useEffect(()=>{
+        setInputUpdate(updateData)
+
+        const tail1 = updateData['name'][updateData['name'].length - 4]
+        const tail2 = updateData['name'].substring(updateData['name'].length - 3, updateData['name'].length)
+        // console.log(tail1, tail2)
+        setInputUpdate(values => ({...values, ['tail1']: tail1}))
+        setInputUpdate(values => ({...values, ['tail2']: tail2}))
+    },[updateData])
    
     const handleClose = () => {
         setShowAdd(false)
         setShowUpdate(false)
         setShowDelete(false)
+        setInputUpdate(0)
     }
     const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowUpdate = () =>{
+        setShowUpdate(true)
+
+    }
     const handleShowDelete = () =>setShowDelete(true)
 
     const getProvice = (data) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
-            
+            getBranch(res.data.data[0].name)
         })
     }
     
@@ -65,9 +78,7 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
-    useEffect(()=>{
-        setInputUpdate(updateData)
-    },[updateData])
+    
 
     const handleChangeUpdate = (event) => {
         const name = event.target.name
@@ -251,10 +262,11 @@ export default function Popplus(){
                                 <label>Phần đuôi: </label>
                                 <select name='tail1' onChange={handleChangeUpdate}>
                                     <option>-</option>
-                                    <option value='P'>P</option>
-                                    <option value='M'>M</option>
+                                    <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
+                                    <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChangeUpdate}/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChangeUpdate}
+                                defaultValue={inputUpdate['tail2']}/>
                             </div>
                             <div>
                                 <label>Name:</label>

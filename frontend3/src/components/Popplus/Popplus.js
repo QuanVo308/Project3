@@ -24,6 +24,7 @@ export default function Popplus(){
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
             // console.log(res)
             setPopplusList(res.data)
+            resetName()
         }
         getPopplus()
     },[update])
@@ -36,17 +37,8 @@ export default function Popplus(){
         })
         },[])
     useEffect(()=>{
-        // setInputUpdate(updateData)
-
-      
-        // const tail1 = updateData['name'][updateData['name'].length - 4]
-        // const tail2 = updateData['name'].substring(updateData['name'].length - 3, updateData['name'].length)
-        // // console.log(tail1, tail2)
-        // setInputUpdate(values => ({...values, ['tail1']: tail1}))
-        // setInputUpdate(values => ({...values, ['tail2']: tail2}))
-        
-        // console.log(updateData)
-    },[updateData])
+        // resetName()
+    },[inputUpdate])
 
     function checkTail2(tail) {
         // console.log(tail)
@@ -94,6 +86,7 @@ export default function Popplus(){
         .then(function(res){
             setProvinceList(res.data.data)
             getBranch(res.data.data[0].name)
+            setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name}))
             
 
         })
@@ -106,13 +99,30 @@ export default function Popplus(){
             setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
 
             setInput(prev => ({...prev, ['branch_name']: res.data.data[0].name, ['branch']: res.data.data[0].id}))
+
+            axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].name,
+            'tail1': inputUpdate['tail1'],
+            'tail2': inputUpdate['tail2']}})
+            .then(function(res){
+                console.log("check", res.data)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        })
             // console.log('branch list',branchList)
         })
     }
 
     const handleChange = (event) => {
         const name = event.target.name
-        const value = event.target.value
+        var value 
+        if (name == 'octet2_ip_MGMT' || name == 'octet2_ip_OSPF_MGMT' || name == 'octet3_ip_MGMT'){
+            value = checkIPOctet(event.target.value)
+        } else if (name == 'tail2') {
+            // console.log('check', name)
+            value = checkTail2(event.target.value)
+            // console.log('check', value)
+        } else {
+            value = event.target.value
+        }
         setInput(values => ({...values, [name]: value}))
     }
 
@@ -130,6 +140,33 @@ export default function Popplus(){
         } else {
             value = event.target.value
         }
+        console.log(name)
+
+        var b= inputUpdate['branch_name']
+        var t1 = inputUpdate['tail1']
+        var t2 = inputUpdate['tail2']
+        if (name == 'tail2'){
+            t2 = value 
+        }
+
+        if (name == 'tail1'){
+            t1 = value 
+        }
+        if (name == 'branch_name'){
+            b = value 
+        }
+
+        axios.get('http://127.0.0.1:8000/api/poppname/', {params:{
+            'branch': b,
+            'tail1': t1,
+            'tail2': t2 
+        }})
+            .then(function(res){
+                // console.log(res.data)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        })
+
+        
         setInputUpdate(values => ({...values, [name]: value}))
     }
 
@@ -178,10 +215,23 @@ export default function Popplus(){
 
     const handleUpdate = () => {
         console.log(inputUpdate)
+        axios({
+            method: "put",
+            url: `http://127.0.0.1:8000/api/popplus/${inputUpdate['id']}/`,
+            data: inputUpdate,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then( (res) => {
+            // console.log('update', res)
+            setUpdate(prev => !prev)
+          }
+          )
+        setShowUpdate(false)
+
     }
 
     const resetName = () => {
-        axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': inputUpdate['branch'],
+        axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': inputUpdate['branch_name'],
         'tail1': inputUpdate['tail1'],
         'tail2': inputUpdate['tail2']}})
         .then(function(res){
@@ -234,7 +284,7 @@ export default function Popplus(){
                                     <option value='P'>P</option>
                                     <option value='M'>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" value={input['tail2']} onChange={handleChange}/>
                             </div>
                             <div>
                                 <label>Area OSPF:</label>
@@ -247,15 +297,15 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Octet2 IP OSPF MGMT:</label>
-                                <input type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChange} />
+                                <input type="number"  value={input['octet2_ip_OSPF_MGMT']} name='octet2_ip_OSPF_MGMT' onChange={handleChange} />
                             </div>
                             <div>
                                 <label>Octet2 IP MGMT:</label>
-                                <input type="number" name='octet2_ip_MGMT' onChange={handleChange} />
+                                <input type="number" value={input['octet2_ip_MGMT']} name='octet2_ip_MGMT' onChange={handleChange} />
                             </div>
                             <div>
                                 <label>Octet3 IP MGMT:</label>
-                                <input type="number" name='octet3_ip_MGMT' onChange={handleChange} />
+                                <input type="number" value={input['octet3_ip_MGMT']} name='octet3_ip_MGMT' onChange={handleChange} />
                             </div>
                             <div>
                                 <label>vlan PPPoE:</label>
@@ -287,7 +337,7 @@ export default function Popplus(){
                         <form className={styles.formModal} >
                             <div>
                                 <label>Vùng:</label>
-                                <select defaultValue={updateData.area_name}  name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}} >
+                                <select defaultValue={updateData.area_name}  name='area_name' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}} >
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -295,7 +345,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}} >
+                                <select defaultValue={updateData.province_name} name='province_name' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}} >
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}

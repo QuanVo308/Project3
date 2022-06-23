@@ -25,7 +25,7 @@ def update_device_all(request):
 
 def get_popplus_name_api(request):
     popp = PopPlus()
-    popp.branch = Branch.objects.filter(id = request.GET['branch'])[0]
+    popp.branch = Branch.objects.filter(name = request.GET['branch'])[0]
     print(get_popplus_name(popp, request.GET['tail1'], request.GET['tail2']))
     name = get_popplus_name(popp, request.GET['tail1'], request.GET['tail2'])
     return JsonResponse({'name': name, 'status': status.HTTP_201_CREATED})
@@ -59,6 +59,8 @@ def update_pop_all(request):
 def get_branch_by_name(request):
     branch = Branch.objects.filter(name = request.GET['name']).values()
     return JsonResponse({'data': list(branch), 'status': status.HTTP_201_CREATED})
+
+
 
 
 def get_province_in_area(request):
@@ -149,7 +151,7 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         t = request.data.copy()
         print(request.data['branch'])
         t._mutable = True
-        t['branch'] = Branch.objects.filter(name = request.data['branch'])[0]
+        t['branch'] = Branch.objects.filter(id = request.data['branch'])[0]
 
         pp = PopPlus()
         for i in t:
@@ -167,7 +169,7 @@ class PopPlusViewSet(viewsets.ModelViewSet):
             s = self.serializer_class(data=request.data)
             # print('zxczxczxc')
             s.is_valid(raise_exception=True)
-            # self.perform_create(s)
+            self.perform_create(s)
             headers = self.get_success_headers(s.data)
             return Response(s.data, status= status.HTTP_201_CREATED, headers=headers)
         

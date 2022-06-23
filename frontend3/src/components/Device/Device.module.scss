@@ -5,6 +5,18 @@
     }
 }
 
+.AddSearch {
+    display: flex;
+}
+
+.btnAdd {
+    width: 50%;
+}
+
+.btnSearch{
+    width: 50%;
+}
+
 .formModal {
     margin: 10px;
     :focus{
@@ -16,10 +28,10 @@
             width: 40%;
         }
         select{
-            width: 30%;
+            width: 60%;
         }
         input{
-            width: 30%;
+            width: 60%;
         }
     }
 }

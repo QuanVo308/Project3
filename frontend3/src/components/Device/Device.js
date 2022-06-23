@@ -22,6 +22,7 @@ export default function Device({tab}){
     const [updateData, setUpdateData] = useState()
     const [inputUpdate, setInputUpdate] = useState({})
     const [searchData, setSearchData] = useState()
+    const [rn, setRn] = useState(false)
 
     useEffect(() => { 
         const getDevice = async()=>{
@@ -39,7 +40,12 @@ export default function Device({tab}){
             getProvince(res.data[0].name, false)
         })
     }, [tab])
+    useEffect(() => { 
+        resetName()
+        console.log('checl')
+    },[inputUpdate['pop']])
 
+    
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
@@ -68,6 +74,8 @@ export default function Device({tab}){
         getProvince(1, false)
     }
     const handleShowUpdate = (data) =>{
+        console.log('data', data)
+        data['type'] = data.name.substring(0,2)
         setShowUpdate(true)
         setInputUpdate(0)
         setInputUpdate(data)
@@ -98,8 +106,10 @@ export default function Device({tab}){
 
                 getPopplus(res.data.data[0].name, false)
                 if(res.data.data.length != 0){
+                setInputUpdate(prev => ({...prev, "branch": res.data.data[0].id, "branch_name": res.data.data[0].name}))}
+                if(res.data.data.length != 0){
                     
-                    setInput(prev => ({...prev, "branch": res.data.data[0].id}))
+                    setInput(prev => ({...prev, "branch": res.data.data[0].id, "branch_name": res.data.data[0].name}))
                 }
             }
         })
@@ -109,12 +119,15 @@ export default function Device({tab}){
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
             setPopplusList(res.data.data)
+            if(res.data.data.length != 0){
+            setInputUpdate(prev => ({...prev, "popPlus": res.data.data[0].id, "popPlus_name": res.data.data[0].name}))}
+            
             if(!br){
                 
                 if(res.data.data.length != 0){
                     getPop(res.data.data[0].name)
                     
-                    setInput(prev => ({...prev, "popPlus": res.data.data[0].id}))
+                    setInput(prev => ({...prev, "popPlus": res.data.data[0].id, "popPlus_name": res.data.data[0].name}))
                 } else {
                     setPopList([])
                 }
@@ -127,8 +140,10 @@ export default function Device({tab}){
         .then(function(res){
             setPopList(res.data.data)
             if(res.data.data.length != 0){
+            setInputUpdate(prev => ({...prev, "pop": res.data.data[0].id, "pop_name": res.data.data[0].name}))}
+            if(res.data.data.length != 0){
                     
-                setInput(prev => ({...prev, "pop": res.data.data[0].name}))
+                setInput(prev => ({...prev, "pop": res.data.data[0].id, "pop_name": res.data.data[0].name}))
             }
         })
     }
@@ -153,50 +168,68 @@ export default function Device({tab}){
         var n= inputUpdate['name']
         var b= inputUpdate['brand_name']
         var t= inputUpdate['type']
+        var p= inputUpdate['pop']
 
         setInputUpdate(values => ({...values, [name]: value}))
-        console.log("name", name, value)
+        console.log("change", name, value)
         if( name == 'brand'){
             axios.get(`http://127.0.0.1:8000/api/brand/${value}/`)
             .then( (res) => {
                 // console.log("brandname", res.data.name)
                 setInputUpdate(values => ({...values, 'brand_name': res.data.name}))
                 b = res.data.name
+                axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
+                    'role': r,
+                    'name': n,
+                    'brand': b,
+                    'type': t,
+                    'pop': p
+                }})
+                .then(function(res){
+                    console.log("res", res.data)
+                    console.log("input", inputUpdate)
+                    setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+                    // setUpdate(prev => !prev)
+                })
+                
             })
         }
 
         if( name == 'type'){
             t = value
+            axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
+                'role': r,
+                'name': n,
+                'brand': b,
+                'type': t,
+                'pop': p
+            }})
+            .then(function(res){
+                console.log("res", res.data)
+                console.log("input", inputUpdate)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+                // setUpdate(prev => !prev)
+            })
         }
-       
 
-
-
-        axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
-            'role': r,
-            'name': n,
-            'brand': b,
-            'type': t,
-        }})
-        .then(function(res){
-            console.log("res", res.data)
-            console.log("input", inputUpdate)
-            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-            setUpdate(prev => !prev)
-        })
-        // axios.get('http://127.0.0.1:8000/api/popname/', {params:{
-        //     'popPlus': b,
-        //     'tail1': t1,
-        //     'tail2': t2 
-        // }})
-        //     .then(function(res){
-        //         // console.log(res.data)
-        //         setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        // })
-
-        
-        // setInputUpdate(values => ({...values, [name]: value}))
-        // setUpdate(prev => !prev)
+        if( name == 'pop'){
+            p = value
+            axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
+                'role': r,
+                'name': n,
+                'brand': b,
+                'type': t,
+                'pop': p
+            }})
+            .then(function(res){
+                console.log("res", res.data)
+                console.log("input", inputUpdate)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+                // setUpdate(prev => !prev)
+            })
+        }
+        console.log("rn", rn)
+        setRn(prev => !prev)
     }
 
     const handleAdd = () => {
@@ -251,18 +284,24 @@ export default function Device({tab}){
     }
 
     const resetName = () => {
+        var r= inputUpdate['role']
+        var n= inputUpdate['name']
+        var b= inputUpdate['brand_name']
+        var t= inputUpdate['type']
+        var p= inputUpdate['pop']
         axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
-            'role': inputUpdate['role'],
-            'name': inputUpdate['name'],
-            'brand': inputUpdate['brand_name'],
-            'type': inputUpdate['type'],
-        }})
-        .then(function(res){
-            console.log("res", res.data)
-            console.log("input", inputUpdate)
-            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-            setUpdate(prev => !prev)
-        })
+                'role': r,
+                'name': n,
+                'brand': b,
+                'type': t,
+                'pop': p
+            }})
+            .then(function(res){
+                // console.log("res", res.data)
+                console.log("input", inputUpdate)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+                // setUpdate(prev => !prev)
+            })
     }
 
     return(
@@ -410,7 +449,7 @@ export default function Device({tab}){
                                 <label>Pop:</label>
                                 <select defaultValue={updateData.pop_name} name='pop' onChange={handleChangeUpdate}>
                                     {popList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                                 
@@ -435,9 +474,9 @@ export default function Device({tab}){
                             </div>}
                             <div>
                                 <label>Brand:</label>
-                                <select defaultValue={inputUpdate.brand_name} name='brand' onChange={handleChangeUpdate}>
+                                <select  name='brand' onChange={handleChangeUpdate}>
                                     {brandList.map(data => (
-                                        <option value={data.id}>{data.name}</option>
+                                        <option value={data.id} selected={data.name==inputUpdate.brand_name}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

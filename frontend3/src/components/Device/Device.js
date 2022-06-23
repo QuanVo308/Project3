@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Table, Button, Modal} from 'react-bootstrap'
 import styles from './Device.module.scss'
 
-export default function Device(){
+export default function Device({tab}){
 
     const [deviceList, setDeviceList] = useState([])
     const [update, setUpdate] = useState(false)
@@ -29,7 +29,7 @@ export default function Device(){
             // resetName()
         }
         getDevice()
-    },[update])
+    },[update, tab])
 
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
@@ -44,8 +44,12 @@ export default function Device(){
         setShowUpdate(false)
         setShowDelete(false)
         setInput(0)
+        setInputUpdate(0)
     }
-    const handleShowAdd = () => setShowAdd(true);
+    const handleShowAdd = () => {
+        setShowAdd(true);
+        getProvice(1, false)
+    }
     const handleShowUpdate = (data) =>{
         setShowUpdate(true)
         setInputUpdate(0)
@@ -53,27 +57,48 @@ export default function Device(){
     }
     const handleShowDelete = () =>setShowDelete(true)
 
-    const getProvice = (data) => {
+    const getProvice = (data, br) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
-            getBranch(res.data.data[0].name)
+            if(!br){
+
+                getBranch(res.data.data[0].name, false)
+                if(res.data.data.length != 0){
+
+                    setInput(prev => ({...prev, "province": res.data.data[0].id}))
+                }
+            }
         })
     }
     
-    const getBranch = (data) => {
+    const getBranch = (data, br) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
             setBranchList(res.data.data)
-            getPopplus(res.data.data[0].name)
+            if(!br){
+
+                getPopplus(res.data.data[0].name, false)
+                if(res.data.data.length != 0){
+                    
+                    setInput(prev => ({...prev, "branch": res.data.data[0].id}))
+                }
+            }
         })
     }
 
-    const getPopplus = (data) => {
+    const getPopplus = (data, br) => {
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
             setPopplusList(res.data.data)
-            getPop(res.data.data[0].name)
+            if(!br){
+                
+                getPop(res.data.data[0].name)
+                if(res.data.data.length != 0){
+                    
+                    setInput(prev => ({...prev, "popPlus": res.data.data[0].id}))
+                }
+            }
         })
     }
 
@@ -81,6 +106,10 @@ export default function Device(){
         axios.get('http://127.0.0.1:8000/api/poppopplus', {params:{'name': data}})
         .then(function(res){
             setPopList(res.data.data)
+            if(res.data.data.length != 0){
+                    
+                setInput(prev => ({...prev, "pop": res.data.data[0].id}))
+            }
         })
     }
 

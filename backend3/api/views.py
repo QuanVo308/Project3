@@ -125,7 +125,7 @@ def get_popplus_name_api(request):
 
 def get_pop_name_api(request):
     pop= Pop()
-    pop.popPlus = PopPlus.objects.filter(id = request.GET['popPlus'])[0]
+    pop.popPlus = PopPlus.objects.filter(name = request.GET['popPlus'])[0]
     name = get_pop_name(pop, request.GET['tail1'], request.GET['tail2'])
     return JsonResponse({'name': name, 'status': status.HTTP_201_CREATED})
 
@@ -168,6 +168,7 @@ def get_branch_in_province(request):
 
 def get_popplus_in_branch(request):
     id = Branch.objects.get(name = request.GET['name'])
+    # print(id.name)
     popplus = PopPlus.objects.filter(branch = id).values()
     return JsonResponse({'data': list(popplus), 'status': status.HTTP_201_CREATED})
 
@@ -292,8 +293,8 @@ class PopViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         request.data._mutable = True
-        request.data['province'] = PopPlus.objects.filter(name = request.data['popPlus'])[0].branch.province.id
-        request.data['popPlus'] = PopPlus.objects.filter(name = request.data['popPlus'])[0].id
+        request.data['province'] = PopPlus.objects.filter(id = request.data['popPlus'])[0].branch.province.id
+        request.data['popPlus'] = PopPlus.objects.filter(id = request.data['popPlus'])[0].id
         t = request.data.copy()
         t._mutable = True
         t['province'] = Province.objects.filter(id = request.data['province'])[0]
@@ -326,7 +327,7 @@ class PopViewSet(viewsets.ModelViewSet):
         if validate_pop(pp):
             s = self.serializer_class(data=request.data)
             print('check')
-            s.is_valid(raise_exception=True)
+            print(s.is_valid(raise_exception=True))
             self.perform_create(s)
             headers = self.get_success_headers(s.data)
 

@@ -67,7 +67,10 @@ export default function Popplus(){
         setShowUpdate(false)
         setShowDelete(false)
     }
-    const handleShowAdd = () => setShowAdd(true);
+    const handleShowAdd = () => {
+        setShowAdd(true);
+        getProvince(1, false)
+    }
     const handleShowUpdate = (data) =>{
         setShowUpdate(true)
         setInputUpdate(0)
@@ -240,6 +243,8 @@ export default function Popplus(){
           }
           )
         setShowUpdate(false)
+        axios.get(`http://127.0.0.1:8000/api/updatepop/`)
+        axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
         setUpdateData([])
 
     }

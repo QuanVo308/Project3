@@ -24,21 +24,13 @@ export default function Pop(){
             // console.log(res)
         }
         getPop()
-    },[])
-
-    useEffect(() => { 
-        const getPop = async()=>{
-            let res = await axios.get('http://127.0.0.1:8000/api/pop/')
-            setPopList(res.data)
-            // console.log(res)
-        }
-        getPop()
     },[update])
 
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
+            getProvice(res.data[0].name)
         })
         },[])
 
@@ -76,15 +68,15 @@ export default function Pop(){
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
-            
+            getBranch(res.data.data[0].name)
         })
     }
     
     const getBranch = (data) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
-            // console.log(res)
             setBranchList(res.data.data)
+            getPopplus(res.data.data[0].name)
         })
     }
 
@@ -158,7 +150,6 @@ export default function Pop(){
                             <div>
                                 <label>Vùng: </label>
                                 <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                    <option>-</option>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -167,7 +158,6 @@ export default function Pop(){
                             <div>
                                 <label>Tỉnh:</label>
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                    <option>-</option>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -176,7 +166,6 @@ export default function Pop(){
                             <div>
                                 <label>Chi nhánh:</label>
                                 <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
-                                    <option>-</option>
                                     {branchList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -185,7 +174,6 @@ export default function Pop(){
                             <div>
                                 <label>Popplus:</label>
                                 <select name='popPlus' onChange={handleChange}>
-                                    <option>-</option>
                                     {popplusList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}

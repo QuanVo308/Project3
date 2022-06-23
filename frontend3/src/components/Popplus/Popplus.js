@@ -31,6 +31,7 @@ export default function Popplus(){
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
+            getProvice(res.data[0].name)
         })
         },[])
    
@@ -47,7 +48,7 @@ export default function Popplus(){
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'name': data}})
         .then(function(res){
             setProvinceList(res.data.data)
-            
+            getBranch(res.data.data[0].name)
         })
     }
     
@@ -141,7 +142,6 @@ export default function Popplus(){
                             <div>
                                 <label>Vùng:</label>
                                 <select name='area' onChange={(e)=>{getProvice(e.target.value)}}>
-                                    <option>-</option>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -150,7 +150,6 @@ export default function Popplus(){
                             <div>
                                 <label>Tỉnh:</label>
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
-                                    <option>-</option>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -159,7 +158,6 @@ export default function Popplus(){
                             <div>
                                 <label>Chi nhánh:</label>
                                 <select name='branch' onChange={handleChange}>
-                                    <option>-</option>
                                     {branchList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -172,7 +170,7 @@ export default function Popplus(){
                                     <option value='P'>P</option>
                                     <option value='M'>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange} required/>
                             </div>
                             <div>
                                 <label>Area OSPF:</label>

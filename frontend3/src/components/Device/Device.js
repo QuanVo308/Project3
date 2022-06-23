@@ -25,7 +25,7 @@ export default function Device(){
         const getDevice = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/device/')
             setDeviceList(res.data)
-            // console.log(res)
+            console.log(res)
             resetName()
         }
         getDevice()
@@ -46,7 +46,7 @@ export default function Device(){
         setInput(0)
     }
     const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = data =>{
+    const handleShowUpdate = (data) =>{
         setShowUpdate(true)
         setInputUpdate(0)
         setUpdateData(data)
@@ -251,7 +251,8 @@ export default function Device(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
-
+                
+                {updateData?
                 <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvice(updateData.area_name); getBranch(updateData.province_name); getPopplus(updateData.popPlus_name); getPop(updateData.pop_name); getBrand(updateData.role)}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
@@ -260,7 +261,7 @@ export default function Device(){
                         <form className={styles.formModal}>
                             <div>
                                 <label>Vùng: </label>
-                                <select name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}}>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -268,7 +269,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select  name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}}>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -277,7 +278,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Chi nhánh:</label>
-                                <select  name='branch' onChange={(e)=>{getPopplus(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={updateData.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value); handleChangeUpdate(e)}}>
                                     {branchList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -285,7 +286,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Popplus:</label>
-                                <select  name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={updateData.popPlus_name} name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
                                     {popplusList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -293,7 +294,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Pop:</label>
-                                <select  name='pop' onChange={handleChangeUpdate}>
+                                <select defaultValue={updateData.pop_name} name='pop' onChange={handleChangeUpdate}>
                                     {popList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -302,8 +303,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Type:</label>
-                                <select  name='type' onChange={handleChangeUpdate}>
-                                    <option>-</option>
+                                <select defaultValue={updateData.type} name='type' onChange={handleChangeUpdate}>
                                     {['DI','DA','CE'].map(data => (
                                     <option value={data}>{data}</option>
                                     ))}
@@ -311,8 +311,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Role:</label>
-                                <select  name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}}>
-                                    <option>-</option>
+                                <select defaultValue={updateData.role} name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}}>
                                     {['AGG','OLT','SW-BB','POWER'].map(data => (
                                         <option value={data}>{data}</option>
                                     ))}
@@ -320,8 +319,7 @@ export default function Device(){
                             </div>
                             <div>
                                 <label>Brand:</label>
-                                <select  name='brand' onChange={handleChangeUpdate}>
-                                    <option>-</option>
+                                <select defaultValue={updateData.brand_name} name='brand' onChange={handleChangeUpdate}>
                                     {brandList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -338,6 +336,7 @@ export default function Device(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
+                :null}
 
                 <Modal show={showDelete} onHide={handleClose}>
                     <Modal.Header closeButton>

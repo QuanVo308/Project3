@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
+import {ArrowClockwise} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 
 export default function Popplus(){
@@ -34,29 +35,14 @@ export default function Popplus(){
             getProvice(res.data[0].name)
         })
         },[])
-    useEffect(()=>{
-        setInputUpdate(updateData)
-
-        const tail1 = updateData['name'][updateData['name'].length - 4]
-        const tail2 = updateData['name'].substring(updateData['name'].length - 3, updateData['name'].length)
-        // console.log(tail1, tail2)
-        setInputUpdate(values => ({...values, ['tail1']: tail1}))
-        setInputUpdate(values => ({...values, ['tail2']: tail2}))
-    },[updateData])
    
     const handleClose = () => {
         setShowAdd(false)
         setShowUpdate(false)
         setShowDelete(false)
-        setInputUpdate(0)
     }
     const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>{
-        setShowUpdate(true)
-        setInputUpdate(0)
-        setUpdate(prev => !prev)
-
-    }
+    const handleShowUpdate = () =>setShowUpdate(true)
     const handleShowDelete = () =>setShowDelete(true)
 
     const getProvice = (data) => {
@@ -81,7 +67,9 @@ export default function Popplus(){
         setInput(values => ({...values, [name]: value}))
     }
 
-    
+    useEffect(()=>{
+        setInputUpdate(updateData)
+    },[updateData])
 
     const handleChangeUpdate = (event) => {
         const name = event.target.name
@@ -183,7 +171,7 @@ export default function Popplus(){
                                     <option value='P'>P</option>
                                     <option value='M'>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange} required/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChange}/>
                             </div>
                             <div>
                                 <label>Area OSPF:</label>
@@ -262,15 +250,14 @@ export default function Popplus(){
                                 <label>Phần đuôi: </label>
                                 <select name='tail1' onChange={handleChangeUpdate}>
                                     <option>-</option>
-                                    <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
-                                    <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
+                                    <option value='P'>P</option>
+                                    <option value='M'>M</option>
                                 </select>
-                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChangeUpdate}
-                                defaultValue={inputUpdate['tail2']}/>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" onChange={handleChangeUpdate}/>
                             </div>
                             <div>
                                 <label>Name:</label>
-                                <input type='text' defaultValue={updateData.name} disabled/>
+                                <input type='text' defaultValue={updateData.name} disabled/><ArrowClockwise />
                             </div> 
                             <div>
                                 <label>Area OSPF:</label>

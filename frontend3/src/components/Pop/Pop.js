@@ -37,7 +37,7 @@ export default function Pop({tab}){
             resetName()
         }
         getPop()
-    },[update])
+    },[update, tab])
 
     useEffect(() => { 
         axios.get('http://127.0.0.1:8000/api/area/')

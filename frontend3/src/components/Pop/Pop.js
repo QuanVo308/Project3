@@ -297,7 +297,7 @@ export default function Pop({tab}){
                                 <label>Tỉnh:</label>
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
                                     {provinceList.map(data => (
-                                        <option value={data.id}>{data.name}</option>
+                                        <option value={data.name}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

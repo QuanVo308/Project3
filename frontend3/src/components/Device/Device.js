@@ -359,14 +359,7 @@ export default function Device({tab}){
                                 </select>
                                 
                             </div>
-                            {inputUpdate.role == 'AGG' && <div>
-                                <label>Type:</label>
-                                <select defaultValue={updateData.type} name='type' onChange={handleChangeUpdate}>
-                                    {['DI','DA','CE'].map(data => (
-                                    <option value={data}>{data}</option>
-                                    ))}
-                                </select>
-                            </div>}
+                            
                             
                             <div>
                                 <label>Role:</label>
@@ -376,6 +369,14 @@ export default function Device({tab}){
                                     ))}
                                 </select>
                             </div>
+                            {inputUpdate.role == 'AGG' && <div>
+                                <label>Type:</label>
+                                <select defaultValue={updateData.type} name='type' onChange={handleChangeUpdate}>
+                                    {['DI','DA','CE'].map(data => (
+                                    <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>}
                             <div>
                                 <label>Brand:</label>
                                 <select defaultValue={updateData.brand_name} name='brand' onChange={handleChangeUpdate}>

@@ -7,21 +7,24 @@ export default function Pop(){
 
     const [popList, setPopList] = useState([])
     const [update, setUpdate] = useState(false)
-    const [showAdd, setShowAdd] = useState(false);
-    const [showUpdate, setShowUpdate] = useState(false);
-    const [showDelete, setShowDelete] = useState(false);
-    const [deleteData, setDeleteData] = useState(false);
+    const [showAdd, setShowAdd] = useState(false)
+    const [showUpdate, setShowUpdate] = useState(false)
+    const [showDelete, setShowDelete] = useState(false)
+    const [deleteData, setDeleteData] = useState(false)
     const [areaList, setAreaList] = useState([])
     const [provinceList, setProvinceList] = useState([])
     const [branchList, setBranchList] = useState([])
     const [popplusList, setPopplusList] = useState([])
     const [input, setInput] = useState({})
+    const [inputUpdate, setInputUpdate] = useState({})
+    const [updateData, setUpdateData] = useState()
 
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
+            console.log(res)
             setPopList(res.data)
-            // console.log(res)
+            resetName()
         }
         getPop()
     },[update])
@@ -32,7 +35,7 @@ export default function Pop(){
             setAreaList(res.data)
             getProvice(res.data[0].name)
         })
-        },[])
+        },[update])
 
     const handleClose = () => {
         setShowAdd(false)
@@ -41,7 +44,17 @@ export default function Pop(){
         setInput(0)
     }
     const handleShowAdd = () => setShowAdd(true);
-    const handleShowUpdate = () =>setShowUpdate(true)
+    const handleShowUpdate = (data) =>{
+        setShowUpdate(true)
+        setInputUpdate(0)
+        setUpdateData(data)
+        const tail1 = data['name'][data['name'].length - 4]
+        const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
+        // console.log(tail1, tail2)
+        setInputUpdate(data)
+        setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
+        setUpdate(prev => !prev)
+    }
     const handleShowDelete = () =>setShowDelete(true)
 
     function checkSequenceRing(se) {
@@ -70,6 +83,7 @@ export default function Pop(){
         .then(function(res){
             setProvinceList(res.data.data)
             getBranch(res.data.data[0].name)
+            setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name}))
         })
     }
     
@@ -78,6 +92,7 @@ export default function Pop(){
         .then(function(res){
             setBranchList(res.data.data)
             getPopplus(res.data.data[0].name)
+            setInputUpdate(prev => ({...prev, 'branch_name':res.data.data[0].name}))
         })
     }
 
@@ -85,6 +100,17 @@ export default function Pop(){
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
             setPopplusList(res.data.data)
+            setInputUpdate(values => ({...values, ['popPlus']: res.data.data[0].id, ['popPlus_name']: res.data.data[0].name}))
+
+            setInput(prev => ({...prev, ['popPlus_name']: res.data.data[0].name, ['popPlus']: res.data.data[0].id}))
+
+            axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': res.data.data[0].name,
+            'tail1': inputUpdate['tail1'],
+            'tail2': inputUpdate['tail2']}})
+            .then(function(res){
+                console.log("check", res.data)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        })
         })
     }
 
@@ -99,6 +125,54 @@ export default function Pop(){
             value = event.target.value
         }
         setInput(values => ({...values, [name]: value}))
+    }
+
+    const handleChangeUpdate = (event) => {
+        const name = event.target.name
+        var value
+        if (name == 'sequence_ring'){
+            value = checkSequenceRing(event.target.value)
+        } else if (name =='tail2') {
+            value = checkTail2(event.target.value)
+        } else {
+            value = event.target.value
+        }
+
+        var b= inputUpdate['popPlus_name']
+        var t1 = inputUpdate['tail1']
+        var t2 = inputUpdate['tail2']
+        if (name == 'tail2'){
+            t2 = value 
+        }
+        if (name == 'tail1'){
+            t1 = value 
+        }
+        if (name == 'popPlus_name'){
+            b = value 
+        }
+
+        axios.get('http://127.0.0.1:8000/api/popname/', {params:{
+            'popPlus': b,
+            'tail1': t1,
+            'tail2': t2 
+        }})
+            .then(function(res){
+                // console.log(res.data)
+                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        })
+
+        
+        setInputUpdate(values => ({...values, [name]: value}))
+    }
+
+    const updateBranch = (e) => {
+        const value = e.target.value
+        // console.log(value)
+        axios.get('http://127.0.0.1:8000/api/branchname/', {params:{'name': value}})
+        .then(function(res){
+            // console.log(res.data.data[0].id)
+            setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id}))
+        })  
     }
 
     const handleAdd = () => {
@@ -132,8 +206,34 @@ export default function Pop(){
         .catch( (res) => {
             console.log(res)
         })
-
         setShowDelete(false)
+    }
+
+    const handleUpdate = () => {
+        console.log(inputUpdate)
+        // axios({
+        //     method: "put",
+        //     url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
+        //     data: inputUpdate,
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //   })
+        //   .then( (res) => {
+        //     console.log('update', res)
+        //     setUpdate(prev => !prev)
+        //   }
+        //   )
+
+        // setShowUpdate(false)
+    }
+
+    const resetName = () => {
+        axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': inputUpdate['popPlus_name'],
+            'tail1': inputUpdate['tail1'],
+            'tail2': inputUpdate['tail2']}})
+        .then(function(res){
+            // console.log(res.data)
+            setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+        })
     }
 
     return(
@@ -214,21 +314,88 @@ export default function Pop(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
-
-                <Modal show={showUpdate} onHide={handleClose}>
+                
+                {updateData?
+                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvice(updateData.area_name); getBranch(updateData.province_name); getPopplus(updateData.popPlus_name)}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body></Modal.Body>
+                    <Modal.Body>
+                        <form className={styles.formModal}>
+                            <div>
+                                <label>Vùng: </label>
+                                <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvice(e.target.value); handleChangeUpdate(e)}}>
+                                    {areaList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Tỉnh:</label>
+                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}}>
+                                    {provinceList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Chi nhánh:</label>
+                                <select defaultValue={updateData.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value); updateBranch(e); handleChangeUpdate(e)}}>
+                                    {branchList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Popplus:</label>
+                                <select defaultValue={updateData.popPlus_name} name='popPlus' onChange={handleChangeUpdate}>
+                                    {popplusList.map(data => (
+                                        <option value={data.name}>{data.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Phần đuôi: </label>
+                                <select name='tail1' onChange={handleChangeUpdate}>
+                                    <option>-</option>
+                                    <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
+                                    <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
+                                    <option value='K' selected={'K' == inputUpdate['tail1']}>K</option>
+                                    <option value='V' selected={'V' == inputUpdate['tail1']}>V</option>
+                                    <option value='B' selected={'B' == inputUpdate['tail1']}>B</option>
+                                </select>
+                                <input type="number" name='tail2' placeholder='001 -> 999' min="1" value={inputUpdate['tail2']} max="999" onChange={handleChangeUpdate}
+                                defaultValue={inputUpdate['tail2']}/>
+                            </div>
+                            <div>
+                                <label>Name:</label>
+                                <input defaultValue={updateData.name} type='text' value={inputUpdate.name} disabled/>
+                            </div>
+                            <div>
+                                <label>Metro:</label>
+                                <select defaultValue={updateData.metro} name='metro' onChange={handleChangeUpdate}>
+                                    <option>-</option>
+                                    {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
+                                        <option value={data}>{data}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Sequence Ring:</label>
+                                <input type="number" name='sequence_ring' defaultValue={updateData.sequence_ring} value={input['sequence_ring']} min="1" max="63" onChange={handleChangeUpdate} />
+                            </div>
+                        </form>
+                    </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleUpdate}>
                         Update
                     </Button>
                     </Modal.Footer>
                 </Modal>
+                :null}
 
                 <Modal show={showDelete} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -244,6 +411,7 @@ export default function Pop(){
                     </Button>
                     </Modal.Footer>
                 </Modal>
+                
             </div>
             <div className={styles.table}>
                 <Table striped bordered hover>
@@ -274,7 +442,7 @@ export default function Pop(){
                             <td>{data.popPlus_name}</td>
                             <td>{data.province_name}</td>
                             <td>
-                                <Button variant="success" onClick={()=>{handleShowUpdate()}}> Update</Button>
+                                <Button variant="success" onClick={()=>{handleShowUpdate(data)}}> Update</Button>
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
                             </td>
                         </tr>

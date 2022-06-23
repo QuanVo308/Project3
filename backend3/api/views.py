@@ -23,6 +23,35 @@ def update_device_all(request):
     update_devices()
     return HttpResponse(status.HTTP_200_OK)
 
+def get_popplus_name_api(request):
+    popp = PopPlus()
+    popp.branch = Branch.objects.filter(id = request.GET['branch'])[0]
+    print(get_popplus_name(popp, request.GET['tail1'], request.GET['tail2']))
+    name = get_popplus_name(popp, request.GET['tail1'], request.GET['tail2'])
+    return JsonResponse({'name': name, 'status': status.HTTP_201_CREATED})
+
+def get_pop_name_api(request):
+    pop= Pop()
+    pop.popPlus = PopPlus.objects.filter(id = request.GET['popPlus'])[0]
+    name = get_pop_name(pop, request.GET['tail1'], request.GET['tail2'])
+    return JsonResponse({'name': name, 'status': status.HTTP_201_CREATED})
+
+def get_device_name_api(request):
+    device = Device()
+    device.pop = Pop.objects.filter(id = request.GET['pop'])[0]
+    device.role = request.GET['role']
+    if device.role == 'AGG':
+        device.type = request.GET['type']
+    device.metro = device.pop.metro
+    device.popp = device.pop.popPlus.name
+    device.area = device.pop.province.area
+    device.province = device.pop.province
+    device.brand = Brand.objects.filter(name = request.GET['brand'])[0]
+    device.name = request.GET['name']
+    name = get_device_name(device)
+    return JsonResponse({'name': name, 'status': status.HTTP_201_CREATED})
+
+
 def update_pop_all(request):
     update_pops()
     return HttpResponse(status.HTTP_200_OK)

@@ -102,8 +102,8 @@ export default function Popplus(){
             axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].name,
             'tail1': inputUpdate['tail1'],
             'tail2': inputUpdate['tail2']}})
-            .then(function(res){
-                console.log("check", res.data)
+            .then(function(ress){
+                console.log("check", ress.data)
                 setInputUpdate(prev => ({...prev, 'name': res.data.name}))
         })
             // console.log('branch list',branchList)

@@ -58,6 +58,7 @@ def search_device(request):
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
 def search_pop(request):
+    print("input", request.GET)
     value = request.GET['search']
     fields = [f for f in Pop._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
     # for f in fields:

@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
 import styles from './Pop.module.scss'
 
-export default function Pop(){
+export default function Pop({tab}){
 
     const [popList, setPopList] = useState([])
     const [update, setUpdate] = useState(false)
@@ -19,6 +19,14 @@ export default function Pop(){
     const [inputUpdate, setInputUpdate] = useState({})
     const [updateData, setUpdateData] = useState()
 
+    useEffect( () => {
+        axios.get('http://127.0.0.1:8000/api/area/')
+        .then(function(res){
+            setAreaList(res.data)
+            getProvince(res.data[0].name, false)
+        })
+    }, [tab])
+
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
@@ -33,7 +41,7 @@ export default function Pop(){
         axios.get('http://127.0.0.1:8000/api/area/')
         .then(function(res){
             setAreaList(res.data)
-            getProvince(res.data[0].name)
+            // getProvince(res.data[0].name, true)
         })
         },[update])
 
@@ -89,33 +97,38 @@ export default function Pop(){
             if(!br){
                 // console.log('check')
                 getBranch(res.data.data[0].name, false)
+                setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name, 'province': res.data.data[0].id}))
+            } else {
+                // console.log('check2')
             }
-            setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name}))
         })
     }
     
     const getBranch = (data, br) => {
+        // console.log(data)
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
             setBranchList(res.data.data)
             if(!br){
+                // console.log('check')
                 getPopplus(res.data.data[0].name, false)
+                setInputUpdate(prev => ({...prev, 'branch_name':res.data.data[0].name, 'branch':res.data.data[0].id}))
             }
-            setInputUpdate(prev => ({...prev, 'branch_name':res.data.data[0].name}))
         })
     }
 
     const getPopplus = (data) => {
+        console.log('check', data)
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'name': data}})
         .then(function(res){
             setPopplusList(res.data.data)
-            
+            console.log('check1', res.data.data)
 
             if(res.data.data.length !=0){
                 setInputUpdate(values => ({...values, ['popPlus']: res.data.data[0].id, ['popPlus_name']: res.data.data[0].name}))
                 setInput(prev => ({...prev, ['popPlus_name']: res.data.data[0].name, ['popPlus']: res.data.data[0].id}))
-                console.log("check1:", data)
-                console.log("check:", res.data.data.length)
+                // console.log("check1:", data)
+                // console.log("check:", res.data.data.length)
             }
             if( res.data.data.length != 0){
                 
@@ -123,12 +136,14 @@ export default function Pop(){
                 'tail1': inputUpdate['tail1'],
                 'tail2': inputUpdate['tail2']}})
                 .then(function(res){
-                    console.log("check", res.data)
+                    // console.log("check", res.data)
                     setInputUpdate(prev => ({...prev, 'name': res.data.name}))
             })
             } else {
                 setInputUpdate(prev => ({...prev, 'name': ''}))
             }
+            // console.log('check2')
+
         })
     }
 
@@ -188,7 +203,7 @@ export default function Pop(){
         // console.log(value)
         axios.get('http://127.0.0.1:8000/api/branchname/', {params:{'name': value}})
         .then(function(res){
-            // console.log(res.data.data[0].id)
+            console.log(res.data.data)
             setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id}))
         })  
     }
@@ -231,7 +246,7 @@ export default function Pop(){
     }
 
     const handleUpdate = () => {
-        console.log(inputUpdate)
+        console.log("inputupdate", inputUpdate)
         axios({
             method: "put",
             url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
@@ -282,7 +297,7 @@ export default function Pop(){
                                 <label>Tỉnh:</label>
                                 <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
                                     {provinceList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -338,7 +353,7 @@ export default function Pop(){
                 </Modal>
                 
                 {updateData?
-                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvince(updateData.area_name); getBranch(updateData.province_name); getPopplus(updateData.popPlus_name)}}>
+                <Modal show={showUpdate} onHide={handleClose} onShow={()=>{getProvince(inputUpdate.area_name, true); getBranch(inputUpdate.province_name, true); getPopplus(inputUpdate.popPlus_name, true)}}>
                     <Modal.Header closeButton>
                     <Modal.Title>Update Data</Modal.Title>
                     </Modal.Header>
@@ -346,7 +361,7 @@ export default function Pop(){
                         <form className={styles.formModal}>
                             <div>
                                 <label>Vùng: </label>
-                                <select defaultValue={inputUpdate.area_name} name='area' onChange={(e)=>{getProvince(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={inputUpdate.area_name} name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -354,7 +369,7 @@ export default function Pop(){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select defaultValue={inputUpdate.province_name} name='province' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}}>
+                                <select defaultValue={inputUpdate.province_name} name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -362,7 +377,7 @@ export default function Pop(){
                             </div>
                             <div>
                                 <label>Chi nhánh:</label>
-                                <select defaultValue={inputUpdate.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value); updateBranch(e); handleChangeUpdate(e)}}>
+                                <select defaultValue={inputUpdate.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value); handleChangeUpdate(e)}}>
                                     {branchList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}

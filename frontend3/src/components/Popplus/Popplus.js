@@ -4,7 +4,7 @@ import {Button, Table, Modal} from 'react-bootstrap'
 import {ArrowClockwise} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 
-export default function Popplus(){
+export default function Popplus(tab){
 
     const [popplusList, setPopplusList] = useState([])
     const [update, setUpdate] = useState(false)
@@ -18,6 +18,14 @@ export default function Popplus(){
     const [branchList, setBranchList] = useState([])
     const [input, setInput] = useState({})
     const [inputUpdate, setInputUpdate] = useState({})
+
+    useEffect( () => {
+        axios.get('http://127.0.0.1:8000/api/area/')
+        .then(function(res){
+            setAreaList(res.data)
+            getProvince(res.data[0].name, false)
+        })
+    }, [tab])
 
     useEffect(() => { 
         const getPopplus = async()=>{

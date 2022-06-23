@@ -93,7 +93,7 @@ export default function Popplus(){
             setProvinceList(res.data.data)
             console.log("2", br)
             if (!br){
-                getBranch(res.data.data[0].name)
+                getBranch(res.data.data[0].name, true)
                 console.log("check", data)
             }
             br = false
@@ -101,11 +101,14 @@ export default function Popplus(){
         })
     }
     
-    const getBranch = (data) => {
+    const getBranch = (data, br) => {
         axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': data}})
         .then(function(res){
             setBranchList(res.data.data)
             // setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
+            if(br) {
+                setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
+            }
 
             setInput(prev => ({...prev, ['branch_name']: res.data.data[0].name, ['branch']: res.data.data[0].id}))
 
@@ -173,6 +176,8 @@ export default function Popplus(){
                 // console.log(res.data)
                 setInputUpdate(prev => ({...prev, 'name': res.data.name}))
         })
+
+
 
         
         setInputUpdate(values => ({...values, [name]: value}))
@@ -354,7 +359,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select defaultValue={inputUpdate.province_name} name='province_name' onChange={(e)=>{getBranch(e.target.value); handleChangeUpdate(e)}} >
+                                <select defaultValue={inputUpdate.province_name} name='province_name' onChange={(e)=>{getBranch(e.target.value, true); handleChangeUpdate(e)}} >
                                     {provinceList.map(data => (
                                         <option value={data.name} selected={data.name==inputUpdate.province_name}>{data.name}</option>
                                     ))}

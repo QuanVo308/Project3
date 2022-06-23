@@ -26,7 +26,7 @@ export default function Device(){
             let res = await axios.get('http://127.0.0.1:8000/api/device/')
             setDeviceList(res.data)
             console.log(res)
-            resetName()
+            // resetName()
         }
         getDevice()
     },[update])
@@ -99,7 +99,8 @@ export default function Device(){
 
     const handleChangeUpdate = (event) => {
         const name = event.target.name
-
+        const value = event.target.value
+        setInputUpdate(values => ({...values, [name]: value}))
         // axios.get('http://127.0.0.1:8000/api/popname/', {params:{
         //     'popPlus': b,
         //     'tail1': t1,
@@ -147,6 +148,22 @@ export default function Device(){
         })
 
         setShowDelete(false)
+    }
+
+    const handleUpdate = () => {
+        console.log(inputUpdate)
+        // axios({
+        //     method: "put",
+        //     url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
+        //     data: inputUpdate,
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //   })
+        //   .then( (res) => {
+        //     console.log('update', res)
+        //     setUpdate(prev => !prev)
+        //   }
+        //   )
+        // setShowUpdate(false)
     }
 
     const resetName = () => {
@@ -331,7 +348,7 @@ export default function Device(){
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleUpdate}>
                         Update
                     </Button>
                     </Modal.Footer>

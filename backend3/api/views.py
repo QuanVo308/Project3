@@ -327,7 +327,7 @@ class PopViewSet(viewsets.ModelViewSet):
             s = self.serializer_class(data=request.data)
             print('check')
             s.is_valid(raise_exception=True)
-            # self.perform_create(s)
+            self.perform_create(s)
             headers = self.get_success_headers(s.data)
 
             # return HttpResponse('success')
@@ -414,7 +414,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
             s = self.serializer_class(data=request.data)
             # print('zxczxczxc')
             s.is_valid(raise_exception=True)
-            # self.perform_create(s)
+            self.perform_create(s)
             headers = self.get_success_headers(s.data)
             return Response(s.data, status= status.HTTP_201_CREATED, headers=headers)
         

@@ -29,4 +29,7 @@ urlpatterns = [
     path('poppname/', views.get_popplus_name_api, name='get_popp_name'), 
     path('popname/', views.get_pop_name_api, name='get_pop_name'),
     path('devicename/', views.get_device_name_api, name='get_device_name'),
+    path('searchdevice/', views.search_device, name='search_device'),
+    path('searchpop/', views.search_pop, name='search_pop'),
+    path('searchpopp/', views.search_popp, name='search_popp'),
 ]

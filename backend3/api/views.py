@@ -1,4 +1,5 @@
 from urllib import request
+from django.forms import GenericIPAddressField
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -9,6 +10,8 @@ from .utils.pop import *
 from .utils.popplus import *
 from .serializers import *
 from .models import *
+from django.db.models import CharField, GenericIPAddressField
+from django.db.models import  Q
 
 
 def index(request):
@@ -16,7 +19,97 @@ def index(request):
 
 def test(request):
     # print(Province.objects.filter(name = request.GET['area']))
-    province = Province.objects.filter(area = request.GET['area']).values()
+    # province = Province.objects.filter(area = '1').values()
+
+    fields = [f for f in Device._meta.fields if isinstance(f, CharField)]
+    for f in fields:
+        print(f.name)
+    # queries = [Q(**{f.name: 'H'}) for f in fields]
+    queries = [Q(('%s__icontains' % f.name, 'GC')) for f in fields]
+    queries.append(Q(brand__name__icontains = 'HW'))
+    qs = Q()
+    
+    for query in queries:
+        qs = qs | query
+    print( qs)
+    province = Device.objects.filter(qs).values()
+
+    # print(province)
+    
+    return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
+
+def search_device(request):
+    value = request.GET['search']
+    fields = [f for f in Device._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
+    # for f in fields:
+    #     print(f.name)
+    # queries = [Q(**{f.name: 'H'}) for f in fields]
+    queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
+    queries.append(Q(brand__name__icontains = value))
+    qs = Q()
+    
+    for query in queries:
+        qs = qs | query
+    print( qs)
+    province = Device.objects.filter(qs).values()
+
+    # print(province)
+    
+    return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
+
+def search_pop(request):
+    value = request.GET['search']
+    fields = [f for f in Pop._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
+    # for f in fields:
+    #     print(f.name)
+    # queries = [Q(**{f.name: 'H'}) for f in fields]
+    queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
+    queries.append(Q(popPlus__name__icontains = value))
+    queries.append(Q(province__name__icontains = value))
+    try:
+        va = int(value)
+        queries.append(Q(sequence_ring = value))
+    except:
+        print()
+    qs = Q()
+    
+    for query in queries:
+        qs = qs | query
+    print( qs)
+    province = Pop.objects.filter(qs).values()
+
+    # print(province)
+    
+    return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
+
+def search_popp(request):
+    value = request.GET['search']
+    fields = [f for f in PopPlus._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
+    # for f in fields:
+    #     print(f.name)
+    # queries = [Q(**{f.name: 'H'}) for f in fields]
+    queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
+    queries.append(Q(branch__name = value))
+    
+    try:
+        va = int(value)
+        queries.append(Q(area_OSPF = value))
+        queries.append(Q(octet2_ip_OSPF_MGMT = value))
+        queries.append(Q(octet2_ip_MGMT = value))
+        queries.append(Q(octet3_ip_MGMT = value))
+        queries.append(Q(vlan_PPPoE = value))
+    except:
+        print()
+
+    qs = Q()
+    
+    for query in queries:
+        qs = qs | query
+    print( qs)
+    province = PopPlus.objects.filter(qs).values()
+
+    # print(province)
+    
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
 def update_device_all(request):

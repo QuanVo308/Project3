@@ -84,6 +84,18 @@ export default function Popplus(){
         setInputUpdate(values => ({...values, [name]: value}))
     }
 
+    const updateBranch = (e) => {
+        const value = e.target.value
+        // console.log(value)
+        axios.get('http://127.0.0.1:8000/api/branchname/', {params:{'name': value}})
+        .then(function(res){
+            // console.log(res.data.data[0].id)
+            setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id}))
+        })
+
+
+    }
+
     const handleAdd = () => {
         console.log(input)
         const formData = new FormData()
@@ -222,7 +234,7 @@ export default function Popplus(){
                         <form className={styles.formModal} >
                             <div>
                                 <label>Vùng:</label>
-                                <select defaultValue={updateData.area_name}  name='area' onChange={(e)=>{getProvice(e.target.value)}} disabled>
+                                <select defaultValue={updateData.area_name}  name='area' onChange={(e)=>{getProvice(e.target.value)}} >
                                     {areaList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -230,7 +242,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value)}} disabled>
+                                <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value)}} >
                                     {provinceList.map(data => (
                                         <option value={data.name}>{data.name}</option>
                                     ))}
@@ -238,7 +250,7 @@ export default function Popplus(){
                             </div>
                             <div>
                                 <label>Chi nhánh:</label>
-                                <select defaultValue={updateData.branch_name} name='branch_name' onChange={(e)=>handleChangeUpdate(e,e.target.values)}>
+                                <select defaultValue={updateData.branch_name} name='branch_name' onChange={(e)=>{handleChangeUpdate(e,e.target.values); updateBranch(e)}}>
                                     {branchList.map(data => (
                                         <option value={data.name} values={data.id}>{data.name}</option>
                                     ))}

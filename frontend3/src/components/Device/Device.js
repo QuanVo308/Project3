@@ -269,17 +269,17 @@ export default function Device({tab}){
 
     const handleUpdate = () => {
         console.log('inputUpdate', inputUpdate)
-        // axios({
-        //     method: "put",
-        //     url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
-        //     data: inputUpdate,
-        //     headers: { "Content-Type": "multipart/form-data" },
-        //   })
-        //   .then( (res) => {
-        //     console.log('update', res)
-        //     setUpdate(prev => !prev)
-        //   }
-        //   )
+        axios({
+            method: "put",
+            url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
+            data: inputUpdate,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then( (res) => {
+            console.log('update', res)
+            setUpdate(prev => !prev)
+          }
+          )
         setShowUpdate(false)
     }
 

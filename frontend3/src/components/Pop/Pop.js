@@ -106,7 +106,7 @@ export default function Pop({tab}){
             setProvinceList(res.data.data)
             if(!br){
                 // console.log('check')
-                getBranch(res.data.data[0].name, false)
+                getBranch(res.data.data[0].id, false)
                 setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name, 'province': res.data.data[0].id}))
             } else {
                 // console.log('check2')
@@ -122,6 +122,7 @@ export default function Pop({tab}){
             axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'name': res.data.name}})
             .then(function(res){
                 setBranchList(res.data.data)
+                console.log('check')
                 if(!br){
                     // console.log('check')
                     getPopplus(res.data.data[0].name, false)
@@ -317,9 +318,9 @@ export default function Pop({tab}){
                             </div>
                             <div>
                                 <label>Tỉnh:</label>
-                                <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
+                                <select name='province' onChange={(e)=>{getBranch(e.target.value, false)}}>
                                     {provinceList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

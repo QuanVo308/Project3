@@ -191,7 +191,7 @@ def get_brand_of_device(request):
     if request.GET['role'] == 'AGG':
         return JsonResponse({'data': list(Brand.objects.filter(name__icontains='HW').values()), 'status': status.HTTP_201_CREATED})
     elif request.GET['role'] == 'OLT':
-        return JsonResponse({'data': list(Brand.objects.filter(name__icontains='GC').values()), 'status': status.HTTP_201_CREATED})
+        return JsonResponse({'data': list(Brand.objects.filter(company__icontains='GC').values()), 'status': status.HTTP_201_CREATED})   
     elif request.GET['role'] == "POWER":
         return JsonResponse({'data': list(Brand.objects.filter(name__icontains='PWE').values()), 'status': status.HTTP_201_CREATED})
     elif request.GET['role'] == "SW-BB":

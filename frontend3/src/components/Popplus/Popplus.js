@@ -84,6 +84,7 @@ export default function Popplus(tab){
         setShowAdd(false)
         setShowUpdate(false)
         setShowDelete(false)
+        setInput(0)
     }
     const handleShowAdd = () => {
         setShowAdd(true);
@@ -234,6 +235,7 @@ export default function Popplus(tab){
           })
 
           setShowAdd(false)
+          setInput(0)
     }
 
     const handleDelete = () => {

@@ -368,6 +368,11 @@ class DeviceViewSet(viewsets.ModelViewSet):
             se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
             se['province_name'] = Province.objects.filter(id = Branch.objects.filter(name = se['branch_name'])[0].province.id)[0].name
             se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
+            
+            se['popPlus'] = PopPlus.objects.filter(id = Pop.objects.filter(name = se['pop_name'])[0].popPlus.id)[0].id
+            se['branch'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].id
+            se['province'] = Province.objects.filter(id = Branch.objects.filter(name = se['branch_name'])[0].province.id)[0].id
+            se['area'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].id
         return Response(serializer.data)
 
     def create(self, request):

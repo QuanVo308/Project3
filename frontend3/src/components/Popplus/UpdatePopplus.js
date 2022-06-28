@@ -20,6 +20,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
 
     useEffect( () => {
         let data = updateData
+        console.log("updateData", updateData)
         setInputUpdate(0)
         const tail1 = data['name'][data['name'].length - 4]
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
@@ -55,7 +56,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                 setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
             }
 
-            axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].name,
+            axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].id,
             'tail1': inputUpdate['tail1'],
             'tail2': inputUpdate['tail2']}})
             .then(function(res){
@@ -104,7 +105,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
             value = event.target.value
         }
 
-        var b= inputUpdate['branch_name']
+        var b= inputUpdate['branch']
         var t1 = inputUpdate['tail1']
         var t2 = inputUpdate['tail2']
         if (name == 'tail2'){

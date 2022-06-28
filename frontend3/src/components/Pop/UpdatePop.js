@@ -4,7 +4,7 @@ import {Button, Modal} from 'react-bootstrap'
 import styles from './Pop.module.scss'
 
 
-function UpdatePop(show, setShow, updateData, setUpdate) {
+function UpdatePop({show, setShow, updateData, setUpdate}) {
 
     const [areaList, setAreaList] = useState([])
     const [provinceList, setProvinceList] = useState([])
@@ -26,11 +26,10 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
         const tail1 = data['name'][data['name'].length - 4]
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
         setInputUpdate(data)
-        // getProvince(updateData.area_name,true)
-        // getProvince(data.area_name, true)
-        // getBranch(data.province)
+        getProvince(data.area_name)
+        getBranch(data.province, false)
         setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
-        // setUpdate(prev => !prev)
+        setUpdate(prev => !prev)
     }, [updateData])
 
     const getProvince = (data, br) => {
@@ -41,28 +40,22 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
                 // console.log('check')
                 getBranch(res.data.data[0].id, false)
                 setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name, 'province': res.data.data[0].id}))
-            } else {
-                // console.log('check2')
             }
         })
     }
 
     const getBranch = (data, br) => {
         // console.log(data)
-
-        axios.get(`http://127.0.0.1:8000/api/province/${data}/`, {})
-        .then(function(res){
-            axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'id': res.data.name}})
+            axios.get('http://127.0.0.1:8000/api/branchprovince', {params:{'id': data}})
             .then(function(res){
                 setBranchList(res.data.data)
                 console.log('check')
                 if(!br){
                     // console.log('check')
-                    getPopplus(res.data.data[0].id, false)
+                    getPopplus(res.data.data[0].id)
                     setInputUpdate(prev => ({...prev, 'branch_name':res.data.data[0].name, 'branch':res.data.data[0].id}))
                 }
-        })
-        })     
+            })    
     }
 
     const getPopplus = (data) => {
@@ -80,7 +73,7 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
             }
             if( res.data.data.length != 0){
                 
-                axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': res.data.data[0].name,
+                axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': res.data.data[0].id,
                 'tail1': inputUpdate['tail1'],
                 'tail2': inputUpdate['tail2']}})
                 .then(function(res){
@@ -90,8 +83,6 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
             } else {
                 setInputUpdate(prev => ({...prev, 'name': ''}))
             }
-            // console.log('check2')
-
         })
     }
 
@@ -118,6 +109,7 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
 
     const handleClose = () => {
         setShow(false)
+        setInputUpdate([])
     }
 
     const handleChangeUpdate = (event) => {
@@ -131,7 +123,7 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
             value = event.target.value
         }
 
-        var b= inputUpdate['popPlus_name']
+        var b= inputUpdate['popPlus']
         var t1 = inputUpdate['tail1']
         var t2 = inputUpdate['tail2']
         if (name == 'tail2'){
@@ -140,7 +132,7 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
         if (name == 'tail1'){
             t1 = value 
         }
-        if (name == 'popPlus_name'){
+        if (name == 'popPlus'){
             b = value 
         }
 
@@ -152,38 +144,25 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
             .then(function(res){
                 // console.log(res.data)
                 setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        })
-
-        
+        })    
         setInputUpdate(values => ({...values, [name]: value}))
     }
 
-    // const updateBranch = (e) => {
-    //     const value = e.target.value
-    //     // console.log(value)
-    //     axios.get('http://127.0.0.1:8000/api/branchname/', {params:{'id': value}})
-    //     .then(function(res){
-    //         console.log(res.data.data)
-    //         setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id}))
-    //     })  
-    // }
-
     const handleUpdate = () => {
         console.log("inputupdate", inputUpdate)
-        // axios({
-        //     method: "put",
-        //     url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
-        //     data: inputUpdate,
-        //     headers: { "Content-Type": "multipart/form-data" },
-        //   })
-        //   .then( (res) => {
-        //     console.log('update', res)
-        //     setUpdate(prev => !prev)
-        //   }
-        //   )
-
-        // setShowUpdate(false)
-        // axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
+        axios({
+            method: "put",
+            url: `http://127.0.0.1:8000/api/pop/${inputUpdate['id']}/`,
+            data: inputUpdate,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then( (res) => {
+            console.log('update', res)
+            setUpdate(prev => !prev)
+          }
+          )
+        setShow(false)
+        axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
     }
 
     return ( 
@@ -230,7 +209,6 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
                         <div>
                             <label>Phần đuôi: </label>
                             <select name='tail1' onChange={handleChangeUpdate}>
-                                <option>-</option>
                                 <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
                                 <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
                                 <option value='K' selected={'K' == inputUpdate['tail1']}>K</option>
@@ -247,7 +225,6 @@ function UpdatePop(show, setShow, updateData, setUpdate) {
                         <div>
                             <label>Metro:</label>
                             <select defaultValue={inputUpdate.metro} name='metro' onChange={handleChangeUpdate}>
-                                <option>-</option>
                                 {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
                                     <option value={data}>{data}</option>
                                 ))}

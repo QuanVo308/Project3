@@ -73,7 +73,6 @@ export default function Pop({tab}){
         setShowUpdate(true)
         // setInputUpdate(0)
         setUpdateData(data)
-        console.log("data", data)
         // const tail1 = data['name'][data['name'].length - 4]
         // const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
         // // console.log(tail1, tail2)
@@ -81,6 +80,8 @@ export default function Pop({tab}){
         // setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
         // setUpdate(prev => !prev)
     }
+
+    
     const handleShowDelete = () =>setShowDelete(true)
 
     // function checkSequenceRing(se) {

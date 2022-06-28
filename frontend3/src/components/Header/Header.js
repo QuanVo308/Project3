@@ -7,7 +7,6 @@ import Device from '../Device/Device';
 import { useEffect, useState } from 'react'
 
 
-
 export default function Header(){
     const [tab, setTab] = useState("popplus")
     return(

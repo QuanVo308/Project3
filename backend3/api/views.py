@@ -159,30 +159,30 @@ def update_pop_all(request):
     return HttpResponse(status.HTTP_200_OK)
 
 def get_branch_by_name(request):
-    branch = Branch.objects.filter(name = request.GET['name']).values()
+    branch = Branch.objects.filter(name = request.GET['id']).values()
     return JsonResponse({'data': list(branch), 'status': status.HTTP_201_CREATED})
 
 
 
 
 def get_province_in_area(request):
-    id = Area.objects.get(name = request.GET['name'])
+    id = Area.objects.get(id = request.GET['id'])
     province = Province.objects.filter(area = id).values()
     return JsonResponse({'data': list(province), 'status': status.HTTP_201_CREATED})
 
 def get_branch_in_province(request):
-    id = Province.objects.get(name = request.GET['name'])
+    id = Province.objects.get(id = request.GET['id'])
     branch = Branch.objects.filter(province = id).values()
     return JsonResponse({'data': list(branch), 'status': status.HTTP_201_CREATED})
 
 def get_popplus_in_branch(request):
-    id = Branch.objects.get(name = request.GET['name'])
+    id = Branch.objects.get(id = request.GET['id'])
     # print(id.name)
     popplus = PopPlus.objects.filter(branch = id).values()
     return JsonResponse({'data': list(popplus), 'status': status.HTTP_201_CREATED})
 
 def get_pop_in_popplus(request):
-    id = PopPlus.objects.get(name = request.GET['name'])
+    id = PopPlus.objects.get(id = request.GET['id'])
     pop = Pop.objects.filter(popPlus = id).values()
     return JsonResponse({'data': list(pop), 'status': status.HTTP_201_CREATED})
 
@@ -242,7 +242,9 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         for se in serializer.data:
             se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
+            se['province'] = Branch.objects.filter(id = se['branch'])[0].province.id
             se['province_name'] = Branch.objects.filter(id = se['branch'])[0].province.name
+            se['area'] = Branch.objects.filter(id = se['branch'])[0].province.area.id
             se['area_name'] = Branch.objects.filter(id = se['branch'])[0].province.area.name
         return Response(serializer.data)
 

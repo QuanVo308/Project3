@@ -343,7 +343,7 @@ export default function Device({tab}){
                                 <label>Chi nhánh:</label>
                                 <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
                                     {branchList.map(data => (
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data.id}>{data.name}</option>
                                     ))}
                                 </select>
                             </div>

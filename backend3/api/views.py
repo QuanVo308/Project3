@@ -406,8 +406,8 @@ class DeviceViewSet(viewsets.ModelViewSet):
         request.data['brand'] = Brand.objects.filter(name = request.data['brand'])[0].id
 
         
-        if len(get_device_ips(pp)) != 0:
-            pp.ip = get_device_ips(pp)[0]
+        if len(get_device_ips(pp, int(request.data['tnew']))) != 0:
+            pp.ip = get_device_ips(pp, int(request.data['tnew']))[0]
             request.data['ip'] = pp.ip
             # print(pp.ip)
         else:

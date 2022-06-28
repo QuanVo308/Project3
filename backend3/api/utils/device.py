@@ -230,10 +230,15 @@ def validate_device(device):
     return False
 
 def update_devices():
+    tnew = True
     devices = Device.objects.filter()
     for i in devices:
         if i.role == 'AGG':
             i.type = i.name[:2]
+        if i.role == 'POWER':
+            # print(i.ip, i.ip[:2])
+            if(i.ip[0:2] == '25'):
+                tnew = False
         i.area = i.pop.province.area
         i.popp = i.pop.popPlus.name
         i.province = i.pop.province.name
@@ -242,11 +247,11 @@ def update_devices():
         print(validate_device(i))
         if (not validate_device(i)
         or i.name != get_device_name(i)
-        or i.subnet != get_device_subnet(i)
-        or i.gateway != get_device_gateway(i)):
+        or i.subnet != get_device_subnet(i, tnew)
+        or i.gateway != get_device_gateway(i, tnew)):
             i.name = get_device_name(i)
-            i.subnet = get_device_subnet(i)
-            i.gateway = get_device_gateway(i)
+            i.subnet = get_device_subnet(i, tnew)
+            i.gateway = get_device_gateway(i, tnew)
             print("update", validate_device(i))
             print(vars(i))
             i.save()

@@ -481,7 +481,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(province, many=True)
         serializer = self.add_field(serializer)
-        for i in p:
+        for i in serializer.data:
             i['pop_name'] = Pop.objects.filter(id = i['pop'])[0].name
             i['brand_name'] = Brand.objects.filter(id = i['brand'])[0].name
         

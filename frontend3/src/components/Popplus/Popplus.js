@@ -41,7 +41,7 @@ export default function Popplus(tab){
         setShowAdd(true);
     }
     const handleShowUpdate = (data) =>{
-        console.log(data)
+        // console.log(data)
         setShowUpdate(true)
         setUpdateData(data)
     }

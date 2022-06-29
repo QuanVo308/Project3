@@ -161,6 +161,15 @@ function AddDevice({show, setShow, setUpdate}) {
                                 ))}
                             </select>
                         </div>}
+                        {input.role == 'POWER' && <div>
+                            <label>IP Type:</label>
+                            <select name='type' onChange={handleChange}>
+                                <option>-</option>
+                                {['New','Old'].map(data => (
+                                <option value={data}>{data}</option>
+                                ))}
+                            </select>
+                        </div>}
                         <div>
                             <label>Brand:</label>
                             <select name='brand' onChange={handleChange}>

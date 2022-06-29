@@ -286,6 +286,15 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                                 ))}
                             </select>
                         </div>}
+                        {inputUpdate.role == 'POWER' && <div>
+                            <label>IP Type:</label>
+                            <select name='type' onChange={handleChangeUpdate}>
+                                <option>-</option>
+                                {['New','Old'].map(data => (
+                                <option value={data}>{data}</option>
+                                ))}
+                            </select>
+                        </div>}
                         <div>
                             <label>Brand:</label>
                             <select defaultValue={inputUpdate.brand_name} name='brand' onChange={handleChangeUpdate}>

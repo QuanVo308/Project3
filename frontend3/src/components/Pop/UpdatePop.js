@@ -22,14 +22,13 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
     useEffect( () => {
         let data = updateData
         console.log("updateData", updateData)
-        setInputUpdate(0)
         const tail1 = data['name'][data['name'].length - 4]
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
         setInputUpdate(data)
-        getProvince(data.area_name)
-        getBranch(data.province, false)
+        getProvince(data.area_name, true)
+        getBranch(data.province, true)
+        getPopplus(data.branch, true)
         setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
-        setUpdate(prev => !prev)
     }, [updateData])
 
     const getProvince = (data, br) => {
@@ -58,31 +57,23 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
             })    
     }
 
-    const getPopplus = (data) => {
+    const getPopplus = (data, br) => {
         console.log('check', data)
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'id': data}})
         .then(function(res){
             setPopplusList(res.data.data)
             console.log('check1', res.data.data)
-
-            if(res.data.data.length !=0){
-                setInputUpdate(values => ({...values, ['popPlus']: res.data.data[0].id, ['popPlus_name']: res.data.data[0].name}))
-                
-                // console.log("check1:", data)
-                // console.log("check:", res.data.data.length)
-            }
-            if( res.data.data.length != 0){
-                
-                axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': res.data.data[0].id,
-                'tail1': inputUpdate['tail1'],
-                'tail2': inputUpdate['tail2']}})
-                .then(function(res){
-                    // console.log("check", res.data)
-                    setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-            })
-            } else {
-                setInputUpdate(prev => ({...prev, 'name': ''}))
-            }
+            if(!br){
+                if(res.data.data.length !=0){
+                    setInputUpdate(values => ({...values, ['popPlus']: res.data.data[0].id, ['popPlus_name']: res.data.data[0].name}))
+                    axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': res.data.data[0].id,
+                    'tail1': inputUpdate['tail1'],
+                    'tail2': inputUpdate['tail2']}})
+                    .then(function(res){
+                        // console.log("check", res.data)
+                        setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+                })
+            }}
         })
     }
 
@@ -176,7 +167,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                     <form className={styles.formModal}>
                         <div>
                             <label>Vùng: </label>
-                            <select defaultValue={inputUpdate.area_name} name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
+                            <select defaultValue={updateData.area_name} name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                 {areaList.map(data => (
                                     <option value={data.id}>{data.name}</option>
                                 ))}
@@ -192,7 +183,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                         </div>
                         <div>
                             <label>Chi nhánh:</label>
-                            <select defaultValue={inputUpdate.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value); handleChangeUpdate(e)}}>
+                            <select defaultValue={inputUpdate.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
                                     <option value={data.id}>{data.name}</option>
                                 ))}

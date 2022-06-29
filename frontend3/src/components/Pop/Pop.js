@@ -28,7 +28,6 @@ export default function Pop({tab}){
     useEffect(()=>{
         axios.get('http://127.0.0.1:8000/api/searchpop/',{params:{'search': searchData}})
         .then(function(res){
-            // console.log(res)
             setPopList(res.data.data)
         });
     },[searchData])

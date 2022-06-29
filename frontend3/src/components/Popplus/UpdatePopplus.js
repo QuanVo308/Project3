@@ -17,20 +17,18 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
             setAreaList(res.data)
         })
     }, [])
-
+    
     useEffect( () => {
         let data = updateData
-        console.log("updateData", updateData)
+        // console.log("updateData", updateData)
         setInputUpdate(0)
         const tail1 = data['name'][data['name'].length - 4]
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
         setInputUpdate(data)
-        getProvince(updateData.area,true)
-        // getProvince(data.area_name, true)
-        getBranch(data.province)
+        getProvince(data.area,true)
+        getBranch(data.province, true)
         setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
-        // setUpdate(prev => !prev)
-    }, [updateData])
+    }, [show])
 
     const getProvince = (data, br) => {
         // console.log("1", br)
@@ -39,11 +37,11 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
             setProvinceList(res.data.data)
             // console.log("2", br)
             if (!br){
-                getBranch(res.data.data[0].id, true)
+                getBranch(res.data.data[0].id, false)
                 setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name, 'province':res.data.data[0].id}))
                 // console.log("check", data)
             }
-            br = false
+            // br = false
         })
     }
     
@@ -52,18 +50,17 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
         .then(function(res){
             setBranchList(res.data.data)
             // setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
-            if(br) {
+            if(!br) {
                 setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
-            }
 
-            axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].id,
-            'tail1': inputUpdate['tail1'],
-            'tail2': inputUpdate['tail2']}})
-            .then(function(res){
-                // console.log("check", res.data)
-                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-            })
-            // console.log('branch list',branchList)
+                axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].id,
+                'tail1': inputUpdate['tail1'],
+                'tail2': inputUpdate['tail2']}})
+                .then(function(res){
+                    // console.log("check", res.data)
+                    setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+                })
+            }
         })
     }
 
@@ -90,6 +87,8 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
 
     const handleClose = () => {
         setShow(false)
+        console.log("updateData", updateData)
+        console.log("inputUpdate", inputUpdate)
     }
 
     const handleChangeUpdate = (event) => {
@@ -131,33 +130,33 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
         setInputUpdate(values => ({...values, [name]: value}))
     }
 
-    const updateBranch = (e) => {
-        const value = e.target.value
-        // console.log(value)
-        axios.get('http://127.0.0.1:8000/api/branchname/', {params:{'id': value}})
-        .then(function(res){
-            // console.log(res.data.data[0].id)
-            setInputUpdate(values => ({...values, ['branch_name']: res.data.data[0].name}))
-        })
-    }
+    // const updateBranch = (e) => {
+    //     const value = e.target.value
+    //     // console.log(value)
+    //     axios.get('http://127.0.0.1:8000/api/branchname/', {params:{'id': value}})
+    //     .then(function(res){
+    //         if(res.data.data.length != 0){
+    //             setInputUpdate(values => ({...values, ['branch_name']: res.data.data[0].name}))
+    //         }
+    //     })
+    // }
 
     const handleUpdate = () => {
         console.log(updateData)
         console.log(inputUpdate)
-        axios({
-            method: "put",
-            url: `http://127.0.0.1:8000/api/popplus/${inputUpdate['id']}/`,
-            data: inputUpdate,
-            headers: { "Content-Type": "multipart/form-data" },
-          })
-          .then( (res) => {
-            // console.log('update', res)
-            setUpdate(prev => !prev)
-          }
-          )
-        setShow(false)
-        axios.get(`http://127.0.0.1:8000/api/updatepop/`)
-        axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
+        // axios({
+        //     method: "put",
+        //     url: `http://127.0.0.1:8000/api/popplus/${inputUpdate['id']}/`,
+        //     data: inputUpdate,
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //   })
+        //   .then( (res) => {
+        //     setUpdate(prev => !prev)
+        //   }
+        //   )
+        // setShow(false)
+        // axios.get(`http://127.0.0.1:8000/api/updatepop/`)
+        // axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
     }
 
     return ( 
@@ -179,34 +178,32 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                         </div>
                         <div>
                             <label>Tỉnh:</label>
-                            <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value, true); handleChangeUpdate(e)}} >
+                            <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}} >
                                 {provinceList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.province_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name == inputUpdate.province_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Chi nhánh:</label>
-                            <select defaultValue={updateData.branch_name} name='branch' onChange={(e)=>{handleChangeUpdate(e); updateBranch(e)}}>
-                            {/* <option>{inputUpdate.branch_name}</option> */}
+                            <select defaultValue={updateData.branch_name} name='branch' onChange={(e)=>{handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id} selected={inputUpdate.branch_name==data.name}>{data.name}</option>
+                                    <option value={data.id} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Phần đuôi: </label>
                             <select name='tail1' onChange={handleChangeUpdate}>
-                                <option>-</option>
                                 <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
                                 <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
                             </select>
-                            <input type="number" name='tail2' placeholder='001 -> 999' min="1" value={inputUpdate['tail2']} max="999" onChange={handleChangeUpdate}
+                            <input type="number" name='tail2' placeholder='001 -> 999' min="1"  max="999" onChange={handleChangeUpdate}
                             defaultValue={inputUpdate['tail2']}/>
                         </div>
                         <div>
                             <label>Name:</label>
-                            <input type='text' value={inputUpdate.name} disabled/>
+                            <input type='text' value={updateData.name} disabled/>
                         </div> 
                         <div>
                             <label>Area OSPF:</label>
@@ -218,20 +215,19 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                         </div>
                         <div>
                             <label>Octet2 IP OSPF MGMT:</label>
-                            <input defaultValue={updateData.octet2_ip_OSPF_MGMT} value={inputUpdate['octet2_ip_OSPF_MGMT']} type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChangeUpdate} />
+                            <input defaultValue={updateData.octet2_ip_OSPF_MGMT}  type="number" name='octet2_ip_OSPF_MGMT' onChange={handleChangeUpdate} />
                         </div>
                         <div>
                             <label>Octet2 IP MGMT:</label>
-                            <input defaultValue={updateData.octet2_ip_MGMT} value={inputUpdate['octet2_ip_MGMT']} type="number" name='octet2_ip_MGMT' onChange={handleChangeUpdate} />
+                            <input defaultValue={updateData.octet2_ip_MGMT}  type="number" name='octet2_ip_MGMT' onChange={handleChangeUpdate} />
                         </div>
                         <div>
                             <label>Octet3 IP MGMT:</label>
-                            <input defaultValue={updateData.octet3_ip_MGMT} value={inputUpdate['octet3_ip_MGMT']} type="number" name='octet3_ip_MGMT' onChange={handleChangeUpdate} />
+                            <input defaultValue={updateData.octet3_ip_MGMT}  type="number" name='octet3_ip_MGMT' onChange={handleChangeUpdate} />
                         </div>
                         <div>
                             <label>vlan PPPoE:</label>
                             <select defaultValue={updateData.vlan_PPPoE} name='vlan_PPPoE' onChange={handleChangeUpdate}>
-                                <option>-</option>
                                 {[30,31,32,33,34,35,36,37,38,39].map(data => (
                                     <option value={data}>{data}</option>
                                 ))}

@@ -41,7 +41,10 @@ function AddPop({show, setShow, setUpdate}) {
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'id': data}})
         .then(function(res){
             setPopplusList(res.data.data)
-            setInput(prev => ({...prev, ['popPlus']: res.data.data[0].id}))
+            if(res.data.data.length != 0){
+                setInput(prev => ({...prev, ['popPlus']: res.data.data[0].id}))
+
+            }
         })
     }
 

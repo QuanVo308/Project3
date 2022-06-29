@@ -300,6 +300,7 @@ class PopViewSet(viewsets.ModelViewSet):
         for se in serializer.data:
             se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
             se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
+            se['branch'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].id
         return Response(serializer.data)
 
     def create(self, request):

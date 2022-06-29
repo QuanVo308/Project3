@@ -20,7 +20,7 @@ export default function Pop({tab}){
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
-            setPopList(res.data)
+            setPopList(res.data.results)
         }
         getPop()
     },[update, tab])

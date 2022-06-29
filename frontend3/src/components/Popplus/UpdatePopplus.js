@@ -90,6 +90,8 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
 
     const handleClose = () => {
         setShow(false)
+        setInputUpdate(0)
+        setUpdate(0)
     }
 
     const handleChangeUpdate = (event) => {

@@ -20,17 +20,15 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
 
     useEffect( () => {
         let data = updateData
-        console.log("updateData", updateData)
+        // console.log("updateData", updateData)
         setInputUpdate(0)
         const tail1 = data['name'][data['name'].length - 4]
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)
         setInputUpdate(data)
-        getProvince(updateData.area,true)
-        // getProvince(data.area_name, true)
-        getBranch(data.province)
+        getProvince(data.area,true)
+        getBranch(data.province, true)
         setInputUpdate(values => ({...values, ['tail1']: tail1, ['tail2']: tail2}))
-        // setUpdate(prev => !prev)
-    }, [updateData])
+    }, [show])
 
     const getProvince = (data, br) => {
         // console.log("1", br)
@@ -39,11 +37,11 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
             setProvinceList(res.data.data)
             // console.log("2", br)
             if (!br){
-                getBranch(res.data.data[0].id, true)
+                getBranch(res.data.data[0].id, false)
                 setInputUpdate(prev => ({...prev, 'province_name':res.data.data[0].name, 'province':res.data.data[0].id}))
                 // console.log("check", data)
             }
-            br = false
+            // br = false
         })
     }
     
@@ -52,17 +50,16 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
         .then(function(res){
             setBranchList(res.data.data)
             // setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
-            if(br) {
+            if(!br) {
                 setInputUpdate(values => ({...values, ['branch']: res.data.data[0].id, ['branch_name']: res.data.data[0].name}))
-            }
 
-            axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].id,
-            'tail1': inputUpdate['tail1'],
-            'tail2': inputUpdate['tail2']}})
-            .then(function(res){
-                // console.log("check", res.data)
-                setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-            })
+                axios.get('http://127.0.0.1:8000/api/poppname/', {params:{'branch': res.data.data[0].id,
+                'tail1': inputUpdate['tail1'],
+                'tail2': inputUpdate['tail2']}})
+                .then(function(res){
+                    // console.log("check", res.data)
+                    setInputUpdate(prev => ({...prev, 'name': res.data.name}))
+            })}
             // console.log('branch list',branchList)
         })
     }
@@ -90,8 +87,6 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
 
     const handleClose = () => {
         setShow(false)
-        setInputUpdate(0)
-        setUpdate(0)
     }
 
     const handleChangeUpdate = (event) => {
@@ -144,8 +139,8 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
     }
 
     const handleUpdate = () => {
-        console.log(updateData)
-        console.log(inputUpdate)
+        // console.log(updateData)
+        // console.log(inputUpdate)
         axios({
             method: "put",
             url: `http://127.0.0.1:8000/api/popplus/${inputUpdate['id']}/`,
@@ -173,15 +168,15 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                     <form className={styles.formModal} >
                         <div>
                             <label>Vùng:</label>
-                            <select defaultValue={updateData.area_name}  name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}} >
+                            <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}} >
                                 {areaList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option value={data.id} selected={data.name==inputUpdate.area_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Tỉnh:</label>
-                            <select defaultValue={updateData.province_name} name='province' onChange={(e)=>{getBranch(e.target.value, true); handleChangeUpdate(e)}} >
+                            <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}} >
                                 {provinceList.map(data => (
                                     <option value={data.id} selected={data.name==inputUpdate.province_name}>{data.name}</option>
                                 ))}
@@ -189,8 +184,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                         </div>
                         <div>
                             <label>Chi nhánh:</label>
-                            <select defaultValue={updateData.branch_name} name='branch' onChange={(e)=>{handleChangeUpdate(e); updateBranch(e)}}>
-                            {/* <option>{inputUpdate.branch_name}</option> */}
+                            <select name='branch' onChange={(e)=>{handleChangeUpdate(e); updateBranch(e)}}>
                                 {branchList.map(data => (
                                     <option value={data.id} selected={inputUpdate.branch_name==data.name}>{data.name}</option>
                                 ))}
@@ -199,7 +193,6 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                         <div>
                             <label>Phần đuôi: </label>
                             <select name='tail1' onChange={handleChangeUpdate}>
-                                <option>-</option>
                                 <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
                                 <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
                             </select>
@@ -233,7 +226,6 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                         <div>
                             <label>vlan PPPoE:</label>
                             <select defaultValue={updateData.vlan_PPPoE} name='vlan_PPPoE' onChange={handleChangeUpdate}>
-                                <option>-</option>
                                 {[30,31,32,33,34,35,36,37,38,39].map(data => (
                                     <option value={data}>{data}</option>
                                 ))}

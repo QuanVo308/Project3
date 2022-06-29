@@ -22,14 +22,14 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
     }, [])
 
     useEffect(()=>{
+        console.log(updateData)
         setInputUpdate(updateData)
-
         getProvince(updateData.area_name)
         getBranch(updateData.province)
         getPopplus(updateData.branch)
         getPop(updateData.popPlus)
         getBrand(updateData.role)
-    },[updateData])
+    },[show])
 
     const getProvince = (data, br) => {
         axios.get('http://127.0.0.1:8000/api/provincearea', {params:{'id': data}})
@@ -100,8 +100,8 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
         // var p= inputUpdate['pop']
 
         setInputUpdate(values => ({...values, [name]: value}))
-        console.log("change", name, value)
-        resetName()
+        // console.log("change", name, value)
+        // resetName()
         // axios.get('http://127.0.0.1:8000/api/devicename/', {params:{
         //         'role': r,
         //         'name': n,
@@ -190,7 +190,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                 }})
                 .then(function(res){
                     // console.log("res", res.data)
-                    console.log("input", inputUpdate)
+                    // console.log("input", inputUpdate)
                     setInputUpdate(prev => ({...prev, 'name': res.data.name}))
                     // setUpdate(prev => !prev)
                 })
@@ -198,23 +198,22 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
 
     const handleUpdate = () => {
         console.log('inputUpdate', inputUpdate)
-        // axios({
-        //     method: "put",
-        //     url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
-        //     data: inputUpdate,
-        //     headers: { "Content-Type": "multipart/form-data" },
-        //   })
-        //   .then( (res) => {
-        //     console.log('update', res)
-        //     setUpdate(prev => !prev)
-        //   }
-        //   )
-        // setShow(false)
+        axios({
+            method: "put",
+            url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
+            data: inputUpdate,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then( (res) => {
+            console.log('update', res)
+            setUpdate(prev => !prev)
+          }
+          )
+        setShow(false)
     }
 
     const handleClose = () => {
         setShow(false)
-        setInputUpdate([])
     }
 
     return ( 
@@ -228,42 +227,42 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                     <form className={styles.formModal}>
                         <div>
                             <label>Vùng: </label>
-                            <select defaultValue={inputUpdate.area_name} name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
+                            <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option value={data.id} selected={data.name==inputUpdate.area_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Tỉnh:</label>
-                            <select defaultValue={inputUpdate.province_name} name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
+                            <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option value={data.id} selected={data.name==inputUpdate.province_name}>{data.name}</option>
                                 ))}
                             </select>
                             
                         </div>
                         <div>
                             <label>Chi nhánh:</label>
-                            <select defaultValue={inputUpdate.branch_name} name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
+                            <select name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option value={data.id} selected={data.name==inputUpdate.branch_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Popplus:</label>
-                            <select defaultValue={inputUpdate.popPlus_name} name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
+                            <select name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
                                 {popplusList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option value={data.id} selected={data.name==inputUpdate.popPlus_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Pop:</label>
-                            <select defaultValue={inputUpdate.pop_name} name='pop' onChange={handleChangeUpdate}>
+                            <select name='pop' onChange={handleChangeUpdate}>
                                 {popList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option value={data.id} selected={data.name==inputUpdate.pop_name}>{data.name}</option>
                                 ))}
                             </select>
                             

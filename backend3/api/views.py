@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 from urllib import request
 from django.forms import GenericIPAddressField
 from django.http import HttpResponse, JsonResponse
@@ -12,7 +13,8 @@ from .serializers import *
 from .models import *
 from django.db.models import CharField, GenericIPAddressField
 from django.db.models import  Q
-
+from .pagination import *
+from rest_framework.decorators import action
 
 def index(request):
     return HttpResponse("Hello, world!!!!")
@@ -41,19 +43,14 @@ def test(request):
 def search_device(request):
     value = request.GET['search'].upper()
     fields = [f for f in Device._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
-    # for f in fields:
-    #     print(f.name)
-    # queries = [Q(**{f.name: 'H'}) for f in fields]
     queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
     queries.append(Q(brand__name__icontains = value))
     qs = Q()
     
     for query in queries:
         qs = qs | query
-    # print( qs)
     province = Device.objects.filter(qs).values()
 
-    # print(province)
     p = list(province)
     for i in p:
         i['pop_name'] = Pop.objects.filter(id = i['pop_id'])[0].name
@@ -228,6 +225,55 @@ class BranchViewSet(viewsets.ModelViewSet):
 class PopPlusViewSet(viewsets.ModelViewSet):
     queryset = PopPlus.objects.all()
     serializer_class = PopPlusSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def add_field(self, serializer):
+        for se in serializer.data:
+            se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
+            se['province'] = Branch.objects.filter(id = se['branch'])[0].province.id
+            se['province_name'] = Branch.objects.filter(id = se['branch'])[0].province.name
+            se['area'] = Branch.objects.filter(id = se['branch'])[0].province.area.id
+            se['area_name'] = Branch.objects.filter(id = se['branch'])[0].province.area.name
+        return serializer
+
+    @action(detail=False)
+    def search(self, request):
+        value = request.GET['search'].upper()
+        fields = [f for f in PopPlus._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
+        # for f in fields:
+        #     print(f.name)
+        # queries = [Q(**{f.name: 'H'}) for f in fields]
+        queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
+        queries.append(Q(branch__name = value))
+        
+        try:
+            va = int(value)
+            queries.append(Q(area_OSPF = value))
+            queries.append(Q(octet2_ip_OSPF_MGMT = value))
+            queries.append(Q(octet2_ip_MGMT = value))
+            queries.append(Q(octet3_ip_MGMT = value))
+            queries.append(Q(vlan_PPPoE = value))
+        except:
+            print()
+
+        qs = Q()
+        
+        for query in queries:
+            qs = qs | query
+        print( qs)
+        province = PopPlus.objects.filter(qs).values()
+
+        # print(province)
+        page = self.paginate_queryset(province)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            # print(serializer.data)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(province, many=True)
+        serializer = self.add_field(serializer)
+        
+        return Response(serializer.data)
 
 
     def list(self, request, *args, **kwargs):
@@ -236,16 +282,13 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
+            serializer = self.add_field(serializer)
             return self.get_paginated_response(serializer.data)
 
         
         serializer = self.get_serializer(queryset, many=True)
-        for se in serializer.data:
-            se['branch_name'] = Branch.objects.filter(id = se['branch'])[0].name
-            se['province'] = Branch.objects.filter(id = se['branch'])[0].province.id
-            se['province_name'] = Branch.objects.filter(id = se['branch'])[0].province.name
-            se['area'] = Branch.objects.filter(id = se['branch'])[0].province.area.id
-            se['area_name'] = Branch.objects.filter(id = se['branch'])[0].province.area.name
+        serializer = self.add_field(serializer)
+        
         return Response(serializer.data)
 
     def create(self, request):
@@ -285,7 +328,56 @@ class PopPlusViewSet(viewsets.ModelViewSet):
 class PopViewSet(viewsets.ModelViewSet):
     queryset = Pop.objects.all()
     serializer_class = PopSerializer
+    pagination_class = CustomPageNumberPagination
 
+    def add_field(self, serializer):
+        for se in serializer.data:
+            se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
+            se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
+        return serializer
+
+    @action(detail=False)
+    def search(self, request):
+        value = request.GET['search'].upper()
+        fields = [f for f in Pop._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
+        # for f in fields:
+        #     print(f.name)
+        # queries = [Q(**{f.name: 'H'}) for f in fields]
+        queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
+        queries.append(Q(popPlus__name__icontains = value))
+        queries.append(Q(province__name__icontains = value))
+        try:
+            va = int(value)
+            queries.append(Q(sequence_ring = value))
+        except:
+            print()
+        qs = Q()
+        
+        for query in queries:
+            qs = qs | query
+        # print( qs)
+        province = Pop.objects.filter(qs)
+
+        page = self.paginate_queryset(province)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            # print(serializer.data)
+            for i in serializer.data:
+                i['popPlus_name'] = PopPlus.objects.filter(id = i['popPlus'])[0].name
+                i['province_name'] = Province.objects.filter(id = i['province'])[0].name
+            return self.get_paginated_response(serializer.data)
+
+        # p = list(province)
+        serializer = self.get_serializer(province, many=True)
+        serializer = self.add_field(serializer)
+        for i in serializer.data:
+            i['popPlus_name'] = PopPlus.objects.filter(id = i['popPlus'])[0].name
+            i['province_name'] = Province.objects.filter(id = i['province'])[0].name
+
+
+        # print(province)
+    
+        return Response(serializer.data)
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -293,14 +385,12 @@ class PopViewSet(viewsets.ModelViewSet):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
+            serializer = self.add_field(serializer)
             return self.get_paginated_response(serializer.data)
 
         
         serializer = self.get_serializer(queryset, many=True)
-        for se in serializer.data:
-            se['area_name'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].name
-            se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
-            se['branch'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].id
+        serializer = self.add_field(serializer)
         return Response(serializer.data)
 
     def create(self, request):
@@ -310,10 +400,7 @@ class PopViewSet(viewsets.ModelViewSet):
         t = request.data.copy()
         t._mutable = True
         t['province'] = Province.objects.filter(id = request.data['province'])[0]
-        t['popPlus'] = PopPlus.objects.filter(id = request.data['popPlus'])[0]
-
-        
-        
+        t['popPlus'] = PopPlus.objects.filter(id = request.data['popPlus'])[0]      
 
         pp = Pop()
         for i in t:
@@ -353,17 +440,9 @@ class PopViewSet(viewsets.ModelViewSet):
 class DeviceViewSet(viewsets.ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
+    pagination_class = CustomPageNumberPagination
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        
-        serializer = self.get_serializer(queryset, many=True)
+    def add_field(self, serializer):
         for se in serializer.data:
             se['popPlus_name'] = PopPlus.objects.filter(id = Pop.objects.filter(name = se['pop_name'])[0].popPlus.id)[0].name
             se['branch_name'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].name
@@ -374,6 +453,52 @@ class DeviceViewSet(viewsets.ModelViewSet):
             se['branch'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].id
             se['province'] = Province.objects.filter(id = Branch.objects.filter(name = se['branch_name'])[0].province.id)[0].id
             se['area'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].id
+        return serializer
+
+
+    @action(detail=False)
+    def search(self, request):
+        value = request.GET['search'].upper()
+        fields = [f for f in Device._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
+        queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
+        queries.append(Q(brand__name__icontains = value))
+        qs = Q()
+        
+        for query in queries:
+            qs = qs | query
+        province = Device.objects.filter(qs)
+
+        page = self.paginate_queryset(province)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            # print(serializer.data)
+            for i in serializer.data:
+                i['pop_name'] = Pop.objects.filter(id = i['pop'])[0].name
+                i['brand_name'] = Brand.objects.filter(id = i['brand'])[0].name
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(province, many=True)
+        serializer = self.add_field(serializer)
+        for i in p:
+            i['pop_name'] = Pop.objects.filter(id = i['pop'])[0].name
+            i['brand_name'] = Brand.objects.filter(id = i['brand'])[0].name
+        
+        return Response(serializer.data)
+        
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            serializer = self.add_field(serializer)
+            # print('page')
+            return self.get_paginated_response(serializer.data)
+
+        
+        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.add_field(serializer)
         return Response(serializer.data)
 
     def create(self, request):
@@ -416,7 +541,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
             return HttpResponse('fail')
 
         try:
-            print(request.data['tnew'])
+            # print(request.data['tnew'])
             request.data['subnet'] = get_device_subnet(pp, int(request.data['tnew']))
             request.data['gateway'] = get_device_gateway(pp, int(request.data['tnew']))
         except:

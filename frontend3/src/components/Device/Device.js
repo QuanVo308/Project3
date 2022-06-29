@@ -21,7 +21,7 @@ export default function Device({tab}){
     useEffect(() => { 
         const getDevice = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/device/')
-            setDeviceList(res.data)
+            setDeviceList(res.data.results)
             // console.log(res)
             // resetName()
         }

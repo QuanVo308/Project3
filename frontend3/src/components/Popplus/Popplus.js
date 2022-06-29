@@ -21,7 +21,7 @@ export default function Popplus(tab){
         const getPopplus = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
             // console.log(res)
-            setPopplusList(res.data)
+            setPopplusList(res.data.results)
         }
         getPopplus()
     },[update, tab])

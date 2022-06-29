@@ -24,14 +24,16 @@
     }
     div {
         margin-bottom: 10px;
+        display: flex;
         label{
             width: 40%;
         }
         select{
             width: 60%;
         }
-        input{
+        .deviceName{
             width: 60%;
         }
+       
     }
 }

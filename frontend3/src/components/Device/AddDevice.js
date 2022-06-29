@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import {Button, Modal} from 'react-bootstrap'
+import {Button, Modal, Form } from 'react-bootstrap'
 import styles from './Device.module.scss'
 
 
@@ -75,7 +75,10 @@ function AddDevice({show, setShow, setUpdate}) {
     }
 
     const handleAdd = () => {
-        // console.log(input)
+        if(typeof(input.tnew) === 'undefined'){
+            setInput(values => ({...values, ['tnew']: 1}))
+        }
+        console.log(input)
         const formData = new FormData()
         Object.entries(input).map( ([key, value]) => {
             formData.append(key, value)
@@ -88,6 +91,7 @@ function AddDevice({show, setShow, setUpdate}) {
             headers: { "Content-Type": "multipart/form-data" },
           })
           .then(function (response) {
+            console.log(response)
             setUpdate(prev => !prev)
           })
           setShow(false)
@@ -163,12 +167,14 @@ function AddDevice({show, setShow, setUpdate}) {
                         </div>}
                         {input.role == 'POWER' && <div>
                             <label>IP Type:</label>
-                            <select name='type' onChange={handleChange}>
-                                <option>-</option>
-                                {['New','Old'].map(data => (
-                                <option value={data}>{data}</option>
+                            <Form onChange={handleChange}>
+                                {['radio'].map((type) => (
+                                    <div key={`inline-${type}`} className="mb-3">
+                                        <Form.Check inline label="New" name="tnew" value='1' type={type} id={`inline-${type}-1`} defaultChecked='true' />
+                                        <Form.Check inline label="Old" name="tnew" value='0' type={type} id={`inline-${type}-2`}/>
+                                    </div>
                                 ))}
-                            </select>
+                            </Form>
                         </div>}
                         <div>
                             <label>Brand:</label>

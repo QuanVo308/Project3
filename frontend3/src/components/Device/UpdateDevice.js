@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import {Button, Modal} from 'react-bootstrap'
+import {Button, Modal, Form} from 'react-bootstrap'
 import styles from './Device.module.scss'
 
 
@@ -198,18 +198,18 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
 
     const handleUpdate = () => {
         console.log('inputUpdate', inputUpdate)
-        axios({
-            method: "put",
-            url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
-            data: inputUpdate,
-            headers: { "Content-Type": "multipart/form-data" },
-          })
-          .then( (res) => {
-            console.log('update', res)
-            setUpdate(prev => !prev)
-          }
-          )
-        setShow(false)
+        // axios({
+        //     method: "put",
+        //     url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
+        //     data: inputUpdate,
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //   })
+        //   .then( (res) => {
+        //     console.log('update', res)
+        //     setUpdate(prev => !prev)
+        //   }
+        //   )
+        // setShow(false)
     }
 
     const handleClose = () => {
@@ -287,12 +287,14 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                         </div>}
                         {inputUpdate.role == 'POWER' && <div>
                             <label>IP Type:</label>
-                            <select name='type' onChange={handleChangeUpdate}>
-                                <option>-</option>
-                                {['New','Old'].map(data => (
-                                <option value={data}>{data}</option>
+                            <Form onChange={handleChangeUpdate}>
+                                {['radio'].map((type) => (
+                                    <div key={`inline-${type}`} className="mb-3">
+                                        <Form.Check inline label="New" name="tnew" value='1' type={type} id={`inline-${type}-1`} defaultChecked={inputUpdate.tnew == 1 ? inputUpdate.tnew : null} />
+                                        <Form.Check inline label="Old" name="tnew" value='0' type={type} id={`inline-${type}-2`} defaultChecked={inputUpdate.tnew == 0 ? inputUpdate.tnew : null} />
+                                    </div>
                                 ))}
-                            </select>
+                            </Form>
                         </div>}
                         <div>
                             <label>Brand:</label>
@@ -304,7 +306,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                         </div>
                         <div>
                             <label>Name:</label>
-                            <input defaultValue={inputUpdate.name} type='text' value={inputUpdate.name} disabled/>
+                            <input className={styles.deviceName} defaultValue={inputUpdate.name} type='text' value={inputUpdate.name} disabled/>
                         </div>
                     </form>
                 </Modal.Body>

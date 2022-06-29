@@ -16,7 +16,6 @@ export default function Device({tab}){
     const [deleteData, setDeleteData] = useState()
     const [updateData, setUpdateData] = useState()
     const [searchData, setSearchData] = useState()
-    const [rn, setRn] = useState(false)
 
     useEffect(() => { 
         const getDevice = async()=>{
@@ -65,7 +64,7 @@ export default function Device({tab}){
         setShowAdd(true);
     }
     const handleShowUpdate = (data) =>{
-        console.log('data', data)
+        // console.log('data', data)
         if (data.role === "AGG"){
             data['type'] = data.name.substring(0,2)
         }

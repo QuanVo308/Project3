@@ -15,6 +15,9 @@ from django.db.models import CharField, GenericIPAddressField
 from django.db.models import  Q
 from .pagination import *
 from rest_framework.decorators import action
+# from django_filters.rest_framework import OrderingFilter 
+from rest_framework import filters
+import operator
 
 def index(request):
     return HttpResponse("Hello, world!!!!")
@@ -329,6 +332,8 @@ class PopViewSet(viewsets.ModelViewSet):
     queryset = Pop.objects.all()
     serializer_class = PopSerializer
     pagination_class = CustomPageNumberPagination
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = '__all__'
 
     def add_field(self, serializer):
         for se in serializer.data:
@@ -342,9 +347,15 @@ class PopViewSet(viewsets.ModelViewSet):
     def search(self, request):
         value = request.GET['search'].upper()
         fields = [f for f in Pop._meta.fields if (isinstance(f, CharField) or isinstance(f, GenericIPAddressField))]
-        # for f in fields:
-        #     print(f.name)
-        # queries = [Q(**{f.name: 'H'}) for f in fields]
+        
+        sort = 'id'
+        reverse = False
+        try:
+            sort = request.GET['sort']
+            reverse = int(request.GET['reverse'])
+        except:
+            None
+
         queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
         queries.append(Q(popPlus__name__icontains = value))
         queries.append(Q(province__name__icontains = value))
@@ -360,6 +371,14 @@ class PopViewSet(viewsets.ModelViewSet):
         # print( qs)
         province = Pop.objects.filter(qs)
 
+        for i in province:
+            i.province_name = Province.objects.filter(id = i.province.id)[0].name
+            i.popPlus_name = PopPlus.objects.filter(id = i.popPlus.id)[0].name
+            i.branch_name = Branch.objects.filter(id = i.popPlus.branch.id)[0].name
+            i.area_name = Area.objects.filter(id = i.province.area.id)[0].name
+        province = sorted(province, key=operator.attrgetter(sort), reverse=int(reverse))
+
+        # province = self.filter_queryset(province)
         page = self.paginate_queryset(province)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -382,7 +401,26 @@ class PopViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
+        sort = 'id'
+        reverse = False
+        try:
+            sort = request.GET['sort']
+            reverse = int(request.GET['reverse'])
+        except:
+            None
+
+        for i in queryset:
+            i.province_name = Province.objects.filter(id = i.province.id)[0].name
+            i.popPlus_name = PopPlus.objects.filter(id = i.popPlus.id)[0].name
+            i.branch_name = Branch.objects.filter(id = i.popPlus.branch.id)[0].name
+            i.area_name = Area.objects.filter(id = i.province.area.id)[0].name
+        print(type(queryset))
+        # queryset = self.filter_queryset(queryset)
+        queryset = sorted(queryset, key=operator.attrgetter(sort), reverse=int(reverse))
+        
+
+        
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -481,7 +519,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(province, many=True)
         serializer = self.add_field(serializer)
-        for i in p:
+        for i in serializer.data:
             i['pop_name'] = Pop.objects.filter(id = i['pop'])[0].name
             i['brand_name'] = Brand.objects.filter(id = i['brand'])[0].name
         

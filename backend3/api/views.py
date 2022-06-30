@@ -405,10 +405,10 @@ class PopViewSet(viewsets.ModelViewSet):
         province = Pop.objects.filter(qs)
 
         for i in province:
-            i.province_name = Province.objects.filter(id = i.province.id)[0].name
-            i.popPlus_name = PopPlus.objects.filter(id = i.popPlus.id)[0].name
-            i.branch_name = Branch.objects.filter(id = i.popPlus.branch.id)[0].name
-            i.area_name = Area.objects.filter(id = i.province.area.id)[0].name
+            i.province_name = i.province.name
+            i.popPlus_name = i.popPlus.name
+            i.branch_name = i.popPlus.branch.name
+            i.area_name =i.province.area.name
         province = sorted(province, key=operator.attrgetter(sort), reverse=int(reverse))
 
         # province = self.filter_queryset(province)
@@ -444,10 +444,10 @@ class PopViewSet(viewsets.ModelViewSet):
             None
 
         for i in queryset:
-            i.province_name = Province.objects.filter(id = i.province.id)[0].name
-            i.popPlus_name = PopPlus.objects.filter(id = i.popPlus.id)[0].name
-            i.branch_name = Branch.objects.filter(id = i.popPlus.branch.id)[0].name
-            i.area_name = Area.objects.filter(id = i.province.area.id)[0].name
+            i.province_name = i.province.name
+            i.popPlus_name = i.popPlus.name
+            i.branch_name = i.popPlus.branch.name
+            i.area_name =i.province.area.name
         # print(type(queryset))
         # queryset = self.filter_queryset(queryset)
         queryset = sorted(queryset, key=operator.attrgetter(sort), reverse=int(reverse))
@@ -526,6 +526,8 @@ class DeviceViewSet(viewsets.ModelViewSet):
             se['branch'] = Branch.objects.filter(id = PopPlus.objects.filter(name = se['popPlus_name'])[0].branch.id)[0].id
             se['province'] = Province.objects.filter(id = Branch.objects.filter(name = se['branch_name'])[0].province.id)[0].id
             se['area'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].id
+            se['pop_name'] = Pop.objects.filter(id = se['pop'])[0].name
+            se['brand_name'] = Brand.objects.filter(id = se['brand'])[0].name
         return serializer
 
 
@@ -536,31 +538,63 @@ class DeviceViewSet(viewsets.ModelViewSet):
         queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
         queries.append(Q(brand__name__icontains = value))
         qs = Q()
+
+        sort = 'id'
+        reverse = False
+        try:
+            sort = request.GET['sort']
+            reverse = int(request.GET['reverse'])
+        except:
+            None
         
         for query in queries:
             qs = qs | query
         province = Device.objects.filter(qs)
 
+        for i in province:
+            i.brand_name = i.brand.name
+            i.pop_name = i.pop.name
+            i.popPlus_name = i.pop.popPlus.name
+            i.branch_name = i.pop.popPlus.branch.name
+            i.province_name = i.pop.province.name
+            i.area_name = i.pop.province.area.name
+        province = sorted(province, key=operator.attrgetter(sort), reverse=int(reverse))
+
         page = self.paginate_queryset(province)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             # print(serializer.data)
-            for i in serializer.data:
-                i['pop_name'] = Pop.objects.filter(id = i['pop'])[0].name
-                i['brand_name'] = Brand.objects.filter(id = i['brand'])[0].name
+            serializer = self.add_field(serializer)
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(province, many=True)
         serializer = self.add_field(serializer)
-        for i in serializer.data:
-            i['pop_name'] = Pop.objects.filter(id = i['pop'])[0].name
-            i['brand_name'] = Brand.objects.filter(id = i['brand'])[0].name
+     
         
         return Response(serializer.data)
         
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
+        sort = 'id'
+        reverse = False
+        try:
+            sort = request.GET['sort']
+            reverse = int(request.GET['reverse'])
+        except:
+            None
+
+        for i in queryset:
+            i.brand_name = i.brand.name
+            i.pop_name = i.pop.name
+            i.popPlus_name = i.pop.popPlus.name
+            i.branch_name = i.pop.popPlus.branch.name
+            i.province_name = i.pop.province.name
+            i.area_name = i.pop.province.area.name
+
+        # print(type(queryset))
+        # queryset = self.filter_queryset(queryset)
+        queryset = sorted(queryset, key=operator.attrgetter(sort), reverse=int(reverse))
 
         page = self.paginate_queryset(queryset)
         if page is not None:

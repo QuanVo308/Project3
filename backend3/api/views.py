@@ -528,6 +528,12 @@ class DeviceViewSet(viewsets.ModelViewSet):
             se['area'] = Area.objects.filter(id = Province.objects.filter(name = se['province_name'])[0].area.id)[0].id
             se['pop_name'] = Pop.objects.filter(id = se['pop'])[0].name
             se['brand_name'] = Brand.objects.filter(id = se['brand'])[0].name
+            if se['role'] == 'POWER':
+                print(se['subnet'][12:])
+                if se['subnet'][12:] == 0:
+                    se['tnew'] = False
+                else:
+                    se['tnew'] = True
         return serializer
 
 

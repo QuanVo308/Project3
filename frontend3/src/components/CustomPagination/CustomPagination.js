@@ -1,19 +1,21 @@
 import {Pagination} from 'react-bootstrap';
 
 
-function CustomPagination() {
-    let active = 2;
+function CustomPagination(pageInfo) {
+    console.log('pageInfo',pageInfo)
+    // let active = 2;
     let items = [];
-    for (let number = 1; number <= 5; number++) {
+    const maxPage = pageInfo.max_page
+    for (let number = 1; number <= maxPage; number++) {
         items.push(
-            <Pagination.Item key={number} active={number === active}>
-            {number}
+            <Pagination.Item key={number} active={number === pageInfo.current_page}>
+                {number}
             </Pagination.Item>,
         );
     }
     return ( 
         <div>
-            <Pagination>{items}</Pagination>
+            {items&&<Pagination>{items}</Pagination>}
         </div>
     );
 }

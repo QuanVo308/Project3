@@ -17,12 +17,14 @@ export default function Popplus(tab){
     const [deleteData, setDeleteData] = useState()
     const [updateData, setUpdateData] = useState()
     const [searchData, setSearchData] = useState()
+    const [pageInfo, setPageInfo] = useState()
 
     useEffect(() => { 
         const getPopplus = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/popplus/')
-            // console.log(res)
+            console.log(res)
             setPopplusList(res.data.results)
+            setPageInfo(res.data)
         }
         getPopplus()
     },[update, tab])
@@ -128,7 +130,7 @@ export default function Popplus(tab){
                 </Table>
             </div>
 
-            <CustomPagination />
+            <CustomPagination pageInfo={pageInfo} />
         </div>
     )
 }

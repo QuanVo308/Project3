@@ -530,10 +530,10 @@ class DeviceViewSet(viewsets.ModelViewSet):
             se['brand_name'] = Brand.objects.filter(id = se['brand'])[0].name
             if se['role'] == 'POWER':
                 print(se['subnet'][12:])
-                if se['subnet'][12:] == 0:
-                    se['tnew'] = False
+                if se['subnet'][12:] == '0':
+                    se['tnew'] = 0
                 else:
-                    se['tnew'] = True
+                    se['tnew'] = 1
         return serializer
 
 

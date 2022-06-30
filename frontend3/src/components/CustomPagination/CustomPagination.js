@@ -4,9 +4,17 @@ import axios from 'axios'
 import styles from './CustomPagination.module.scss'
 
 
-function CustomPagination({title, pageInfo, setData, setPageInfo, searchData, sort, reverse}) {
+function CustomPagination({title, pageInfo, setData, setPageInfo, searchData, sort, reverse, update}) {
 
     // const [currentPage, setCurrentPage] = useState()
+    useEffect( () => {
+        axios.get(`http://127.0.0.1:8000/api/${title}/search/?search=${searchData}&page=${pageInfo.current_page}&sort=${sort}&reverse=${reverse}`)
+        .then(function (res) {
+            setData(res.data.results)
+            setPageInfo(res.data)
+          })
+        console.log(pageInfo)
+    }, [update])
     
     let pageNumber = [];
     let maxPage = pageInfo.max_page
@@ -23,7 +31,7 @@ function CustomPagination({title, pageInfo, setData, setPageInfo, searchData, so
             value = pageInfo.maxPage
         }
         console.log(value)
-        axios.get(`http://127.0.0.1:8000/api/${title}/search/?search=${searchData}&page=${value}&sort=${sort}&reverse=${-1}`)
+        axios.get(`http://127.0.0.1:8000/api/${title}/search/?search=${searchData}&page=${value}&sort=${sort}&reverse=${reverse}`)
         .then(function (res) {
             setData(res.data.results)
             setPageInfo(res.data)
@@ -34,7 +42,7 @@ function CustomPagination({title, pageInfo, setData, setPageInfo, searchData, so
     return ( 
         <div className={styles.divPagination}>
             <Pagination >
-                <Pagination.First key={1} onClick={()=>{handleChangePage(1)}}>First</Pagination.First>
+                <Pagination.First onClick={()=>{handleChangePage(1)}}>First</Pagination.First>
                 <Pagination.Prev onClick={()=>handleChangePage(pageInfo.current_page - 1)}></Pagination.Prev>
                 {pageNumber.map(number => (
                     <Pagination.Item key={number} active={number === pageInfo.current_page} onClick={()=>handleChangePage(number)}>

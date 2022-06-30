@@ -28,19 +28,20 @@ export default function Popplus(tab){
 
     useEffect(() => { 
         const getPopplus = async()=>{
-            let res = await axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${''}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
-            console.log(res)
+            let res = await axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
+            // console.log(res)
             setPopplusList(res.data.results)
             setPageInfo(res.data)
         }
         getPopplus()
-    },[update, tab])
+        console.log(reverse)
+    },[update, tab, reverse])
 
     useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/searchpopp/',{params:{'search': searchData}})
+        axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
         .then(function(res){
             // console.log(res)
-            setPopplusList(res.data.data)
+            setPopplusList(res.data.results)
         });
     },[searchData])
 
@@ -68,6 +69,15 @@ export default function Popplus(tab){
         setShowDelete(false)
     }
 
+    const handleSort = () => {
+        if (reverse == 0){
+            setReverse(1)
+        } else {
+            setReverse(0)
+        }
+        setUpdate(prev => !prev)
+    }
+
     return(
         <div>    
             <div className={styles.AddSearch}>
@@ -75,12 +85,13 @@ export default function Popplus(tab){
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Popplus</Button>
                 </div>
                 <div className={styles.btnSearch}>
-                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value)}}/>
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value); setUpdate(prev => !prev)}}/>
                     <Search />
                 </div>
             </div>
 
             <div>   
+                <button onClick={handleSort}>Test</button>
                 <AddPopplus show={showAdd} setShow={setShowAdd} setUpdate={setUpdate} />
                 {updateData?
                     <UpdatePopplus show={showUpdate} setShow={setShowUpdate} updateData={updateData} setUpdate={setUpdate} />
@@ -138,7 +149,7 @@ export default function Popplus(tab){
                 </Table>
             </div>
 
-            {pageInfo&&<CustomPagination title='popplus' pageInfo={pageInfo} searchData={searchData} setData={setPopplusList} setPageInfo={setPageInfo} sort={sort} reverse={reverse}/>}
+            {pageInfo&&<CustomPagination title='popplus' pageInfo={pageInfo} searchData={searchData} setData={setPopplusList} setPageInfo={setPageInfo} sort={sort} reverse={reverse} update={update}/>}
 
         </div>
     )

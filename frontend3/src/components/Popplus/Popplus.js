@@ -37,6 +37,10 @@ export default function Popplus(tab){
         console.log(reverse)
     },[update, tab, reverse])
 
+    useEffect(() => {
+        setSearchData('')
+    }, [tab])
+
     useEffect(()=>{
         axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
         .then(function(res){

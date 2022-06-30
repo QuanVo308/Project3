@@ -25,17 +25,21 @@ export default function Pop({tab}){
 
     useEffect(() => { 
         const getPop = async()=>{
-            let res = await axios.get('http://127.0.0.1:8000/api/pop/')
+            let res = await axios.get(`http://127.0.0.1:8000/api/pop/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
             setPopList(res.data.results)
             setPageInfo(res.data)
         }
         getPop()
-    },[update, tab])
+    },[update, tab, reverse])
+
+    useEffect(() => {
+        setSearchData('')
+    }, [tab])
 
     useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/searchpop/',{params:{'search': searchData}})
+        axios.get(`http://127.0.0.1:8000/api/pop/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
         .then(function(res){
-            setPopList(res.data.data)
+            setPopList(res.data.results)
         });
     },[searchData])
 
@@ -63,6 +67,15 @@ export default function Pop({tab}){
         setShowDelete(false)
     }
 
+    const handleSort = () => {
+        if (reverse == 0){
+            setReverse(1)
+        } else {
+            setReverse(0)
+        }
+        setUpdate(prev => !prev)
+    }
+
     return(
         <div>
             <div className={styles.AddSearch}>
@@ -70,11 +83,12 @@ export default function Pop({tab}){
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Pop</Button>
                 </div>
                 <div className={styles.btnSearch}>
-                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value)}} />
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value); setUpdate(prev => !prev)}} />
                     <Search />
                 </div>
             </div>
             <div>
+            <button onClick={handleSort}>Test</button>
                 <AddPop show={showAdd} setShow={setShowAdd} setUpdate={setUpdate} />
                 {updateData?
                 <UpdatePop show={showUpdate} setShow={setShowUpdate} updateData={updateData} setUpdate={setUpdate} />
@@ -133,7 +147,7 @@ export default function Pop({tab}){
                     ))}
                 </Table>
             </div>
-            {pageInfo&&<CustomPagination title='pop' pageInfo={pageInfo} searchData={searchData} setData={setPopList} setPageInfo={setPageInfo} sort={sort} reverse={reverse}/>}
+            {pageInfo&&<CustomPagination title='pop' pageInfo={pageInfo} searchData={searchData} setData={setPopList} setPageInfo={setPageInfo} sort={sort} reverse={reverse} update={update}/>}
         </div>
     )
 }

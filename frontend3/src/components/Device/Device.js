@@ -32,6 +32,10 @@ export default function Device({tab}){
         getDevice()
     },[update, tab])
 
+    useEffect(() => {
+        setSearchData('')
+    }, [tab])
+
     useEffect(()=>{
         axios.get('http://127.0.0.1:8000/api/searchdevice/',{params:{'search': searchData}})
         .then(function(res){

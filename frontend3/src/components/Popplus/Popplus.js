@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import {Button, Table, Modal} from 'react-bootstrap'
-import {ArrowClockwise, Search} from 'react-bootstrap-icons'
+import {Button, Table, Modal, Pagination } from 'react-bootstrap'
+import {Search} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 import AddPopplus from './AddPopplus'
 import UpdatePopplus from './UpdatePopplus'
@@ -122,6 +122,7 @@ export default function Popplus(tab){
                             </td>
                         </tr>
                     </tbody>
+                    
                     ))}
                 </Table>
             </div>

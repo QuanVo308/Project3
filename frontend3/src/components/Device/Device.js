@@ -19,6 +19,8 @@ export default function Device({tab}){
     const [updateData, setUpdateData] = useState()
     const [searchData, setSearchData] = useState()
     const [pageInfo, setPageInfo] = useState()
+    const [sort, setSort] = useState('id')
+    const [reverse, setReverse] = useState(0)
 
 
     useEffect(() => { 
@@ -135,7 +137,7 @@ export default function Device({tab}){
                     ))}
                 </Table>
             </div>
-            {pageInfo&&<CustomPagination title='device' pageInfo={pageInfo} setData={setDeviceList} setPageInfo={setPageInfo}/>}
+            {pageInfo&&<CustomPagination title='device' pageInfo={pageInfo} setData={setDeviceList} searchData={searchData} setPageInfo={setPageInfo} sort={sort} reverse={reverse}/>}
         </div>
     )
 }

@@ -4,7 +4,7 @@ import axios from 'axios'
 import styles from './CustomPagination.module.scss'
 
 
-function CustomPagination({title, pageInfo, setData, setPageInfo}) {
+function CustomPagination({title, pageInfo, setData, setPageInfo, searchData, sort, reverse}) {
 
     // const [currentPage, setCurrentPage] = useState()
     
@@ -23,7 +23,7 @@ function CustomPagination({title, pageInfo, setData, setPageInfo}) {
             value = pageInfo.maxPage
         }
         console.log(value)
-        axios.get(`http://127.0.0.1:8000/api/${title}/?page=${value}`)
+        axios.get(`http://127.0.0.1:8000/api/${title}/search/?search=${searchData}&page=${value}&sort=${sort}&reverse=${-1}`)
         .then(function (res) {
             setData(res.data.results)
             setPageInfo(res.data)

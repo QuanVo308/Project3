@@ -19,6 +19,8 @@ export default function Pop({tab}){
     const [updateData, setUpdateData] = useState()
     const [searchData, setSearchData] = useState()
     const [pageInfo, setPageInfo] = useState()
+    const [sort, setSort] = useState('id')
+    const [reverse, setReverse] = useState(0)
 
 
     useEffect(() => { 
@@ -131,7 +133,7 @@ export default function Pop({tab}){
                     ))}
                 </Table>
             </div>
-            {pageInfo&&<CustomPagination title='pop' pageInfo={pageInfo} setData={setPopList} setPageInfo={setPageInfo}/>}
+            {pageInfo&&<CustomPagination title='pop' pageInfo={pageInfo} searchData={searchData} setData={setPopList} setPageInfo={setPageInfo} sort={sort} reverse={reverse}/>}
         </div>
     )
 }

@@ -1,21 +1,43 @@
+import { useEffect, useState } from 'react';
 import {Pagination} from 'react-bootstrap';
+import axios from 'axios'
+import styles from './CustomPagination.module.scss'
 
 
-function CustomPagination(pageInfo) {
-    console.log('pageInfo',pageInfo)
-    // let active = 2;
-    let items = [];
-    const maxPage = pageInfo.max_page
-    for (let number = 1; number <= maxPage; number++) {
-        items.push(
-            <Pagination.Item key={number} active={number === pageInfo.current_page}>
-                {number}
-            </Pagination.Item>,
-        );
+function CustomPagination({title, pageInfo, setData, setPageInfo}) {
+
+    // const [currentPage, setCurrentPage] = useState()
+    
+    let pageNumber = [];
+    let maxPage = pageInfo.max_page
+        for (let number = 1; number <= maxPage; number++) {
+            pageNumber.push(number);
+        }
+
+    const handleChangePage = (value) => {
+        // const value = e.target.text
+        console.log(value)
+        axios.get(`http://127.0.0.1:8000/api/${title}/?page=${value}`)
+        .then(function (res) {
+            setData(res.data.results)
+            setPageInfo(res.data)
+          })
     }
+        
+
     return ( 
-        <div>
-            {items&&<Pagination>{items}</Pagination>}
+        <div className={styles.divPagination}>
+            <Pagination >
+                <Pagination.First key={1} onClick={()=>{handleChangePage(1)}}>First</Pagination.First>
+                <Pagination.Prev></Pagination.Prev>
+                {pageNumber.map(number => (
+                    <Pagination.Item key={number} active={number === pageInfo.current_page} onClick={()=>handleChangePage(number)}>
+                        {number}
+                    </Pagination.Item>
+                ))}
+                <Pagination.Next></Pagination.Next>
+                <Pagination.Last key={maxPage} onClick={(e)=>{handleChangePage(maxPage)}}>Last</Pagination.Last>
+            </Pagination>
         </div>
     );
 }

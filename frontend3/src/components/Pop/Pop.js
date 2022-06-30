@@ -5,6 +5,8 @@ import {Search} from 'react-bootstrap-icons'
 import styles from './Pop.module.scss'
 import AddPop from './AddPop'
 import UpdatePop from './UpdatePop'
+import CustomPagination from '../CustomPagination/CustomPagination'
+
 
 export default function Pop({tab}){
 
@@ -16,11 +18,14 @@ export default function Pop({tab}){
     const [deleteData, setDeleteData] = useState(false)
     const [updateData, setUpdateData] = useState()
     const [searchData, setSearchData] = useState()
+    const [pageInfo, setPageInfo] = useState()
+
 
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get('http://127.0.0.1:8000/api/pop/')
             setPopList(res.data.results)
+            setPageInfo(res.data)
         }
         getPop()
     },[update, tab])
@@ -122,10 +127,11 @@ export default function Pop({tab}){
                                 <Button variant="danger" onClick={()=>{handleShowDelete(); setDeleteData(data.id)}}> Delete</Button>
                             </td>
                         </tr>
-                    </tbody>
+                        </tbody>
                     ))}
                 </Table>
             </div>
+            {pageInfo&&<CustomPagination title='pop' pageInfo={pageInfo} setData={setPopList} setPageInfo={setPageInfo}/>}
         </div>
     )
 }

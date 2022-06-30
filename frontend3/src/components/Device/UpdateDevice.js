@@ -22,7 +22,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
     }, [])
 
     useEffect(()=>{
-        console.log(updateData)
+        // console.log(updateData)
         setInputUpdate(updateData)
         getProvince(updateData.area_name)
         getBranch(updateData.province)
@@ -98,81 +98,18 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
         // var b= inputUpdate['brand']
         // var t= inputUpdate['type']
         // var p= inputUpdate['pop']
+        if( name == 'tnew'){
+            axios.get('http://127.0.0.1:8000/api/powerdeviceupdate/', {params:{
+                'tnew': event.target.value,
+                'pop': inputUpdate['pop'],
+            }})
+            .then( (res) => {
+                // console.log(res)
+                setInputUpdate(values => ({...values, 'subnet': res.data.subnet, 'gateway': res.data.gateway}))
+            })
+        }
 
-        setInputUpdate(values => ({...values, [name]: value}))
-        // console.log("change", name, value)
-        // resetName()
-        // axios.get('http://127.0.0.1:8000/api/devicename/', {params:{
-        //         'role': r,
-        //         'name': n,
-        //         'brand': b,
-        //         'type': t,
-        //         'pop': p
-        //     }})
-        //     .then(function(res){
-        //         // console.log("res", res.data)
-        //         console.log("input", inputUpdate)
-        //         setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        //         setUpdate(prev => !prev)
-        //     })
-
-        // if( name == 'brand'){
-        //     axios.get(`http://127.0.0.1:8000/api/brand/${value}/`)
-        //     .then( (res) => {
-        //         // console.log("brandname", res.data.name)
-        //         setInputUpdate(values => ({...values, 'brand_name': res.data.name}))
-        //         b = res.data.id
-        //         axios.get('http://127.0.0.1:8000/api/devicename/', {params:{
-        //             'role': r,
-        //             'name': n,
-        //             'brand': b,
-        //             'type': t,
-        //             'pop': p
-        //         }})
-        //         .then(function(res){
-        //             console.log("res", res.data)
-        //             console.log("input", inputUpdate)
-        //             setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        //             // setUpdate(prev => !prev)
-        //         })
-                
-        //     })
-        // }
-
-        // if( name == 'type'){
-        //     t = value
-        //     axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
-        //         'role': r,
-        //         'name': n,
-        //         'brand': b,
-        //         'type': t,
-        //         'pop': p
-        //     }})
-        //     .then(function(res){
-        //         console.log("res", res.data)
-        //         console.log("input", inputUpdate)
-        //         setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        //         // setUpdate(prev => !prev)
-        //     })
-        // }
-
-        // if( name == 'pop'){
-        //     p = value
-        //     axios.get('http://127.0.0.1:8000/api/devicename/', {params:{'pop': inputUpdate['pop'],
-        //         'role': r,
-        //         'name': n,
-        //         'brand': b,
-        //         'type': t,
-        //         'pop': p
-        //     }})
-        //     .then(function(res){
-        //         console.log("res", res.data)
-        //         console.log("input", inputUpdate)
-        //         setInputUpdate(prev => ({...prev, 'name': res.data.name}))
-        //         // setUpdate(prev => !prev)
-        //     })
-        // // console.log("rn", rn)
-        // // setRn(prev => !prev)
+        setInputUpdate(values => ({...values, [name]: value})) 
     }
 
     const resetName = () => {
@@ -198,18 +135,18 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
 
     const handleUpdate = () => {
         console.log('inputUpdate', inputUpdate)
-        // axios({
-        //     method: "put",
-        //     url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
-        //     data: inputUpdate,
-        //     headers: { "Content-Type": "multipart/form-data" },
-        //   })
-        //   .then( (res) => {
-        //     console.log('update', res)
-        //     setUpdate(prev => !prev)
-        //   }
-        //   )
-        // setShow(false)
+        axios({
+            method: "put",
+            url: `http://127.0.0.1:8000/api/device/${inputUpdate['id']}/`,
+            data: inputUpdate,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then( (res) => {
+            console.log('update', res)
+            setUpdate(prev => !prev)
+          }
+          )
+        setShow(false)
     }
 
     const handleClose = () => {
@@ -290,8 +227,8 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <Form onChange={handleChangeUpdate}>
                                 {['radio'].map((type) => (
                                     <div key={`inline-${type}`} className="mb-3">
-                                        <Form.Check inline label="New" name="tnew" value='1' type={type} id={`inline-${type}-1`} defaultChecked={inputUpdate.tnew == 1 ? inputUpdate.tnew : null} />
-                                        <Form.Check inline label="Old" name="tnew" value='0' type={type} id={`inline-${type}-2`} defaultChecked={inputUpdate.tnew == 0 ? inputUpdate.tnew : null} />
+                                        <Form.Check inline label="New" name="tnew" value='1' type={type} id={`inline-${type}-1`} defaultChecked={updateData.tnew == 1 ? true : false} />
+                                        <Form.Check inline label="Old" name="tnew" value='0' type={type} id={`inline-${type}-2`} defaultChecked={updateData.tnew == 0 ? true : false} />
                                     </div>
                                 ))}
                             </Form>

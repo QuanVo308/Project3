@@ -25,7 +25,7 @@ export default function Pop({tab}){
 
     useEffect(() => { 
         const getPop = async()=>{
-            let res = await axios.get(`http://127.0.0.1:8000/api/pop/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
+            let res = await axios.get(`http://127.0.0.1:8000/api/pop/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
             setPopList(res.data.results)
             setPageInfo(res.data)
         }

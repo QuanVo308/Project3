@@ -25,22 +25,22 @@ export default function Device({tab}){
 
     useEffect(() => { 
         const getDevice = async()=>{
-            let res = await axios.get('http://127.0.0.1:8000/api/device/')
+            let res = await axios.get(`http://127.0.0.1:8000/api/device/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
             setDeviceList(res.data.results)
             setPageInfo(res.data)
         }
         getDevice()
-    },[update, tab])
+    },[update, tab, reverse])
 
     useEffect(() => {
         setSearchData('')
     }, [tab])
 
     useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/searchdevice/',{params:{'search': searchData}})
+        axios.get(`http://127.0.0.1:8000/api/device/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
         .then(function(res){
             // console.log(res)
-            setDeviceList(res.data.data)
+            setDeviceList(res.data.results)
         });
     },[searchData])
 
@@ -73,6 +73,15 @@ export default function Device({tab}){
         setShowDelete(false)
     }
 
+    const handleSort = () => {
+        if (reverse == 0){
+            setReverse(1)
+        } else {
+            setReverse(0)
+        }
+        setUpdate(prev => !prev)
+    }
+
     return(
         <div>
             <div className={styles.AddSearch}>
@@ -80,11 +89,12 @@ export default function Device({tab}){
                     <Button variant="primary" onClick={()=>{handleShowAdd()}}> Add Device</Button>
                 </div>
                 <div className={styles.btnSearch}>
-                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value)}}/>
+                    <input className={styles.SearchInput} type='text' placeholder='Search...' value={searchData} onChange={(e) => {setSearchData(e.target.value); setUpdate(prev => !prev)}}/>
                     <Search />
                 </div>
             </div>
             <div>
+                <button onClick={handleSort}>Test</button>
                 <AddDevice show={showAdd} setShow={setShowAdd} setUpdate={setUpdate} />
                 
                 {updateData?
@@ -141,7 +151,7 @@ export default function Device({tab}){
                     ))}
                 </Table>
             </div>
-            {pageInfo&&<CustomPagination title='device' pageInfo={pageInfo} setData={setDeviceList} searchData={searchData} setPageInfo={setPageInfo} sort={sort} reverse={reverse}/>}
+            {pageInfo&&<CustomPagination title='device' pageInfo={pageInfo} setData={setDeviceList} searchData={searchData} setPageInfo={setPageInfo} sort={sort} reverse={reverse} update={update}/>}
         </div>
     )
 }

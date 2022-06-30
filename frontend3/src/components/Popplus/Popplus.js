@@ -28,13 +28,13 @@ export default function Popplus(tab){
 
     useEffect(() => { 
         const getPopplus = async()=>{
-            let res = await axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${searchData}&page=${pageInfo ? pageInfo.current_page : 1}&sort=${sort}&reverse=${reverse}`)
+            let res = await axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
             // console.log(res)
             setPopplusList(res.data.results)
             setPageInfo(res.data)
         }
         getPopplus()
-        console.log(reverse)
+        // console.log(reverse)
     },[update, tab, reverse])
 
     useEffect(() => {

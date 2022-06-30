@@ -16,6 +16,12 @@ function CustomPagination({title, pageInfo, setData, setPageInfo}) {
 
     const handleChangePage = (value) => {
         // const value = e.target.text
+        if (value < 1){
+            value = 1
+        }
+        if (value > pageInfo.maxPage){
+            value = pageInfo.maxPage
+        }
         console.log(value)
         axios.get(`http://127.0.0.1:8000/api/${title}/?page=${value}`)
         .then(function (res) {
@@ -29,13 +35,13 @@ function CustomPagination({title, pageInfo, setData, setPageInfo}) {
         <div className={styles.divPagination}>
             <Pagination >
                 <Pagination.First key={1} onClick={()=>{handleChangePage(1)}}>First</Pagination.First>
-                <Pagination.Prev></Pagination.Prev>
+                <Pagination.Prev onClick={()=>handleChangePage(pageInfo.current_page - 1)}></Pagination.Prev>
                 {pageNumber.map(number => (
                     <Pagination.Item key={number} active={number === pageInfo.current_page} onClick={()=>handleChangePage(number)}>
                         {number}
                     </Pagination.Item>
                 ))}
-                <Pagination.Next></Pagination.Next>
+                <Pagination.Next onClick={()=>handleChangePage(pageInfo.current_page + 1)}></Pagination.Next>
                 <Pagination.Last key={maxPage} onClick={(e)=>{handleChangePage(maxPage)}}>Last</Pagination.Last>
             </Pagination>
         </div>

@@ -248,6 +248,14 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         # queries = [Q(**{f.name: 'H'}) for f in fields]
         queries = [Q(('%s__icontains' % f.name, value)) for f in fields]
         queries.append(Q(branch__name = value))
+
+        sort = 'id'
+        reverse = False
+        try:
+            sort = request.GET['sort']
+            reverse = int(request.GET['reverse'])
+        except:
+            None
         
         try:
             va = int(value)
@@ -263,8 +271,16 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         
         for query in queries:
             qs = qs | query
-        print( qs)
-        province = PopPlus.objects.filter(qs).values()
+        # print( qs)
+        province = PopPlus.objects.filter(qs)
+
+        for i in province:
+            i.branch_name = Branch.objects.filter(id = i.branch.id)[0].name
+            i.province = i.branch.province.id
+            i.province_name = i.branch.province.name
+            i.area = i.branch.province.area.id
+            i.area_name = i.branch.province.area.name
+        province = sorted(province, key=operator.attrgetter(sort), reverse=int(reverse))
 
         # print(province)
         page = self.paginate_queryset(province)
@@ -280,7 +296,24 @@ class PopPlusViewSet(viewsets.ModelViewSet):
 
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
+        sort = 'id'
+        reverse = False
+        try:
+            sort = request.GET['sort']
+            reverse = int(request.GET['reverse'])
+        except:
+            None
+
+        for i in queryset:
+            i.branch_name = Branch.objects.filter(id = i.branch.id)[0].name
+            i.province = i.branch.province.id
+            i.province_name = i.branch.province.name
+            i.area = i.branch.province.area.id
+            i.area_name = i.branch.province.area.name
+        # print(type(queryset))
+        # queryset = self.filter_queryset(queryset)
+        queryset = sorted(queryset, key=operator.attrgetter(sort), reverse=int(reverse))
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -415,7 +448,7 @@ class PopViewSet(viewsets.ModelViewSet):
             i.popPlus_name = PopPlus.objects.filter(id = i.popPlus.id)[0].name
             i.branch_name = Branch.objects.filter(id = i.popPlus.branch.id)[0].name
             i.area_name = Area.objects.filter(id = i.province.area.id)[0].name
-        print(type(queryset))
+        # print(type(queryset))
         # queryset = self.filter_queryset(queryset)
         queryset = sorted(queryset, key=operator.attrgetter(sort), reverse=int(reverse))
         

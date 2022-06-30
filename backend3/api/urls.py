@@ -32,4 +32,5 @@ urlpatterns = [
     path('searchdevice/', views.search_device, name='search_device'),
     path('searchpop/', views.search_pop, name='search_pop'),
     path('searchpopp/', views.search_popp, name='search_popp'),
+    path('powerdeviceupdate/', views.get_power_ip_api, name='update_power_device'),
 ]

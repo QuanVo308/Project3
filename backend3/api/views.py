@@ -153,6 +153,20 @@ def get_device_name_api(request):
     name = get_device_name(device)
     return JsonResponse({'name': name, 'status': status.HTTP_201_CREATED})
 
+def get_power_ip_api(request):
+    device = Device()
+    subnet = ''
+    gateway = ''
+    device.pop = Pop.objects.filter(id = int(request.GET['pop']))[0]
+    device.role = 'POWER'
+    if int(request.GET['tnew']) == 1:
+        subnet = '255.255.255.248'
+        gateway = get_device_gateway(device, True)
+    else:
+        subnet = '255.255.255.0'
+        gateway = get_device_gateway(device, False)
+    return JsonResponse({'subnet': subnet, 'gateway': gateway, 'status': status.HTTP_201_CREATED})
+
 
 def update_pop_all(request):
     update_pops()

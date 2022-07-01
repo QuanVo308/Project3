@@ -301,6 +301,8 @@ class PopPlusViewSet(viewsets.ModelViewSet):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             # print(serializer.data)
+            serializer = self.add_field(serializer)
+
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(province, many=True)
@@ -430,18 +432,13 @@ class PopViewSet(viewsets.ModelViewSet):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             # print(serializer.data)
-            for i in serializer.data:
-                i['popPlus_name'] = PopPlus.objects.filter(id = i['popPlus'])[0].name
-                i['province_name'] = Province.objects.filter(id = i['province'])[0].name
+            serializer = self.add_field(serializer)
             return self.get_paginated_response(serializer.data)
 
         # p = list(province)
         serializer = self.get_serializer(province, many=True)
+        # serializer = self.add_field(serializer)
         serializer = self.add_field(serializer)
-        for i in serializer.data:
-            i['popPlus_name'] = PopPlus.objects.filter(id = i['popPlus'])[0].name
-            i['province_name'] = Province.objects.filter(id = i['province'])[0].name
-
 
         # print(province)
     

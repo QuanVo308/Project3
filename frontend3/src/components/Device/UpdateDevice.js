@@ -166,7 +166,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Vùng: </label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.area_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.area_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -174,7 +174,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
                                 ))}
                             </select>
                             
@@ -183,7 +183,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.branch_name} >{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.branch_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -191,7 +191,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Popplus:</label>
                             <select name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
                                 {popplusList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.popPlus_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.popPlus_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -199,7 +199,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Pop:</label>
                             <select name='pop' onChange={handleChangeUpdate}>
                                 {popList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.pop_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.pop_name}>{data.name}</option>
                                 ))}
                             </select>
                             
@@ -210,7 +210,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Role:</label>
                             <select defaultValue={inputUpdate.role} name='role' onChange={(e)=>{getBrand(e.target.value); handleChangeUpdate(e)}} disabled>
                                 {['AGG','OLT','SW-BB','POWER'].map(data => (
-                                    <option value={data}>{data}</option>
+                                    <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>
@@ -218,7 +218,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Type:</label>
                             <select defaultValue={inputUpdate.type} name='type' onChange={handleChangeUpdate}>
                                 {['DI','DA','CE'].map(data => (
-                                <option value={data}>{data}</option>
+                                <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>}
@@ -237,7 +237,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Brand:</label>
                             <select defaultValue={inputUpdate.brand_name} name='brand' onChange={handleChangeUpdate}>
                                 {brandList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.brand_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.brand_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>

@@ -168,7 +168,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Vùng: </label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.area_name} >{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.area_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -176,7 +176,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -184,7 +184,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.branch_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.branch_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -192,7 +192,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Popplus:</label>
                             <select name='popPlus' onChange={handleChangeUpdate}>
                                 {popplusList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.popPlus_name} >{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.popPlus_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -216,7 +216,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Metro:</label>
                             <select defaultValue={inputUpdate.metro} name='metro' onChange={handleChangeUpdate}>
                                 {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
-                                    <option value={data}>{data}</option>
+                                    <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>

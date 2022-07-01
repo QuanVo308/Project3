@@ -170,7 +170,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                             <label>Vùng:</label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}} >
                                 {areaList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.area_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.area_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -178,7 +178,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}} >
                                 {provinceList.map(data => (
-                                    <option value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -186,7 +186,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{handleChangeUpdate(e); updateBranch(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id} selected={inputUpdate.branch_name===data.name}>{data.name}</option>
+                                    <option key={data.id} value={data.id} selected={inputUpdate.branch_name===data.name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -207,7 +207,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                             <label>Area OSPF:</label>
                             <select defaultValue={updateData.area_OSPF} name='area_OSPF' onChange={handleChangeUpdate}>
                                 {[1,2,3,4,5,6,7,8,9].map(data => (
-                                    <option value={data}>{data}</option>
+                                    <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>
@@ -227,7 +227,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
                             <label>vlan PPPoE:</label>
                             <select defaultValue={updateData.vlan_PPPoE} name='vlan_PPPoE' onChange={handleChangeUpdate}>
                                 {[30,31,32,33,34,35,36,37,38,39].map(data => (
-                                    <option value={data}>{data}</option>
+                                    <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>

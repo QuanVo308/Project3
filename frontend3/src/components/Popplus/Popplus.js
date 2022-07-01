@@ -132,13 +132,13 @@ export default function Popplus(tab){
                     <thead>
                         <tr>
                             <th>ID {reverse == 1 && sort == 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
-                            <th>Name <SortDown onClick={()=>{handleClickSort('name')}}/></th>
-                            <th>area_OSPF <SortDown onClick={()=>{handleClickSort('area_OSPF')}}/></th>
-                            <th>octet2_ip_OSPF_MGMT <SortDown onClick={(e)=>{handleClickSort('octet2_ip_OSPF_MGMT')}}/></th>
-                            <th>octet2_ip_MGMT <SortDown onClick={()=>{handleClickSort('octet2_ip_MGMT')}}/></th>
-                            <th>octet3_ip_MGMT <SortDown onClick={()=>{handleClickSort('octet3_ip_MGMT')}}/></th>
-                            <th>vlan_PPPoE <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/></th>
-                            <th>branch <SortDown onClick={()=>{handleClickSort('branch_name')}}/></th>
+                            <th>Name {reverse == 1 && sort == 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
+                            <th>area_OSPF {reverse == 1 && sort == 'area_OSPF' ? <SortUp onClick={()=>{handleClickSort('area_OSPF')}}/> : <SortDown onClick={()=>{handleClickSort('area_OSPF')}}/>}</th>
+                            <th>octet2_ip_OSPF_MGMT {reverse == 1 && sort == 'octet2_ip_OSPF_MGMT' ? <SortUp onClick={()=>{handleClickSort('octet2_ip_OSPF_MGMT')}}/> : <SortDown onClick={()=>{handleClickSort('octet2_ip_OSPF_MGMT')}}/>}</th>
+                            <th>octet2_ip_MGMT {reverse == 1 && sort == 'octet2_ip_MGMT' ? <SortUp onClick={()=>{handleClickSort('octet2_ip_MGMT')}}/> : <SortDown onClick={()=>{handleClickSort('octet2_ip_MGMT')}}/>}</th>
+                            <th>octet3_ip_MGMT {reverse == 1 && sort == 'octet3_ip_MGMT' ? <SortUp onClick={()=>{handleClickSort('octet3_ip_MGMT')}}/> : <SortDown onClick={()=>{handleClickSort('octet3_ip_MGMT')}}/>}</th>
+                            <th>vlan_PPPoE {reverse == 1 && sort == 'vlan_PPPoE' ? <SortUp onClick={()=>{handleClickSort('vlan_PPPoE')}}/> : <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/>}</th>
+                            <th>branch {reverse == 1 && sort == 'branch_name' ? <SortUp onClick={()=>{handleClickSort('branch_name')}}/> : <SortDown onClick={()=>{handleClickSort('branch_name')}}/>}</th>
                             <th>Action</th>
                         </tr>
                     </thead>

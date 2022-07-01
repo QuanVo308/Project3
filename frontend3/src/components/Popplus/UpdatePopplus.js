@@ -20,7 +20,7 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
 
     useEffect( () => {
         let data = updateData
-        // console.log("updateData", updateData)
+        console.log("updateData", updateData)
         setInputUpdate(0)
         const tail1 = data['name'][data['name'].length - 4]
         const tail2 = data['name'].substring(data['name'].length - 3, data['name'].length)

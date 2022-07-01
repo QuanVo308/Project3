@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal } from 'react-bootstrap'
-import {Search, SortDown} from 'react-bootstrap-icons'
+import {Search, SortDown, SortUp} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 import AddPopplus from './AddPopplus'
 import UpdatePopplus from './UpdatePopplus'
@@ -19,7 +19,7 @@ export default function Popplus(tab){
     const [searchData, setSearchData] = useState('')
     const [pageInfo, setPageInfo] = useState()
     const [sort, setSort] = useState('id')
-    const [reverse, setReverse] = useState(0)
+    const [reverse, setReverse] = useState()
 
     // setReverse(prev => !prev)
     // setSort()
@@ -84,6 +84,13 @@ export default function Popplus(tab){
 
     const handleClickSort = (titleSort) => {
         setSort(titleSort)
+        if (reverse == 0){
+            setReverse(1)
+        } else {
+            setReverse(0)
+        }
+        console.log('check', titleSort)
+        setUpdate(prev => !prev)
     }
 
     return(
@@ -124,14 +131,14 @@ export default function Popplus(tab){
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID <SortDown onClick={()=>{handleClickSort('id')}}/></th>
+                            <th>ID {reverse == 1 && sort == 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
                             <th>Name <SortDown onClick={()=>{handleClickSort('name')}}/></th>
                             <th>area_OSPF <SortDown onClick={()=>{handleClickSort('area_OSPF')}}/></th>
                             <th>octet2_ip_OSPF_MGMT <SortDown onClick={(e)=>{handleClickSort('octet2_ip_OSPF_MGMT')}}/></th>
                             <th>octet2_ip_MGMT <SortDown onClick={()=>{handleClickSort('octet2_ip_MGMT')}}/></th>
                             <th>octet3_ip_MGMT <SortDown onClick={()=>{handleClickSort('octet3_ip_MGMT')}}/></th>
                             <th>vlan_PPPoE <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/></th>
-                            <th>branch <SortDown onClick={()=>{handleClickSort('branch')}}/></th>
+                            <th>branch <SortDown onClick={()=>{handleClickSort('branch_name')}}/></th>
                             <th>Action</th>
                         </tr>
                     </thead>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal } from 'react-bootstrap'
-import {Search} from 'react-bootstrap-icons'
+import {Search, SortDown} from 'react-bootstrap-icons'
 import styles from './Popplus.module.scss'
 import AddPopplus from './AddPopplus'
 import UpdatePopplus from './UpdatePopplus'
@@ -82,6 +82,10 @@ export default function Popplus(tab){
         setUpdate(prev => !prev)
     }
 
+    const handleClickSort = (titleSort) => {
+        setSort(titleSort)
+    }
+
     return(
         <div>    
             <div className={styles.AddSearch}>
@@ -120,14 +124,14 @@ export default function Popplus(tab){
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>area_OSPF</th>
-                            <th>octet2_ip_OSPF_MGMT</th>
-                            <th>octet2_ip_MGMT </th>
-                            <th>octet3_ip_MGMT </th>
-                            <th>vlan_PPPoE </th>
-                            <th>branch</th>
+                            <th>ID <SortDown onClick={()=>{handleClickSort('id')}}/></th>
+                            <th>Name <SortDown onClick={()=>{handleClickSort('name')}}/></th>
+                            <th>area_OSPF <SortDown onClick={()=>{handleClickSort('area_OSPF')}}/></th>
+                            <th>octet2_ip_OSPF_MGMT <SortDown onClick={(e)=>{handleClickSort('octet2_ip_OSPF_MGMT')}}/></th>
+                            <th>octet2_ip_MGMT <SortDown onClick={()=>{handleClickSort('octet2_ip_MGMT')}}/></th>
+                            <th>octet3_ip_MGMT <SortDown onClick={()=>{handleClickSort('octet3_ip_MGMT')}}/></th>
+                            <th>vlan_PPPoE <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/></th>
+                            <th>branch <SortDown onClick={()=>{handleClickSort('branch')}}/></th>
                             <th>Action</th>
                         </tr>
                     </thead>

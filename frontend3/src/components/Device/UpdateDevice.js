@@ -48,7 +48,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
             if(!br){
 
                 getPopplus(res.data.data[0].id, false)
-                if(res.data.data.length != 0){
+                if(res.data.data.length !== 0){
                 setInputUpdate(prev => ({...prev, "branch": res.data.data[0].id, "branch_name": res.data.data[0].name}))}
             }
         })
@@ -58,12 +58,12 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'id': data}})
         .then(function(res){
             setPopplusList(res.data.data)
-            if(res.data.data.length != 0){
+            if(res.data.data.length !== 0){
             setInputUpdate(prev => ({...prev, "popPlus": res.data.data[0].id, "popPlus_name": res.data.data[0].name}))}
             
             if(!br){
                 
-                if(res.data.data.length != 0){
+                if(res.data.data.length !== 0){
                     getPop(res.data.data[0].id)
                 }
             }
@@ -78,7 +78,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
         axios.get('http://127.0.0.1:8000/api/poppopplus', {params:{'id': data}})
         .then(function(res){
             setPopList(res.data.data)
-            if(res.data.data.length != 0){
+            if(res.data.data.length !== 0){
             setInputUpdate(prev => ({...prev, "pop": res.data.data[0].id, "pop_name": res.data.data[0].name}))}
         })
     }
@@ -98,7 +98,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
         // var b= inputUpdate['brand']
         // var t= inputUpdate['type']
         // var p= inputUpdate['pop']
-        if( name == 'tnew'){
+        if( name === 'tnew'){
             axios.get('http://127.0.0.1:8000/api/powerdeviceupdate/', {params:{
                 'tnew': event.target.value,
                 'pop': inputUpdate['pop'],
@@ -166,7 +166,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Vùng: </label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.area_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.area_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -174,7 +174,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.province_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
                                 ))}
                             </select>
                             
@@ -183,7 +183,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.branch_name} >{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.branch_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -191,7 +191,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Popplus:</label>
                             <select name='popp' onChange={(e)=>{getPop(e.target.value); handleChangeUpdate(e)}}>
                                 {popplusList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.popPlus_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.popPlus_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -199,7 +199,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Pop:</label>
                             <select name='pop' onChange={handleChangeUpdate}>
                                 {popList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.pop_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.pop_name}>{data.name}</option>
                                 ))}
                             </select>
                             
@@ -214,7 +214,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                                 ))}
                             </select>
                         </div>
-                        {inputUpdate.role == 'AGG' && <div>
+                        {inputUpdate.role === 'AGG' && <div>
                             <label>Type:</label>
                             <select defaultValue={inputUpdate.type} name='type' onChange={handleChangeUpdate}>
                                 {['DI','DA','CE'].map(data => (
@@ -222,13 +222,13 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                                 ))}
                             </select>
                         </div>}
-                        {inputUpdate.role == 'POWER' && <div>
+                        {inputUpdate.role === 'POWER' && <div>
                             <label>IP Type:</label>
                             <Form onChange={handleChangeUpdate}>
                                 {['radio'].map((type) => (
                                     <div key={`inline-${type}`} className="mb-3">
-                                        <Form.Check inline label="New" name="tnew" value='1' type={type} id={`inline-${type}-1`} defaultChecked={updateData.tnew == 1 ? true : false} />
-                                        <Form.Check inline label="Old" name="tnew" value='0' type={type} id={`inline-${type}-2`} defaultChecked={updateData.tnew == 0 ? true : false} />
+                                        <Form.Check inline label="New" name="tnew" value='1' type={type} id={`inline-${type}-1`} defaultChecked={updateData.tnew === 1 ? true : false} />
+                                        <Form.Check inline label="Old" name="tnew" value='0' type={type} id={`inline-${type}-2`} defaultChecked={updateData.tnew === 0 ? true : false} />
                                     </div>
                                 ))}
                             </Form>
@@ -237,7 +237,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
                             <label>Brand:</label>
                             <select defaultValue={inputUpdate.brand_name} name='brand' onChange={handleChangeUpdate}>
                                 {brandList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.brand_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.brand_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>

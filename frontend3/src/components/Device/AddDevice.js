@@ -156,7 +156,7 @@ function AddDevice({show, setShow, setUpdate}) {
                                 ))}
                             </select>
                         </div>
-                        {input.role == 'AGG' && <div>
+                        {input.role === 'AGG' && <div>
                             <label>Type:</label>
                             <select name='type' onChange={handleChange}>
                                 <option>-</option>
@@ -165,7 +165,7 @@ function AddDevice({show, setShow, setUpdate}) {
                                 ))}
                             </select>
                         </div>}
-                        {input.role == 'POWER' && <div>
+                        {input.role === 'POWER' && <div>
                             <label>IP Type:</label>
                             <Form onChange={handleChange}>
                                 {['radio'].map((type) => (

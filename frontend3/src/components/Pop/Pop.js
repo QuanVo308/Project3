@@ -68,18 +68,18 @@ export default function Pop({tab}){
         setShowDelete(false)
     }
 
-    const handleSort = () => {
-        if (reverse == 0){
-            setReverse(1)
-        } else {
-            setReverse(0)
-        }
-        setUpdate(prev => !prev)
-    }
+    // const handleSort = () => {
+    //     if (reverse == 0){
+    //         setReverse(1)
+    //     } else {
+    //         setReverse(0)
+    //     }
+    //     setUpdate(prev => !prev)
+    // }
 
     const handleClickSort = (titleSort) => {
         setSort(titleSort)
-        if (reverse == 0){
+        if (reverse === 0){
             setReverse(1)
         } else {
             setReverse(0)
@@ -125,15 +125,15 @@ export default function Pop({tab}){
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID {reverse == 1 && sort == 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
-                            <th>Name {reverse == 1 && sort == 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
-                            <th>Ring {reverse == 1 && sort == 'ring' ? <SortUp onClick={()=>{handleClickSort('ring')}}/> : <SortDown onClick={()=>{handleClickSort('ring')}}/>}</th>
-                            <th>Range Ip {reverse == 1 && sort == 'range_ip' ? <SortUp onClick={()=>{handleClickSort('range_ip')}}/> : <SortDown onClick={()=>{handleClickSort('range_ip')}}/>}</th>
-                            <th>Metro {reverse == 1 && sort == 'metro' ? <SortUp onClick={()=>{handleClickSort('metro')}}/> : <SortDown onClick={()=>{handleClickSort('metro')}}/>}</th>
-                            <th>sequence ring {reverse == 1 && sort == 'sequence_ring' ? <SortUp onClick={()=>{handleClickSort('sequence_ring')}}/> : <SortDown onClick={()=>{handleClickSort('sequence_ring')}}/>}</th>
-                            <th>vlan_PPPoE {reverse == 1 && sort == 'vlan_PPPoE' ? <SortUp onClick={()=>{handleClickSort('vlan_PPPoE')}}/> : <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/>}</th>
-                            <th>PopPlus {reverse == 1 && sort == 'popPlus_name' ? <SortUp onClick={()=>{handleClickSort('popPlus_name')}}/> : <SortDown onClick={()=>{handleClickSort('popPlus_name')}}/>}</th>
-                            <th>Province {reverse == 1 && sort == 'province_name' ? <SortUp onClick={()=>{handleClickSort('province_name')}}/> : <SortDown onClick={()=>{handleClickSort('province_name')}}/>}</th>
+                            <th>ID {reverse === 1 && sort === 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
+                            <th>Name {reverse === 1 && sort === 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
+                            <th>Ring {reverse === 1 && sort === 'ring' ? <SortUp onClick={()=>{handleClickSort('ring')}}/> : <SortDown onClick={()=>{handleClickSort('ring')}}/>}</th>
+                            <th>Range Ip {reverse === 1 && sort === 'range_ip' ? <SortUp onClick={()=>{handleClickSort('range_ip')}}/> : <SortDown onClick={()=>{handleClickSort('range_ip')}}/>}</th>
+                            <th>Metro {reverse === 1 && sort === 'metro' ? <SortUp onClick={()=>{handleClickSort('metro')}}/> : <SortDown onClick={()=>{handleClickSort('metro')}}/>}</th>
+                            <th>sequence ring {reverse === 1 && sort === 'sequence_ring' ? <SortUp onClick={()=>{handleClickSort('sequence_ring')}}/> : <SortDown onClick={()=>{handleClickSort('sequence_ring')}}/>}</th>
+                            <th>vlan_PPPoE {reverse === 1 && sort === 'vlan_PPPoE' ? <SortUp onClick={()=>{handleClickSort('vlan_PPPoE')}}/> : <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/>}</th>
+                            <th>PopPlus {reverse === 1 && sort === 'popPlus_name' ? <SortUp onClick={()=>{handleClickSort('popPlus_name')}}/> : <SortDown onClick={()=>{handleClickSort('popPlus_name')}}/>}</th>
+                            <th>Province {reverse === 1 && sort === 'province_name' ? <SortUp onClick={()=>{handleClickSort('province_name')}}/> : <SortDown onClick={()=>{handleClickSort('province_name')}}/>}</th>
                             <th>Action</th>
                         </tr>
                     </thead>

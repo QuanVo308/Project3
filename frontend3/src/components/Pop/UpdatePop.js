@@ -64,7 +64,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
             setPopplusList(res.data.data)
             // console.log('check1', res.data.data)
             if(!br){
-                if(res.data.data.length !=0){
+                if(res.data.data.length !==0){
                     setInputUpdate(values => ({...values, ['popPlus']: res.data.data[0].id, ['popPlus_name']: res.data.data[0].name}))
                     axios.get('http://127.0.0.1:8000/api/popname/', {params:{'popPlus': res.data.data[0].id,
                     'tail1': inputUpdate['tail1'],
@@ -105,9 +105,9 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
     const handleChangeUpdate = (event) => {
         const name = event.target.name
         var value
-        if (name == 'sequence_ring'){
+        if (name === 'sequence_ring'){
             value = checkSequenceRing(event.target.value)
-        } else if (name =='tail2') {
+        } else if (name ==='tail2') {
             value = checkTail2(event.target.value)
         } else {
             value = event.target.value
@@ -116,13 +116,13 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
         var b= inputUpdate['popPlus']
         var t1 = inputUpdate['tail1']
         var t2 = inputUpdate['tail2']
-        if (name == 'tail2'){
+        if (name === 'tail2'){
             t2 = value 
         }
-        if (name == 'tail1'){
+        if (name === 'tail1'){
             t1 = value 
         }
-        if (name == 'popPlus'){
+        if (name === 'popPlus'){
             b = value 
         }
 
@@ -168,7 +168,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Vùng: </label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value, false); handleChangeUpdate(e)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.area_name} >{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.area_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -176,7 +176,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value, false); handleChangeUpdate(e)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.province_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.province_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -184,7 +184,7 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{getPopplus(e.target.value, false); handleChangeUpdate(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.branch_name}>{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.branch_name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -192,18 +192,18 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
                             <label>Popplus:</label>
                             <select name='popPlus' onChange={handleChangeUpdate}>
                                 {popplusList.map(data => (
-                                    <option value={data.id} selected={data.name==inputUpdate.popPlus_name} >{data.name}</option>
+                                    <option value={data.id} selected={data.name===inputUpdate.popPlus_name} >{data.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
                             <label>Phần đuôi: </label>
                             <select name='tail1' onChange={handleChangeUpdate}>
-                                <option value='P' selected={'P' == inputUpdate['tail1']}>P</option>
-                                <option value='M' selected={'M' == inputUpdate['tail1']}>M</option>
-                                <option value='K' selected={'K' == inputUpdate['tail1']}>K</option>
-                                <option value='V' selected={'V' == inputUpdate['tail1']}>V</option>
-                                <option value='B' selected={'B' == inputUpdate['tail1']}>B</option>
+                                <option value='P' selected={'P' === inputUpdate['tail1']}>P</option>
+                                <option value='M' selected={'M' === inputUpdate['tail1']}>M</option>
+                                <option value='K' selected={'K' === inputUpdate['tail1']}>K</option>
+                                <option value='V' selected={'V' === inputUpdate['tail1']}>V</option>
+                                <option value='B' selected={'B' === inputUpdate['tail1']}>B</option>
                             </select>
                             <input type="number" name='tail2' placeholder='001 -> 999' min="1" value={inputUpdate['tail2']} max="999" onChange={handleChangeUpdate}
                             defaultValue={inputUpdate['tail2']}/>

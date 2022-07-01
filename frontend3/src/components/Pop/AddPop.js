@@ -41,7 +41,7 @@ function AddPop({show, setShow, setUpdate}) {
         axios.get('http://127.0.0.1:8000/api/popplusbrnach', {params:{'id': data}})
         .then(function(res){
             setPopplusList(res.data.data)
-            if(res.data.data.length != 0){
+            if(res.data.data.length !== 0){
                 setInput(prev => ({...prev, ['popPlus']: res.data.data[0].id}))
 
             }
@@ -77,9 +77,9 @@ function AddPop({show, setShow, setUpdate}) {
     const handleChange = (event) => {
         const name = event.target.name
         var value
-        if (name == 'sequence_ring'){
+        if (name === 'sequence_ring'){
             value = checkSequenceRing(event.target.value)
-        } else if (name =='tail2') {
+        } else if (name ==='tail2') {
             value = checkTail2(event.target.value)
         } else {
             value = event.target.value

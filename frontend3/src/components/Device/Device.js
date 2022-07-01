@@ -85,7 +85,7 @@ export default function Device({tab}){
 
     const handleClickSort = (titleSort) => {
         setSort(titleSort)
-        if (reverse == 0){
+        if (reverse === 0){
             setReverse(1)
         } else {
             setReverse(0)
@@ -131,14 +131,14 @@ export default function Device({tab}){
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID {reverse == 1 && sort == 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
-                            <th>Name {reverse == 1 && sort == 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
-                            <th>Role {reverse == 1 && sort == 'role' ? <SortUp onClick={()=>{handleClickSort('role')}}/> : <SortDown onClick={()=>{handleClickSort('role')}}/>}</th>
-                            <th>Ip {reverse == 1 && sort == 'ip' ? <SortUp onClick={()=>{handleClickSort('ip')}}/> : <SortDown onClick={()=>{handleClickSort('ip')}}/>}</th>
-                            <th>Pop {reverse == 1 && sort == 'pop_name' ? <SortUp onClick={()=>{handleClickSort('pop_name')}}/> : <SortDown onClick={()=>{handleClickSort('pop_name')}}/>}</th>
-                            <th>Brand {reverse == 1 && sort == 'brand_name' ? <SortUp onClick={()=>{handleClickSort('brand_name')}}/> : <SortDown onClick={()=>{handleClickSort('brand_name')}}/>}</th> 
-                            <th>Subnet {reverse == 1 && sort == 'subnet' ? <SortUp onClick={()=>{handleClickSort('subnet')}}/> : <SortDown onClick={()=>{handleClickSort('subnet')}}/>}</th>
-                            <th>Gateway {reverse == 1 && sort == 'gateway' ? <SortUp onClick={()=>{handleClickSort('gateway')}}/> : <SortDown onClick={()=>{handleClickSort('gateway')}}/>}</th>
+                            <th>ID {reverse === 1 && sort === 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
+                            <th>Name {reverse === 1 && sort === 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
+                            <th>Role {reverse === 1 && sort === 'role' ? <SortUp onClick={()=>{handleClickSort('role')}}/> : <SortDown onClick={()=>{handleClickSort('role')}}/>}</th>
+                            <th>Ip {reverse === 1 && sort === 'ip' ? <SortUp onClick={()=>{handleClickSort('ip')}}/> : <SortDown onClick={()=>{handleClickSort('ip')}}/>}</th>
+                            <th>Pop {reverse === 1 && sort === 'pop_name' ? <SortUp onClick={()=>{handleClickSort('pop_name')}}/> : <SortDown onClick={()=>{handleClickSort('pop_name')}}/>}</th>
+                            <th>Brand {reverse === 1 && sort === 'brand_name' ? <SortUp onClick={()=>{handleClickSort('brand_name')}}/> : <SortDown onClick={()=>{handleClickSort('brand_name')}}/>}</th> 
+                            <th>Subnet {reverse === 1 && sort === 'subnet' ? <SortUp onClick={()=>{handleClickSort('subnet')}}/> : <SortDown onClick={()=>{handleClickSort('subnet')}}/>}</th>
+                            <th>Gateway {reverse === 1 && sort === 'gateway' ? <SortUp onClick={()=>{handleClickSort('gateway')}}/> : <SortDown onClick={()=>{handleClickSort('gateway')}}/>}</th>
                             <th>Action</th>
                         </tr>
                     </thead>

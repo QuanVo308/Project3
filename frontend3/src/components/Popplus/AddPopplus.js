@@ -64,9 +64,9 @@ function AddPopplus({show, setShow, setUpdate}) {
     const handleChange = (event) => {
         const name = event.target.name
         var value 
-        if (name == 'octet2_ip_MGMT' || name == 'octet2_ip_OSPF_MGMT' || name == 'octet3_ip_MGMT'){
+        if (name === 'octet2_ip_MGMT' || name === 'octet2_ip_OSPF_MGMT' || name === 'octet3_ip_MGMT'){
             value = checkIPOctet(event.target.value)
-        } else if (name == 'tail2') {
+        } else if (name === 'tail2') {
             // console.log('check', name)
             value = checkTail2(event.target.value)
             // console.log('check', value)

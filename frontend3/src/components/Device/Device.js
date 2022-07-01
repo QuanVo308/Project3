@@ -26,7 +26,7 @@ export default function Device({tab}){
     useEffect(() => { 
         const getDevice = async()=>{
             let res = await axios.get(`http://127.0.0.1:8000/api/device/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
-            console.log("results", res.data.results[0])
+            // console.log("results", res.data.results[0])
             setDeviceList(res.data.results)
             setPageInfo(res.data)
         }
@@ -74,14 +74,14 @@ export default function Device({tab}){
         setShowDelete(false)
     }
 
-    const handleSort = () => {
-        if (reverse == 0){
-            setReverse(1)
-        } else {
-            setReverse(0)
-        }
-        setUpdate(prev => !prev)
-    }
+    // const handleSort = () => {
+    //     if (reverse == 0){
+    //         setReverse(1)
+    //     } else {
+    //         setReverse(0)
+    //     }
+    //     setUpdate(prev => !prev)
+    // }
 
     const handleClickSort = (titleSort) => {
         setSort(titleSort)

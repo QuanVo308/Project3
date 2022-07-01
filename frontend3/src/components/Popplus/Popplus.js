@@ -107,7 +107,6 @@ export default function Popplus(tab){
             </div>
 
             <div>   
-                {/* <button onClick={handleSort}>Test</button> */}
                 <AddPopplus show={showAdd} setShow={setShowAdd} setUpdate={setUpdate} />
                 {updateData?
                     <UpdatePopplus show={showUpdate} setShow={setShowUpdate} updateData={updateData} setUpdate={setUpdate} />

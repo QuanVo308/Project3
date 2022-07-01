@@ -13,7 +13,7 @@ function CustomPagination({title, pageInfo, setData, setPageInfo, searchData, so
             setData(res.data.results)
             setPageInfo(res.data)
           })
-        console.log(pageInfo)
+        // console.log(pageInfo)
     }, [update])
     
     let pageNumber = [];

@@ -109,7 +109,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <label>Vùng: </label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -117,7 +117,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                             
@@ -126,7 +126,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{getPopplus(e.target.value)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -134,7 +134,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <label>Popplus:</label>
                             <select name='popp' onChange={(e)=>{getPop(e.target.value)}}>
                                 {popplusList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -142,7 +142,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <label>Pop:</label>
                             <select name='pop' onChange={handleChange}>
                                 {popList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                             
@@ -152,7 +152,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <select name='role' onChange={(e)=>{getBrand(e.target.value); handleChange(e)}}>
                                 <option>-</option>
                                 {['AGG','OLT','SW-BB','POWER'].map(data => (
-                                    <option value={data}>{data}</option>
+                                    <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>
@@ -161,7 +161,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <select name='type' onChange={handleChange}>
                                 <option>-</option>
                                 {['DI','DA','CE'].map(data => (
-                                <option value={data}>{data}</option>
+                                <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>}
@@ -181,7 +181,7 @@ function AddDevice({show, setShow, setUpdate}) {
                             <select name='brand' onChange={handleChange}>
                                 <option>-</option>
                                 {brandList.map(data => (
-                                    <option value={data.name}>{data.name}</option>
+                                    <option key={data.id} value={data.name}>{data.name}</option>
                                 ))}
                             </select>
                         </div>

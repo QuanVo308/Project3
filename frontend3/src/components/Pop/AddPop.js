@@ -123,7 +123,7 @@ function AddPop({show, setShow, setUpdate}) {
                             <label>Vùng: </label>
                             <select name='area' onChange={(e)=>{getProvince(e.target.value, false)}}>
                                 {areaList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -131,7 +131,7 @@ function AddPop({show, setShow, setUpdate}) {
                             <label>Tỉnh:</label>
                             <select name='province' onChange={(e)=>{getBranch(e.target.value); handleChange(e)}}>
                                 {provinceList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -139,7 +139,7 @@ function AddPop({show, setShow, setUpdate}) {
                             <label>Chi nhánh:</label>
                             <select name='branch' onChange={(e)=>{getPopplus(e.target.value); handleChange(e)}}>
                                 {branchList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -147,7 +147,7 @@ function AddPop({show, setShow, setUpdate}) {
                             <label>Popplus:</label>
                             <select name='popPlus' onChange={handleChange}>
                                 {popplusList.map(data => (
-                                    <option value={data.id}>{data.name}</option>
+                                    <option key={data.id} value={data.id}>{data.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -156,7 +156,7 @@ function AddPop({show, setShow, setUpdate}) {
                             <select name='tail1' onChange={handleChange}>
                                 <option>-</option>
                                 {['P','M','K','V','B'].map(data => (
-                                <option value={data}>{data}</option>
+                                <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                             <input type="number" name='tail2' placeholder='001 -> 999' min="1" max="999" value={input['tail2']} onChange={handleChange}/>
@@ -166,7 +166,7 @@ function AddPop({show, setShow, setUpdate}) {
                             <select name='metro' onChange={handleChange}>
                                 <option>-</option>
                                 {['MP01','MP02','MP03','MP04','MP05','MP06','MP07','MP08','MP09','MP10','MP11','MP12','MP13'].map(data => (
-                                    <option value={data}>{data}</option>
+                                    <option key={data} value={data}>{data}</option>
                                 ))}
                             </select>
                         </div>

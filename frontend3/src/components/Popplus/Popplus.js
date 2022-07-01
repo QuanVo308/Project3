@@ -29,7 +29,7 @@ export default function Popplus(tab){
     useEffect(() => { 
         const getPopplus = async()=>{
             let res = await axios.get(`http://127.0.0.1:8000/api/popplus/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
-            console.log("results", res.data.results[0])
+            // console.log("results", res.data.results[0])
             setPopplusList(res.data.results)
             setPageInfo(res.data)
         }
@@ -58,7 +58,7 @@ export default function Popplus(tab){
     const handleShowUpdate = (data) =>{
         // console.log(data)
         setShowUpdate(true)
-        console.log("update", data)
+        // console.log("update", data)
         setUpdateData(data)
     }
     const handleShowDelete = () =>setShowDelete(true)

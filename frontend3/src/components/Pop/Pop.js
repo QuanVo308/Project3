@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Button, Table, Modal} from 'react-bootstrap'
-import {Search} from 'react-bootstrap-icons'
+import {Search, SortDown, SortUp} from 'react-bootstrap-icons'
 import styles from './Pop.module.scss'
 import AddPop from './AddPop'
 import UpdatePop from './UpdatePop'
@@ -26,6 +26,7 @@ export default function Pop({tab}){
     useEffect(() => { 
         const getPop = async()=>{
             let res = await axios.get(`http://127.0.0.1:8000/api/pop/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
+            // console.log("results", res.data.results[0])
             setPopList(res.data.results)
             setPageInfo(res.data)
         }
@@ -76,6 +77,17 @@ export default function Pop({tab}){
         setUpdate(prev => !prev)
     }
 
+    const handleClickSort = (titleSort) => {
+        setSort(titleSort)
+        if (reverse == 0){
+            setReverse(1)
+        } else {
+            setReverse(0)
+        }
+        console.log('check', titleSort)
+        setUpdate(prev => !prev)
+    }
+
     return(
         <div>
             <div className={styles.AddSearch}>
@@ -88,7 +100,6 @@ export default function Pop({tab}){
                 </div>
             </div>
             <div>
-            <button onClick={handleSort}>Test</button>
                 <AddPop show={showAdd} setShow={setShowAdd} setUpdate={setUpdate} />
                 {updateData?
                 <UpdatePop show={showUpdate} setShow={setShowUpdate} updateData={updateData} setUpdate={setUpdate} />
@@ -114,15 +125,15 @@ export default function Pop({tab}){
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Ring</th>
-                            <th>Range Ip</th>
-                            <th>Metro </th>
-                            <th>sequence ring</th>
-                            <th>vlan_PPPoE </th>
-                            <th>PopPlus</th>
-                            <th>Province</th>
+                            <th>ID {reverse == 1 && sort == 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
+                            <th>Name {reverse == 1 && sort == 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
+                            <th>Ring {reverse == 1 && sort == 'ring' ? <SortUp onClick={()=>{handleClickSort('ring')}}/> : <SortDown onClick={()=>{handleClickSort('ring')}}/>}</th>
+                            <th>Range Ip {reverse == 1 && sort == 'range_ip' ? <SortUp onClick={()=>{handleClickSort('range_ip')}}/> : <SortDown onClick={()=>{handleClickSort('range_ip')}}/>}</th>
+                            <th>Metro {reverse == 1 && sort == 'metro' ? <SortUp onClick={()=>{handleClickSort('metro')}}/> : <SortDown onClick={()=>{handleClickSort('metro')}}/>}</th>
+                            <th>sequence ring {reverse == 1 && sort == 'sequence_ring' ? <SortUp onClick={()=>{handleClickSort('sequence_ring')}}/> : <SortDown onClick={()=>{handleClickSort('sequence_ring')}}/>}</th>
+                            <th>vlan_PPPoE {reverse == 1 && sort == 'vlan_PPPoE' ? <SortUp onClick={()=>{handleClickSort('vlan_PPPoE')}}/> : <SortDown onClick={()=>{handleClickSort('vlan_PPPoE')}}/>}</th>
+                            <th>PopPlus {reverse == 1 && sort == 'popPlus_name' ? <SortUp onClick={()=>{handleClickSort('popPlus_name')}}/> : <SortDown onClick={()=>{handleClickSort('popPlus_name')}}/>}</th>
+                            <th>Province {reverse == 1 && sort == 'province_name' ? <SortUp onClick={()=>{handleClickSort('province_name')}}/> : <SortDown onClick={()=>{handleClickSort('province_name')}}/>}</th>
                             <th>Action</th>
                         </tr>
                     </thead>

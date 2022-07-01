@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {Table, Button, Modal} from 'react-bootstrap'
-import {Search} from 'react-bootstrap-icons'
+import {Search, SortUp, SortDown} from 'react-bootstrap-icons'
 import styles from './Device.module.scss'
 import AddDevice from './AddDevice'
 import UpdateDevice from './UpdateDevice'
@@ -26,6 +26,7 @@ export default function Device({tab}){
     useEffect(() => { 
         const getDevice = async()=>{
             let res = await axios.get(`http://127.0.0.1:8000/api/device/search/?search=${searchData}&page=${1}&sort=${sort}&reverse=${reverse}`)
+            console.log("results", res.data.results[0])
             setDeviceList(res.data.results)
             setPageInfo(res.data)
         }
@@ -82,6 +83,17 @@ export default function Device({tab}){
         setUpdate(prev => !prev)
     }
 
+    const handleClickSort = (titleSort) => {
+        setSort(titleSort)
+        if (reverse == 0){
+            setReverse(1)
+        } else {
+            setReverse(0)
+        }
+        console.log('check', titleSort)
+        setUpdate(prev => !prev)
+    }
+
     return(
         <div>
             <div className={styles.AddSearch}>
@@ -94,7 +106,6 @@ export default function Device({tab}){
                 </div>
             </div>
             <div>
-                <button onClick={handleSort}>Test</button>
                 <AddDevice show={showAdd} setShow={setShowAdd} setUpdate={setUpdate} />
                 
                 {updateData?
@@ -120,14 +131,14 @@ export default function Device({tab}){
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Ip</th>
-                            <th>Pop</th>
-                            <th>Brand</th> 
-                            <th>Subnet</th>
-                            <th>Gateway</th>
+                            <th>ID {reverse == 1 && sort == 'id' ? <SortUp onClick={()=>{handleClickSort('id')}}/> : <SortDown onClick={()=>{handleClickSort('id')}}/>}</th>
+                            <th>Name {reverse == 1 && sort == 'name' ? <SortUp onClick={()=>{handleClickSort('name')}}/> : <SortDown onClick={()=>{handleClickSort('name')}}/>}</th>
+                            <th>Role {reverse == 1 && sort == 'role' ? <SortUp onClick={()=>{handleClickSort('role')}}/> : <SortDown onClick={()=>{handleClickSort('role')}}/>}</th>
+                            <th>Ip {reverse == 1 && sort == 'ip' ? <SortUp onClick={()=>{handleClickSort('ip')}}/> : <SortDown onClick={()=>{handleClickSort('ip')}}/>}</th>
+                            <th>Pop {reverse == 1 && sort == 'pop_name' ? <SortUp onClick={()=>{handleClickSort('pop_name')}}/> : <SortDown onClick={()=>{handleClickSort('pop_name')}}/>}</th>
+                            <th>Brand {reverse == 1 && sort == 'brand_name' ? <SortUp onClick={()=>{handleClickSort('brand_name')}}/> : <SortDown onClick={()=>{handleClickSort('brand_name')}}/>}</th> 
+                            <th>Subnet {reverse == 1 && sort == 'subnet' ? <SortUp onClick={()=>{handleClickSort('subnet')}}/> : <SortDown onClick={()=>{handleClickSort('subnet')}}/>}</th>
+                            <th>Gateway {reverse == 1 && sort == 'gateway' ? <SortUp onClick={()=>{handleClickSort('gateway')}}/> : <SortDown onClick={()=>{handleClickSort('gateway')}}/>}</th>
                             <th>Action</th>
                         </tr>
                     </thead>

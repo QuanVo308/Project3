@@ -148,11 +148,13 @@ function UpdatePop({show, setShow, updateData, setUpdate}) {
           })
           .then( (res) => {
             console.log('update', res)
-            setUpdate(prev => !prev)
+            axios.get(`http://127.0.0.1:8000/api/updatepop/`)
+            .then((res) => {
+                setUpdate(prev => !prev)
+            })
           }
           )
         setShow(false)
-        axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
     }
 
     return ( 

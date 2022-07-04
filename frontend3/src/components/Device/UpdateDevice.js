@@ -118,6 +118,7 @@ function UpdateDevice({show, setShow, updateData, setUpdate}) {
             var b= inputUpdate['brand']
             var t= inputUpdate['type']
             var p= inputUpdate['pop']
+            console.log("check", p)
             axios.get('http://127.0.0.1:8000/api/devicename/', {params:{
                     'role': r,
                     'name': n,

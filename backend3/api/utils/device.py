@@ -91,7 +91,7 @@ def get_device_ips(device, tnew=True):
         while(i <= 9):
             # print(i)
             octet1 = '10.'
-            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet2 = str(device.pop.popPlus.octet2_ip_OSPF_MGMT) + '.'
             octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+i)//255) + '.'
             octet4 = str(((int(device.pop.sequence_ring)*64)+i)%256)
             ip = octet1 + octet2 + octet3 + octet4
@@ -105,7 +105,7 @@ def get_device_ips(device, tnew=True):
         while(i <= 19):
             # print(i)
             octet1 = '10.'
-            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet2 = str(device.pop.popPlus.octet2_ip_OSPF_MGMT) + '.'
             octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+i)//255) + '.'
             octet4 = str(((int(device.pop.sequence_ring)*64)+i)%256)
             ip = octet1 + octet2 + octet3 + octet4
@@ -144,7 +144,7 @@ def get_device_ips(device, tnew=True):
                 i+=1
         else:
             octet1 = '25.'
-            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet2 = str(device.pop.popPlus.octet2_ip_OSPF_MGMT) + '.'
             octet3 = str(int(device.pop.sequence_ring)) + '.'
             octet4 = '2'
             ip = octet1 + octet2 + octet3 + octet4
@@ -163,7 +163,7 @@ def get_device_gateway(device, tnew = True):
     elif device.role == 'POWER':
         if tnew:
             octet1 = '10.'
-            octet2 = str(device.pop.popPlus.octet2_ip_MGMT) + '.'
+            octet2 = str(device.pop.popPlus.octet2_ip_OSPF_MGMT) + '.'
             octet3 = str(int(device.pop.popPlus.octet3_ip_MGMT) + ((int(device.pop.sequence_ring)*64)+33)//255) + '.'
             octet4 = str(((int(device.pop.sequence_ring)*64)+33)%256)
             ip = octet1 + octet2 + octet3 + octet4

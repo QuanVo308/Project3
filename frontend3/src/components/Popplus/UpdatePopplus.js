@@ -149,12 +149,15 @@ function UpdatePopplus({show, setShow, updateData, setUpdate}) {
           })
           .then( (res) => {
             // console.log('update', res)
-            setUpdate(prev => !prev)
+            axios.get(`http://127.0.0.1:8000/api/updatepop/`)
+            axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
+            .then(() => {
+
+                setUpdate(prev => !prev)
+            })
           }
           )
         setShow(false)
-        axios.get(`http://127.0.0.1:8000/api/updatepop/`)
-        axios.get(`http://127.0.0.1:8000/api/updatedevice/`)
     }
 
     return ( 

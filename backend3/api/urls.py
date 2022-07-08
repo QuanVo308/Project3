@@ -11,12 +11,13 @@ router.register(r'area', views.AreaViewSet,basename="area")
 router.register(r'province', views.ProvinceViewSet,basename="province")
 router.register(r'branch', views.BranchViewSet,basename="branch")
 router.register(r'brand', views.BrandViewSet,basename="brand")
+# router.register(r'zxc', views.generalV, basename="zcx")
 
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('', views.index, name='index'),
-    path('test', views.test, name='test'),
+    path('index', views.index, name='bruh'),
+    # path('zxc', views.generalV.check, name='asdasd'),
     path('provincearea', views.get_province_in_area, name='province_area'),
     path('branchprovince', views.get_branch_in_province, name='branch_province'),
     path('popplusbrnach', views.get_popplus_in_branch, name='popplus_branch'),

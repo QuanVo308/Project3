@@ -3,8 +3,8 @@ from django.forms import GenericIPAddressField
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import *
-# from .utils import *
 from .utils.device import *
 from .utils.pop import *
 from .utils.popplus import *
@@ -12,11 +12,43 @@ from .serializers import *
 from .models import *
 from django.db.models import CharField, GenericIPAddressField
 from django.db.models import  Q
+<<<<<<< Updated upstream
 
+=======
+from .pagination import *
+from rest_framework.decorators import action
+from rest_framework import filters
+import operator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import api_view
+>>>>>>> Stashed changes
 
+# class generalV():
+#     serializer_class = AreaSerializer
+#     check = openapi.Parameter('check', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY)
+
+#     @swagger_auto_schema(manual_parameters=[check])
+#     def get(self, request):
+#         return HttpResponse('test')
+    
+#     @swagger_auto_schema(manual_parameters=[check])
+#     @action(detail=False)
+#     def check(request):
+#         return HttpResponse('check')
+check = openapi.Parameter('check', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY)
+tess = openapi.Parameter('tess', type=openapi.TYPE_INTEGER, in_=openapi.IN_QUERY)
+# @swagger_auto_schema(manual_parameters=[check], methods=['post'])
+@swagger_auto_schema(method='get', manual_parameters=[check])
+# 'methods' can be used to apply the same modification to multiple methods
+@swagger_auto_schema(methods=['put', 'post'], manual_parameters=[tess])
+@api_view(['GET', 'PUT', 'POST'])
 def index(request):
     return HttpResponse("Hello, world!!!!")
 
+
+# @swagger_auto_schema(request_body=AreaSerializer)
+@swagger_auto_schema(operation_description="partial_update description override", responses={404: 'slug not found'})
 def test(request):
     # print(Province.objects.filter(name = request.GET['area']))
     # province = Province.objects.filter(area = '1').values()
